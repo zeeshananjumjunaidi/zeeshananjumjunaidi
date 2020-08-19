@@ -1,4 +1,4 @@
-### Hello multi-verse 👋
+### Hello multiverse 👋
 
 
 # Coming Soon
