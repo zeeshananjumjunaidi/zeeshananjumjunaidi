@@ -7,7 +7,6 @@ function setup() {
     rectMode(CENTER);
     imageMode(CENTER);
     textAlign(CENTER);
-
 }
 // start loading images
 function preload() {
@@ -17,10 +16,10 @@ function preload() {
 function draw() {
     noCursor();
     background(15, 20, 20);
+    
     // earth image
     noStroke();
     texture(img);
-
     // allow user to drag, zoom, and move globe
     orbitControl();
 
@@ -28,4 +27,6 @@ function draw() {
     rotateY(millis() / 10000);
     //earth
     sphere(100);
+
+   text("Hello Multiverse",width-100,100);
 }
