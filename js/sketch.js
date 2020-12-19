@@ -15,13 +15,15 @@ function setup() {
 function preload() {
     img = loadImage('assets/img/earth.diffuse.2k.jpg');
     clouds = loadImage('assets/img/earth.cloud-transparent.2k.jpg');
-    bg = loadImage('assets/img/stars.jpg');
+    //bg = loadImage('assets/img/stars.jpg');
    // defaultFont = loadFont('assets/fonts/SourceSansPro-Regular.otf');
 }
 function draw() {
     noCursor();
     background(15, 20, 20,50);
-    
+    if(!img ||!clouds){
+        return;
+    }
     
     directionalLight(255, 255, 255, -100,45, -1);
     
