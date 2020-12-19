@@ -2,7 +2,7 @@
 let img;
 let clouds;
 let bg;
-let defaultFont;
+// let defaultFont;
 function setup() {
     
     createCanvas(innerWidth, innerHeight, WEBGL);
@@ -16,7 +16,7 @@ function preload() {
     img = loadImage('assets/img/earth.diffuse.2k.jpg');
     clouds = loadImage('assets/img/earth.cloud-transparent.2k.jpg');
     bg = loadImage('assets/img/stars.jpg');
-    defaultFont = loadFont('assets/fonts/SourceSansPro-Regular.otf');
+   // defaultFont = loadFont('assets/fonts/SourceSansPro-Regular.otf');
 }
 function draw() {
     noCursor();
@@ -44,8 +44,8 @@ function draw() {
     sphere(110);
     pop();
 
-    textFont(defaultFont);
-    textSize(24);
+    // textFont(defaultFont);
+    // textSize(24);
     // let txt = "Earth";
     // let txtWidth = textWidth(txt);
     // text('Earth', 150, 50);
