@@ -89,3 +89,46 @@ a,a:active{
   color:white;
   text-decoration: none;
 }
+
+.bottom-menu {
+  font-size: medium;;
+}
+@media (max-width: 576px) {
+  .bottom-menu{
+    font-size: small;
+  }
+  .bottom-menu a{
+    display: block;
+  }
+  .bottom-menu a:not(:last-child)::after {
+    content: " ✔"
+  }
+  .bottom-menu a:not(:last-child)::before {
+    content: "✔ "
+  }
+}
+
+@media (min-width: 768px) {
+  .bottom-menu{
+    font-size: medium;
+  }
+  .bottom-menu a:not(:last-child)::after {
+    content: " -"
+  }
+}
+
+@media (min-width: 1200px) {
+  .bottom-menu{
+    font-size: medium;
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 50px;
+  }
+  .bottom-menu a{
+    
+    margin:5px; 
+  }
+  .bottom-menu a:not(:last-child)::after {
+    content: "  "
+  }
+}
