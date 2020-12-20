@@ -2,6 +2,7 @@
 let img;
 let clouds;
 let bg;
+let glow;
 let sat;
 // let defaultFont;
 function setup() {
@@ -17,28 +18,36 @@ function setup() {
 function preload() {
     img = loadImage('assets/img/earth.diffuse.2k.jpg');
     clouds = loadImage('assets/img/earth.cloud-transparent.2k.jpg');
+    glow = loadImage('assets/img/glow.png');
 }
 function draw() {
     noCursor();
-    background(15, 20, 20, 10);
+    background(5, 15, 30, 210);
     if (!img || !clouds) {
         return;
     }
 
-    directionalLight(255, 255, 255, -100, 45, -1);
 
-    // earth image
-    noStroke();
-    texture(img);
 
     // allow user to drag, zoom, and move globe
     orbitControl();
+    texture(glow);
+    noStroke();
+    ellipse(0,0,260,260);
+    
+    directionalLight(255, 255, 255, -100, 45, -1);
     push();
     // earth Tilt
     // rotateX(13);
     //earth's rotation
     rotateY(millis() / 10000);
+
+    
     //earth
+    
+    // earth image
+    noStroke();
+    texture(img);
     sphere(100);
 
     specularMaterial(210);
