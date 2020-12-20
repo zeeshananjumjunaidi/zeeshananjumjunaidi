@@ -2,14 +2,16 @@
 let img;
 let clouds;
 let bg;
+let sat;
 // let defaultFont;
 function setup() {
-    
+
     createCanvas(innerWidth, innerHeight, WEBGL);
     rectMode(CENTER);
     imageMode(CENTER);
     textAlign(CENTER);
     background(0);
+    sat = new Satellite(0, 150, 5);
 }
 // start loading images
 function preload() {
@@ -18,13 +20,13 @@ function preload() {
 }
 function draw() {
     noCursor();
-    background(15, 20, 20,50);
-    if(!img ||!clouds){
+    background(15, 20, 20, 10);
+    if (!img || !clouds) {
         return;
     }
-    
-    directionalLight(255, 255, 255, -100,45, -1);
-    
+
+    directionalLight(255, 255, 255, -100, 45, -1);
+
     // earth image
     noStroke();
     texture(img);
@@ -33,11 +35,12 @@ function draw() {
     orbitControl();
     push();
     // earth Tilt
-    rotateX(23.5);
+    // rotateX(13);
     //earth's rotation
     rotateY(millis() / 10000);
     //earth
     sphere(100);
+
     specularMaterial(210);
     tint(255, 50);
     texture(clouds);
@@ -50,16 +53,67 @@ function draw() {
     // let txtWidth = textWidth(txt);
     // text('Earth', 150, 50);
     noFill();
-    stroke(255,50);
-    circle(0,0,250);
-    rotateZ(45-millis() / 1000);
+    stroke(255, 50);
+    circle(0, 0, 250);
     push();
+    rotateZ(45 - millis() / 1000);
     let _x = 125;
     let _y = 0;
-    translate(_x,_y);
+    translate(_x, _y);
     sphere(3);
-    let eV = createVector(_x+Math.cos(135)*5,_y+Math.sin(135)*5).normalize();
+    let eV = createVector(_x + Math.cos(135) * 5, _y + Math.sin(135) * 5).normalize();
     fill(255);
-    line(0,0,eV.x*10,eV.y*10);
+    line(0, 0, eV.x * 10, eV.y * 10);
     pop();
+    sat.draw();
+    sat.gravity([createVector(0, 0)])
+}
+class Satellite {
+    constructor(x, y, radius = 3, mass = 1) {
+        this.x = x;
+        this.y = y;
+        this.mass = mass;
+        this.radius = radius;
+        this.moveVelocity = -1;
+        this.acceleration=createVector(-0.7,0);
+        this.velocity=createVector();
+    }
+    draw() {
+        push();
+        noStroke();
+        fill(100, 100, 100);
+        specularMaterial(100, 100, 100);
+        translate(this.x, this.y);
+        sphere(this.radius);
+        pop();
+
+    }
+    gravity(listOfObject = []) {
+        for (let obj of listOfObject) {
+
+            /* Gravitational force */
+            let G = 1;
+            let M = 80;
+            var d = dist(this.x, this.y, obj.x, obj.y)
+            let gravity_force = ((G * this.mass * M) / (sq(d)));
+            let gravity_force_x=0;
+            let gravity_force_y=0;
+            if (obj.x != this.x) {
+                alpha = atan(abs((obj.y - this.y)) / abs((obj.x - this.x)));
+                gravity_force_x = gravity_force * cos(alpha);
+                gravity_force_y = gravity_force * sin(alpha);
+            } else {
+                gravity_force_x = 0;
+                gravity_force_y = gravity_force;
+            }
+            let dir = p5.Vector.sub(obj,createVector(this.x,this.y)).normalize();
+            let force = createVector(dir.x*gravity_force_x,dir.y*gravity_force_y);
+            this.acceleration.add(force);
+            this.velocity.add(this.acceleration);
+            this.x+=this.velocity.x;
+            this.y+=this.velocity.y;
+            this.acceleration.mult(0);
+     
+        }
+    }
 }
