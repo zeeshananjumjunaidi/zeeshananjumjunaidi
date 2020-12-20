@@ -62,18 +62,18 @@ function draw() {
     // let txtWidth = textWidth(txt);
     // text('Earth', 150, 50);
     noFill();
-    stroke(255, 50);
-    circle(0, 0, 250);
-    push();
-    rotateZ(45 - millis() / 1000);
-    let _x = 125;
-    let _y = 0;
-    translate(_x, _y);
-    sphere(3);
-    let eV = createVector(_x + Math.cos(135) * 5, _y + Math.sin(135) * 5).normalize();
-    fill(255);
-    line(0, 0, eV.x * 10, eV.y * 10);
-    pop();
+    // stroke(255, 50);
+    // circle(0, 0, 250);
+    // push();
+    // rotateZ(45 - millis() / 1000);
+    // let _x = 125;
+    // let _y = 0;
+    // translate(_x, _y);
+    // sphere(3);
+    // let eV = createVector(_x + Math.cos(135) * 5, _y + Math.sin(135) * 5).normalize();
+    // fill(255);
+    // line(0, 0, eV.x * 10, eV.y * 10);
+    // pop();
     sat.draw();
     sat.gravity([createVector(0, 0)])
 }
