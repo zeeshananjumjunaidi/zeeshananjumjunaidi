@@ -3493,7 +3493,7 @@ input[type=button].btn-block {
 .input-group-lg > .input-group-append > .btn {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
-  line-height: 1.5;
+  line-height: 0;
   border-radius: 0.3rem;
 }
 
@@ -3510,7 +3510,7 @@ input[type=button].btn-block {
 .input-group-sm > .input-group-append > .btn {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
-  line-height: 1.5;
+  line-height: 0;
   border-radius: 0.2rem;
 }
 
