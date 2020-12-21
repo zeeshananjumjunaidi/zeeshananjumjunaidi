@@ -31,6 +31,7 @@ function draw() {
     if (!img || !clouds) {
         return;
     }
+  
     for (let i = 0; i < stars.length; i++) {
         push();
         if (deltaTime % 3 == 0) {
