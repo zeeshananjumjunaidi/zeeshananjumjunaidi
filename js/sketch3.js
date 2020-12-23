@@ -141,7 +141,6 @@ $(document).ready(() => {
     lineGeom.attributes.position.needsUpdate = true;
     const line = new THREE.Line( lineGeom, lineMtl );
     scene.add( line );
-    console.log(THREE);
     // HELPERS
     // scene.add(new THREE.PointLightHelper(light, 1));
     // scene.add(new THREE.GridHelper(50, 50));
