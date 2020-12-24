@@ -1,4 +1,4 @@
-const vertextShader =`
+const vertextShader = `
 varying vec3 vNormal;
 void main() 
 {
@@ -12,8 +12,8 @@ uniform float p;
 varying vec3 vNormal;
 void main() 
 {
-	float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1 ) ), p ); 
-	gl_FragColor = vec4( 0.7, 0.7, 1.0, 0.5 ) * intensity;
+	float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 0.5) ), p ); 
+	gl_FragColor = vec4( 0.5, 0.5, 1.7, 11 ) * intensity;
 }
 `;
 
@@ -22,7 +22,7 @@ $(document).ready(() => {
         animate: true,
         context: "webgl",
         scaleToView: true
-      };
+    };
     var SCREEN_WIDTH = window.innerWidth;
     var SCREEN_HEIGHT = window.innerHeight;
     const loader = new THREE.TextureLoader();
@@ -30,24 +30,24 @@ $(document).ready(() => {
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     camera.position.set(0, 3, 5);
-    camera.position.set(15, 0,0);
+    camera.position.set(15, 0, 0);
     camera.lookAt(scene.position);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor("#121222", 1);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     document.body.appendChild(renderer.domElement);
     // basic line material
-    const lineMtl = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+    const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-      
+
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
-    light.position.set(50,0, 0);
+    light.position.set(50, 0, 0);
     light.castShadow = true; // default false
     scene.add(light);
     //Set up shadow properties for the light
@@ -64,67 +64,96 @@ $(document).ready(() => {
         fontFamily: '"Times New Roman", Times, serif',
         fontSize: 0.7,
         fontStyle: 'italic',
-        text:'Earth'
-      });
-      scene.add(earthText);
-     let moonText  = new THREE.TextSprite({
+        text: 'Earth'
+    });
+    scene.add(earthText);
+    let moonText = new THREE.TextSprite({
         alignment: 'left',
         color: '#fff',
         fontFamily: '"Times New Roman", Times, serif',
         fontSize: 0.3,
         fontStyle: 'italic',
-        text:'Moon'
-      });
-      moonText.text = "Moon";
-      scene.add(moonText);
-      
+        text: 'Moon'
+    });
+    moonText.text = "Moon";
+    scene.add(moonText);
+
     const geometry = new THREE.SphereGeometry(1, 32, 16);
+
+    const earthDayTexture = loader.load("assets/img/earth-day.jpg");
+    const earthSpecular = loader.load("assets/img/specular.jpg");
+    const earthBump = loader.load("assets/img/bump.jpg");
+    const earthClouds = loader.load("assets/img/clouds.png");
+    const earthNightTexture = loader.load("assets/img/earth-night.jpg");
+
     
-    const earthTexture = loader.load("assets/img/earth.diffuse.2k.jpg");
-    const earthAtmos = loader.load("assets/img/earth.cloud-transparent.2k.jpg");
-    const earthMtl = new THREE.MeshStandardMaterial({map: earthTexture});
-    const earthAtmosMtl = new THREE.MeshPhongMaterial({color:0xFFFFFF,map: earthAtmos,alphaTest: 0.5,
-        transparent: true,opacity:0.3,
+    const moonTexture = loader.load("assets/img/2k_moon.jpg");
+    const earthMtl = new THREE.MeshPhongMaterial({
+        map: earthDayTexture,
+        aoMap: earthClouds,
+        bumpMap: earthBump,
+        bumpScale: 0.08,
+        specularMap: earthSpecular,
+        specular:0x777,
+        emissiveMap: earthNightTexture,
+        emissiveIntensity: 10,
+        emissive: 1,
+    });
+
+    //new THREE.MeshStandardMaterial({map: earthTexture});
+
+
+
+    const earthAtmosMtl = new THREE.MeshPhongMaterial({color:0xFFFFFF,map: earthClouds,alphaTest: 0.5,
+        transparent: true,opacity:1,
         side: THREE.DoubleSide,});
     const customMaterialAtmosphere = new THREE.ShaderMaterial( 
         {
             uniforms:       
             { 
                 "c":   { type: "f", value: 0.6 },
-                "p":   { type: "f", value: 5.0 }
+                "p":   { type: "f", value: 3.0 }
             },
             vertexShader:   vertextShader,
             fragmentShader: fragmentShader
         }   );
 
- 
+
 
     const earthMesh = new THREE.Mesh(geometry, earthMtl);
-    earthMesh.castShadow = true; 
+    earthMesh.castShadow = true;
     earthMesh.scale.setScalar(3);
     scene.add(earthMesh);
-    earthText.position=earthMesh.position;
-    earthText.position.y+=4;
-    // const earthAtmosMesh = new THREE.Mesh(geometry, customMaterialAtmosphere);
-    // earthAtmosMesh.material.side = THREE.BackSide;
-    // earthAtmosMesh.scale.setScalar(1.2);
-    // scene.add(earthAtmosMesh);
+    earthText.position = earthMesh.position;
+    earthText.position.y += 4;
 
+    const earthAtmosMesh = new THREE.Mesh(geometry, customMaterialAtmosphere);
 
+    earthAtmosMesh.material.side = THREE.BackSide;
+    earthAtmosMesh.scale.setScalar(3.2);
+    earthAtmosMesh.position=earthMesh.position;
+    scene.add(earthAtmosMesh);
 
+    const earthCloudMesh = new THREE.Mesh(geometry, earthAtmosMtl);
+    earthCloudMesh.scale.setScalar(3.05);
+    earthCloudMesh.position=earthMesh.position;
+    scene.add(earthCloudMesh);
 
-     const moonGeometry = new THREE.SphereGeometry(1, 32, 16);
-     moonGeometry.translate(0,0,0);
+    const moonGeometry = new THREE.SphereGeometry(1, 32, 16);
+    moonGeometry.translate(0, 0, 0);
 
-     const moonTexture = loader.load("assets/img/moon.jpg");
     const pivotPoint = new THREE.Object3D();
-    const moonMtl = new THREE.MeshStandardMaterial({map:moonTexture});
+    const moonMtl = new THREE.MeshStandardMaterial({
+        map: moonTexture,
+        bump: moonTexture,
+        bumpScale: 10,
+    });
     const moonMesh = new THREE.Mesh(moonGeometry, moonMtl);
     moonMesh.receiveShadow = true;
     moonMesh.position.set(13, 0, 0);
     moonMesh.scale.setScalar(.3);
 
-    moonText.position.set(13,0.5,0);
+    moonText.position.set(13, 0.5, 0);
 
     pivotPoint.add(moonMesh);
     pivotPoint.add(moonText);
@@ -134,29 +163,30 @@ $(document).ready(() => {
     // earthMesh.scale.setScalar(0.8);
 
     const points = [];
-    points.push( earthMesh.position );
-    points.push(moonMesh.position.clone() );
-    
-    const lineGeom = new THREE.BufferGeometry().setFromPoints( points );
-    lineGeom.attributes.position.needsUpdate = true;
-    const line = new THREE.Line( lineGeom, lineMtl );
-    scene.add( line );
+    points.push(earthMesh.position);
+    points.push(moonMesh.position.clone());
+
+    // const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
+    // lineGeom.attributes.position.needsUpdate = true;
+    // const line = new THREE.Line(lineGeom, lineMtl);
+   // scene.add(line);
     // HELPERS
     // scene.add(new THREE.PointLightHelper(light, 1));
     // scene.add(new THREE.GridHelper(50, 50));
     // const helper = new THREE.CameraHelper( light.shadow.camera );
     // scene.add( helper );
-   // camera.position.z = 5;
-        // Fog
-   scene.fog = new THREE.Fog( 0x000011, 1, 40, 4000 );
+    // camera.position.z = 5;
+    // Fog
+    scene.fog = new THREE.Fog(0x000011, 1, 40, 4000);
 
 
     const animate = function () {
         requestAnimationFrame(animate);
-     
+
         earthMesh.rotation.y += 0.006;
+        earthCloudMesh.rotation.y += 0.005;
         pivotPoint.rotation.y += 0.002;
-        
+
         // moonMesh.rotateAround(earthMesh.position);
         controls.update();
         renderer.render(scene, camera);
