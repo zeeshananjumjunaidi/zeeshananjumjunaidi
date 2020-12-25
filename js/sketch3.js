@@ -189,11 +189,18 @@ $(document).ready(() => {
     scene.add(ellipse);
 
     // scene.add(generateArc(13,13,13,17,17,17));
-    var dotGeometry = new THREE.Geometry();
-    dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    var dotMaterial = new THREE.PointsMaterial({ size: 1, sizeAttenuation: false });
-    var dot = new THREE.Points(dotGeometry, dotMaterial);
-    scene.add(dot);
+  
+    let v1 =new THREE.Vector3(2.25,2.25,0);
+    let v2 =new THREE.Vector3(-2.25,2.25,0);
+
+    
+
+    scene.add(generateDot(v1.x,v1.y,v1.z));
+    scene.add(generateDot(v2.x,v2.y,v2.z));
+    // scene.add(generateDot(-2.25,-2.25,0));
+    // scene.add(generateDot(2.25,-2.25,0));
+
+    
 
     // const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
     // lineGeom.attributes.position.needsUpdate = true;
@@ -225,12 +232,16 @@ $(document).ready(() => {
 
 });
 
-function generateArc(x1, y1, z1, x2, y2, z2) {
-    let d = new THREE.Vector3(x1, y1, z1).distanceTo(new THREE.Vector3(x2, y2, z2));
+function generateDot(x1,y1,z1){
+    var dotGeometry = new THREE.Geometry();
+    dotGeometry.vertices.push(new THREE.Vector3(x1,y1,z1));
+    var dotMaterial = new THREE.PointsMaterial({ size: 1, sizeAttenuation: false });
+    var dot = new THREE.Points(dotGeometry, dotMaterial);
+    return dot;
+}
 
-    let midPoint = new THREE.Vector3(x1, y1, z1).sub(new THREE.Vector3(x2, y2, z2));
-
-    console.log(d);
+function generateArc(posVector, startAngle,endAngle,xSize,ySize) {
+  
 
     // console.log(angle);
     const curve = new THREE.EllipseCurve(
