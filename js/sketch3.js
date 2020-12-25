@@ -86,7 +86,7 @@ $(document).ready(() => {
     const earthClouds = loader.load("assets/img/clouds.png");
     const earthNightTexture = loader.load("assets/img/earth-night.jpg");
 
-    
+
     const moonTexture = loader.load("assets/img/2k_moon.jpg");
     const earthMtl = new THREE.MeshPhongMaterial({
         map: earthDayTexture,
@@ -94,7 +94,7 @@ $(document).ready(() => {
         bumpMap: earthBump,
         bumpScale: 0.08,
         specularMap: earthSpecular,
-        specular:0x777,
+        specular: 0x777,
         emissiveMap: earthNightTexture,
         emissiveIntensity: 10,
         emissive: 1,
@@ -104,19 +104,21 @@ $(document).ready(() => {
 
 
 
-    const earthAtmosMtl = new THREE.MeshPhongMaterial({color:0xFFFFFF,map: earthClouds,alphaTest: 0.5,
-        transparent: true,opacity:1,
-        side: THREE.DoubleSide,});
-    const customMaterialAtmosphere = new THREE.ShaderMaterial( 
+    const earthAtmosMtl = new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF, map: earthClouds, alphaTest: 0.5,
+        transparent: true, opacity: 1,
+        side: THREE.DoubleSide,
+    });
+    const customMaterialAtmosphere = new THREE.ShaderMaterial(
         {
-            uniforms:       
-            { 
-                "c":   { type: "f", value: 0.6 },
-                "p":   { type: "f", value: 3.0 }
+            uniforms:
+            {
+                "c": { type: "f", value: 0.6 },
+                "p": { type: "f", value: 3.0 }
             },
-            vertexShader:   vertextShader,
+            vertexShader: vertextShader,
             fragmentShader: fragmentShader
-        }   );
+        });
 
 
 
@@ -131,12 +133,12 @@ $(document).ready(() => {
 
     earthAtmosMesh.material.side = THREE.BackSide;
     earthAtmosMesh.scale.setScalar(3.2);
-    earthAtmosMesh.position=earthMesh.position;
+    earthAtmosMesh.position = earthMesh.position;
     scene.add(earthAtmosMesh);
 
     const earthCloudMesh = new THREE.Mesh(geometry, earthAtmosMtl);
     earthCloudMesh.scale.setScalar(3.05);
-    earthCloudMesh.position=earthMesh.position;
+    earthCloudMesh.position = earthMesh.position;
     scene.add(earthCloudMesh);
 
     const moonGeometry = new THREE.SphereGeometry(1, 32, 16);
@@ -166,10 +168,37 @@ $(document).ready(() => {
     points.push(earthMesh.position);
     points.push(moonMesh.position.clone());
 
+
+    const curve = new THREE.EllipseCurve(
+        0, 0,            // ax, aY
+        13, 13,           // xRadius, yRadius
+        0, 2 * Math.PI,  // aStartAngle, aEndAngle
+        false,            // aClockwise
+        0                 // aRotation
+    );
+
+    const curvePoints = curve.getPoints(50);
+    const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
+
+    const curveMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+    // Create the final object to add to the scene
+    const ellipse = new THREE.Line(curveGeometry, curveMaterial);
+
+    ellipse.rotation.x = Math.PI / 2;
+    scene.add(ellipse);
+
+    // scene.add(generateArc(13,13,13,17,17,17));
+    var dotGeometry = new THREE.Geometry();
+    dotGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
+    var dotMaterial = new THREE.PointsMaterial({ size: 1, sizeAttenuation: false });
+    var dot = new THREE.Points(dotGeometry, dotMaterial);
+    scene.add(dot);
+
     // const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
     // lineGeom.attributes.position.needsUpdate = true;
     // const line = new THREE.Line(lineGeom, lineMtl);
-   // scene.add(line);
+    // scene.add(line);
     // HELPERS
     // scene.add(new THREE.PointLightHelper(light, 1));
     // scene.add(new THREE.GridHelper(50, 50));
@@ -195,3 +224,30 @@ $(document).ready(() => {
     animate();
 
 });
+
+function generateArc(x1, y1, z1, x2, y2, z2) {
+    let d = new THREE.Vector3(x1, y1, z1).distanceTo(new THREE.Vector3(x2, y2, z2));
+
+    let midPoint = new THREE.Vector3(x1, y1, z1).sub(new THREE.Vector3(x2, y2, z2));
+
+    console.log(d);
+
+    // console.log(angle);
+    const curve = new THREE.EllipseCurve(
+        midPoint.x, midPoint.y,            // ax, aY
+        d, d,           // xRadius, yRadius
+        0, Math.PI,  // aStartAngle, aEndAngle
+        false,            // aClockwise
+        0                 // aRotation
+    );
+    const curvePoints = curve.getPoints(50);
+    const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
+
+    const curveMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+    // Create the final object to add to the scene
+    const ellipse = new THREE.Line(curveGeometry, curveMaterial);
+
+    ellipse.rotation.x = Math.PI;
+    return ellipse;
+}
