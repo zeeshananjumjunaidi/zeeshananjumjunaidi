@@ -16,7 +16,11 @@ void main()
 	gl_FragColor = vec4( 0.5, 0.5, 1.7, 11 ) * intensity;
 }
 `;
+const DEGREE_TO_RADIAN  =Math.PI / 180;
 
+const CURVE_MIN_ALTITUDE = 1;
+const CURVE_MAX_ALTITUDE = 4;
+const GLOBE_RADIUS=3;
 $(document).ready(() => {
     const settings = {
         animate: true,
@@ -197,6 +201,18 @@ $(document).ready(() => {
 
     scene.add(generateDot(v1.x,v1.y,v1.z));
     scene.add(generateDot(v2.x,v2.y,v2.z));
+
+
+
+    const points1 =  getSplineFromCoords([0,0,100,14]).spline.getPoints( 50 );
+    const geometry1 = new THREE.BufferGeometry().setFromPoints( points1 );
+
+    const material1 = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+
+    // Create the final object to add to the scene
+    const curveObject1 = new THREE.Line( geometry1, material1 );
+
+    scene.add(curveObject1)
     // scene.add(generateDot(-2.25,-2.25,0));
     // scene.add(generateDot(2.25,-2.25,0));
 
@@ -240,25 +256,52 @@ function generateDot(x1,y1,z1){
     return dot;
 }
 
-function generateArc(posVector, startAngle,endAngle,xSize,ySize) {
+// Credit: https://medium.com/@xiaoyangzhao/drawing-curves-on-webgl-globe-using-three-js-and-d3-draft-7e782ffd7ab
+function getSplineFromCoords(coords) {
+    const startLat = coords[0];
+    const startLng = coords[1];
+    const endLat = coords[2];
+    const endLng = coords[3];
+    console.log(startLat,startLng);
+    // start and end points
+    const start = coordinateToPosition(startLat, startLng, GLOBE_RADIUS);
+    const end = coordinateToPosition(endLat, endLng, GLOBE_RADIUS);
+   
+    // altitude
+    const altitude = clamp(start.distanceTo(end) * .75, CURVE_MIN_ALTITUDE, CURVE_MAX_ALTITUDE);
+    
+    // 2 control points
+    // const interpolate = geoInterpolate([startLng, startLat], [endLng, endLat]);
+    const midCoord1 = start.sub(end).multiplyScalar (0.25);
+    const midCoord2 = end.sub(start).multiplyScalar (0.75);
+    // const midCoord2 = interpolate(0.75);
+    const mid1 = coordinateToPosition(midCoord1.x,midCoord1.y, GLOBE_RADIUS + altitude);
+    const mid2 = coordinateToPosition(midCoord2.x,midCoord2.y, GLOBE_RADIUS + altitude);
+   
+    return {
+      start,
+      end,
+      spline: new THREE.CubicBezierCurve3(start, mid1, mid2, end)
+    };
+  }
+
+  function latLonTo3d(lat,lon,alt){
+    let rad = 3;//     
+    let x = rad* Math.cos(lat) * Math.sin(lon);
+    let y = rad* Math.sin(lat) * Math.sin(lon);
+    let z = rad* Math.cos(lon);
+    return 
+  }
+ function coordinateToPosition(lat, lng, radius) {
+    const phi = (90 - lat) * DEGREE_TO_RADIAN;
+    const theta = (lng + 180) * DEGREE_TO_RADIAN;
   
-
-    // console.log(angle);
-    const curve = new THREE.EllipseCurve(
-        midPoint.x, midPoint.y,            // ax, aY
-        d, d,           // xRadius, yRadius
-        0, Math.PI,  // aStartAngle, aEndAngle
-        false,            // aClockwise
-        0                 // aRotation
+    return new THREE.Vector3(
+      - radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.cos(phi),
+      radius * Math.sin(phi) * Math.sin(theta)
     );
-    const curvePoints = curve.getPoints(50);
-    const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-
-    const curveMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-
-    // Create the final object to add to the scene
-    const ellipse = new THREE.Line(curveGeometry, curveMaterial);
-
-    ellipse.rotation.x = Math.PI;
-    return ellipse;
-}
+  }
+  function clamp(num, min, max) {
+    return num <= min ? min : (num >= max ? max : num);
+  }
