@@ -1,4 +1,4 @@
-const vertextShader = `
+const vertexShader = `
 varying vec3 vNormal;
 void main() 
 {
@@ -12,10 +12,10 @@ uniform float p;
 varying vec3 vNormal;
 void main() 
 {
-	float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 0.5) ), p ); 
-	gl_FragColor = vec4( 0.5, 0.5, 1.7, 11 ) * intensity;
-}
-`;
+	float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0) ), 2.0 ); 
+	gl_FragColor = vec4( 0.20,0.60,0.99, 11 ) * intensity;
+}`;
+
 const DEGREE_TO_RADIAN  =Math.PI / 180;
 
 const CURVE_MIN_ALTITUDE = 1;
@@ -117,10 +117,16 @@ $(document).ready(() => {
         {
             uniforms:
             {
+                color1: {
+                    value: new THREE.Color("red")
+                  },
+                  color2: {
+                    value: new THREE.Color("green")
+                  },
                 "c": { type: "f", value: 0.6 },
                 "p": { type: "f", value: 3.0 }
             },
-            vertexShader: vertextShader,
+            vertexShader: vertexShader,
             fragmentShader: fragmentShader
         });
 
