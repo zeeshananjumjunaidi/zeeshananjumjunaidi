@@ -10,18 +10,22 @@ $(document).ready(() => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    camera.position.set(0, 3, 5);
-    camera.position.set(15, 10, 10);
-    const renderer = new THREE.WebGLRenderer({antialias: true});
+    //camera.position.set(0, 3, 5);
+
+    camera.rotation.x = 0;
+    camera.rotation.y = 0;
+    camera.rotation.z = 0;
+    camera.position.set(0, 10, 0);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor("#121222", 1);
+    renderer.setClearColor("#EEE", 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
-   // ORBIT CONTROLS
-   const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    // ORBIT CONTROLS
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-   // basic line material
+    // basic line material
     //const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
@@ -38,80 +42,92 @@ $(document).ready(() => {
     loadVehicle(scene);
 
     scene.add(createGroundPlane());
-
-    const animate = function () {
+    let then = 0;
+    const animate = function (now) {
+        now *= 0.001;  // make it seconds                
+        const delta = now - then;
+        then = now;
         requestAnimationFrame(animate);
-        if(car){
-        camera.lookAt(car);
-            // car.position.x = Math.cos(heading)*10;
-            // car.rotation.x+=(heading);
-     }
-        
+        if (car) {
+            // console.log(then,now,delta);
+            let pwr = 0.1;
+            car.position.x += Math.sin(heading) * pwr;// delta*0.0001;
+            car.position.z += Math.cos(heading) * pwr;
+            if (car.rotation.y < heading)
+                car.rotation.y += heading;
+            if (car.rotation.y > heading)
+                car.rotation.y -= heading;
+            
+                // camera.position.x=car.position.x;
+                // camera.position.z=car.position.z;                
+                camera.position.y=car.position.y+23; 
+        }
+
         controls.update();
         renderer.render(scene, camera);
     };
     animate();
 
 
-console.log("ASD")
-// movement - please calibrate these values
-var xSpeed = 0.4;
-var ySpeed = 0.0004;
-var heading = 0;
-document.addEventListener("keydown", onDocumentKeyDown, false);
-function onDocumentKeyDown(event) {
-    var keyCode = event.which;
-    if (keyCode == 38) {
-        car.position.z += ySpeed;
-    } else if (keyCode == 40) {
-        car.position.z -= ySpeed;
-    } else if (keyCode == 37) {
-        heading -= xSpeed;
-    } else if (keyCode == 39) {
-        heading += xSpeed;
-    } else if (keyCode == 32) {
-        car.position.set(0, 0, 0);
-    }
-};
+    console.log("ASD")
+    // movement - please calibrate these values
+    var xSpeed = 0.4;
+    var ySpeed = 0.0004;
+    var heading = 1.5;
+    document.addEventListener("keydown", onDocumentKeyDown, false);
+    function onDocumentKeyDown(event) {
+        var keyCode = event.which;
+        if (keyCode == 38) {
+            car.position.z += ySpeed;
+        } else if (keyCode == 40) {
+            car.position.z -= ySpeed;
+        } else if (keyCode == 37) {
+            heading -= xSpeed;
+        } else if (keyCode == 39) {
+            heading += xSpeed;
+        } else if (keyCode == 32) {
+            car.position.set(0, 0, 0);
+        }
+    };
 
 
 
 
 });
-var car=undefined;
-function createGroundPlane(){
+var car = undefined;
+function createGroundPlane() {
     var geo = new THREE.PlaneBufferGeometry(500, 500, 8, 8);
-    var mat = new THREE.MeshBasicMaterial({ color: 0x333333, side: THREE.DoubleSide });
-    var plane = new THREE.Mesh(geo, mat);plane.rotateX( - Math.PI / 2);
+    var mat = new THREE.MeshBasicMaterial({ color: 0xAAAAAA, side: THREE.DoubleSide });
+    var plane = new THREE.Mesh(geo, mat); plane.rotateX(- Math.PI / 2);
     return plane;
 }
-function loadVehicle(sceneRef){
-    let texture =  new THREE.TextureLoader().load( '../assets/3d/audi/Audi R8-black.jpg' );
-      // load fbx model and texture                                               
-      const objs = [];
-      const loader = new THREE.FBXLoader();
-      loader.load("../assets/3d/audi/Audi_R8.fbx", model => {
-          // model is a THREE.Group (THREE.Object3D)       
-          console.log(model);                      
-          
-          const material = new THREE.MeshPhongMaterial({
+function loadVehicle(sceneRef) {
+    let texture = new THREE.TextureLoader().load('../assets/3d/audi/Audi R8-black.jpg');
+    // load fbx model and texture                                               
+    const objs = [];
+    const loader = new THREE.FBXLoader();
+    loader.load("../assets/3d/audi/Audi_R8.fbx", model => {
+        // model is a THREE.Group (THREE.Object3D)       
+        console.log(model);
+
+        const material = new THREE.MeshPhongMaterial({
             color: 0xFF0000,    // red (can also use a CSS color string here)
             flatShading: true,
-          });
-          model.traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
+        });
+        model.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
 
-                    // apply texture
-                    child.material = material;
-                    child.material.map = texture;
-                    child.material.needsUpdate = true;
-                }
-            });
-          const mixer = new THREE.AnimationMixer(model);
-          // animations is a list of THREE.AnimationClip                          
-          //mixer.clipAction(model.animations[0]).play();
-          sceneRef.add(model);
-          car=model;
-          objs.push({model, mixer});
-      });
+                // apply texture
+                child.material = material;
+                child.material.map = texture;
+                child.material.needsUpdate = true;
+            }
+        });
+        const mixer = new THREE.AnimationMixer(model);
+        // animations is a list of THREE.AnimationClip                          
+        //mixer.clipAction(model.animations[0]).play();
+        sceneRef.add(model);
+        car = model;
+        objs.push({ model, mixer });
+    });
 }
