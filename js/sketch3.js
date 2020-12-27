@@ -211,9 +211,9 @@ $(document).ready(() => {
 
     let lines= [];
     let randomPoints =[];
-    for(let i=0;i<30;i++){
-        let q2 = latlonToSphericalProjection(Math.random(0,180),Math.random(0,360),3);
-        let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(4);
+    for(let i=0;i<360;i++){
+        let q2 = latlonToSphericalProjection(Math.random(-Math.PI*2,Math.PI*2),Math.random(-Math.PI,Math.PI),3);
+        let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(Math.random()* 4);
         let l2 = addNewLine(q2,nq2,curveMaterial);
         lines.push(l2);
         scene.add(l2);
@@ -367,8 +367,8 @@ function addNewLine(p1,p2,mtl){
 }
 function latlonToSphericalProjection(lat,lon,alt){
     // ρ = altitude + radius of the planet
-    let x = Math.cos(lat) * Math.cos(lon) * alt
-    let y = Math.cos(lat) * Math.sin(lon) * alt
-    let z = Math.sin(lat) * alt // z is 'up'
+    let x = Math.cos(lon) * Math.sin(lat) * alt;// * 180/Math.PI;
+    let y = Math.sin(lat) * Math.sin(lon) * alt ;//* 180/Math.PI;
+    let z = Math.cos(lat) * alt ;//* 180/Math.PI;// z is 'up'
     return new THREE.Vector3(x,y,z);
 }
