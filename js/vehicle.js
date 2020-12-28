@@ -50,17 +50,18 @@ $(document).ready(() => {
         requestAnimationFrame(animate);
         if (car) {
             // console.log(then,now,delta);
-            let pwr = 0.1;
-            car.position.x += Math.sin(heading) * pwr;// delta*0.0001;
+            let pwr = ySpeed;
+            heading+=steering *pwr*100;
+            car.position.x += Math.sin(heading) *pwr ;// delta*0.0001;
             car.position.z += Math.cos(heading) * pwr;
-            if (car.rotation.y < heading)
-                car.rotation.y += heading;
-            if (car.rotation.y > heading)
-                car.rotation.y -= heading;
             
+            car.rotation.y = heading;
+            // console.log(heading);
                 // camera.position.x=car.position.x;
                 // camera.position.z=car.position.z;                
-                camera.position.y=car.position.y+23; 
+               // camera.position.y=car.position.y+23; 
+                ySpeed*=0.99;
+                steering*=0.7;
         }
 
         controls.update();
@@ -71,20 +72,22 @@ $(document).ready(() => {
 
     console.log("ASD")
     // movement - please calibrate these values
-    var xSpeed = 0.4;
-    var ySpeed = 0.0004;
-    var heading = 1.5;
+    var xSpeed = 0.0;
+    var ySpeed = 0.0;
+    var heading = 0;
+    var steering = 0;
     document.addEventListener("keydown", onDocumentKeyDown, false);
     function onDocumentKeyDown(event) {
         var keyCode = event.which;
         if (keyCode == 38) {
-            car.position.z += ySpeed;
+            ySpeed+=0.005;
         } else if (keyCode == 40) {
-            car.position.z -= ySpeed;
+            ySpeed-=0.005;
+
         } else if (keyCode == 37) {
-            heading -= xSpeed;
+            steering -= 0.01;
         } else if (keyCode == 39) {
-            heading += xSpeed;
+            steering += 0.01;
         } else if (keyCode == 32) {
             car.position.set(0, 0, 0);
         }
