@@ -1,4 +1,8 @@
 $(document).ready(() => {
+
+    let eleSpeed = document.getElementById('speed');
+    let eleSteer = document.getElementById('steering');
+
     const settings = {
         animate: true,
         context: "webgl",
@@ -8,14 +12,16 @@ $(document).ready(() => {
     var SCREEN_HEIGHT = window.innerHeight;
     const loader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 100000);
+    camera.position.y = 5000;
+    camera.position.z = -5000;
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
     //camera.position.set(0, 3, 5);
 
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
-    camera.position.set(0, 10, 0);
+    
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor("#EEE", 1);
@@ -42,57 +48,68 @@ $(document).ready(() => {
     loadVehicle(scene);
 
     scene.add(createGroundPlane());
-    let then = 0;
+    keyDown = new Array();
+    for (i = 0; i < 300; i++) {
+        keyDown[i] = false;
+    }
+    let position = new THREE.Vector3();
+    let steerAngle=0;
+    let heading=0;
     const animate = function (now) {
-        now *= 0.001;  // make it seconds                
-        const delta = now - then;
-        then = now;
+
         requestAnimationFrame(animate);
         if (car) {
-            // console.log(then,now,delta);
-            let pwr = ySpeed;
-            heading+=steering *pwr*100;
-            car.position.x += Math.sin(heading) *pwr ;// delta*0.0001;
-            car.position.z += Math.cos(heading) * pwr;
-            
-            car.rotation.y = heading;
-            // console.log(heading);
-                // camera.position.x=car.position.x;
-                // camera.position.z=car.position.z;                
-               // camera.position.y=car.position.y+23; 
-                ySpeed*=0.99;
-                steering*=0.7;
-        }
 
+            if (keyDown[87]) {
+                if (speed < 130) {
+                    speed += 1;
+                }
+            } else if (keyDown[83]) {
+                speed -= 2;
+            } else {
+                speed -= 1;
+                if (speed < 0) speed = 0;
+            }
+            if (speed != 0) {
+                if (keyDown[65]) steerAngle += 0.01;
+                if (keyDown[68]) steerAngle -= 0.01;
+            }
+            let radius = 20 / 2;
+            steerAngle = steerAngle;
+            constantVelocity = speed; //constant velocity
+            heading += (steerAngle * this.constantVelocity) / radius;
+            position.x += constantVelocity * Math.cos(heading);
+            position.z += constantVelocity * Math.sin(heading);
+
+
+
+            car.position.x =  position.x;//speed * Math.sin(car.rotation.y);
+            car.position.z =  position.z;//speed * Math.cos(car.rotation.y);
+            car.rotation.y=heading;
+
+            camera.lookAt(car.position);
+
+            renderer.render(scene, camera);
+        }
+        if (eleSpeed)
+            eleSpeed.innerText = "Speed: " + speed;
+        if (eleSteer)
+            eleSteer.innerText = "Steer: " + speed;
         controls.update();
         renderer.render(scene, camera);
     };
     animate();
 
+    speed = 0;
+  
+    document.onkeydown = function (event) {
+        console.log(event.keyCode);
+        keyDown[event.keyCode] = true;
+    }
 
-    console.log("ASD")
-    // movement - please calibrate these values
-    var xSpeed = 0.0;
-    var ySpeed = 0.0;
-    var heading = 0;
-    var steering = 0;
-    document.addEventListener("keydown", onDocumentKeyDown, false);
-    function onDocumentKeyDown(event) {
-        var keyCode = event.which;
-        if (keyCode == 38) {
-            ySpeed+=0.005;
-        } else if (keyCode == 40) {
-            ySpeed-=0.005;
-
-        } else if (keyCode == 37) {
-            steering -= 0.01;
-        } else if (keyCode == 39) {
-            steering += 0.01;
-        } else if (keyCode == 32) {
-            car.position.set(0, 0, 0);
-        }
-    };
-
+    document.onkeyup = function (event) {
+        keyDown[event.keyCode] = false;
+    }
 
 
 
@@ -102,6 +119,8 @@ function createGroundPlane() {
     var geo = new THREE.PlaneBufferGeometry(500, 500, 8, 8);
     var mat = new THREE.MeshBasicMaterial({ color: 0xAAAAAA, side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat); plane.rotateX(- Math.PI / 2);
+    
+    plane.scale.x = plane.scale.y = plane.scale.z = 2000;
     return plane;
 }
 function loadVehicle(sceneRef) {
@@ -131,6 +150,7 @@ function loadVehicle(sceneRef) {
         //mixer.clipAction(model.animations[0]).play();
         sceneRef.add(model);
         car = model;
+        car.scale.x = car.scale.y = car.scale.z = 200;
         objs.push({ model, mixer });
     });
 }
