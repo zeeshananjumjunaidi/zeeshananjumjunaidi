@@ -31,7 +31,7 @@ $(document).ready(() => {
     var SCREEN_HEIGHT = window.innerHeight;
     const loader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     camera.position.set(0, 3, 5);
     camera.position.set(15, 0, 10);
@@ -48,7 +48,11 @@ $(document).ready(() => {
 
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-
+    controls.minDistance = 5;
+    controls.maxDistance = 20;
+    controls.minPolarAngle = 0; // radians
+    // controls.maxPolarAngle = Math.PI; // radians
+    controls.maxPolarAngle = Math.PI/2; 
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
     light.position.set(50, 0, 0);
@@ -62,25 +66,25 @@ $(document).ready(() => {
     // light.shadow.camera.rotation.x=90;
     // light.shadow.camera.rotation.y=90;
     // light.shadow.camera.rotation.z=180;
-    let earthText = new THREE.TextSprite({
-        alignment: 'left',
-        color: '#fff',
-        fontFamily: '"Times New Roman", Times, serif',
-        fontSize: 0.7,
-        fontStyle: 'italic',
-        text: 'Earth'
-    });
-    scene.add(earthText);
-    let moonText = new THREE.TextSprite({
-        alignment: 'left',
-        color: '#fff',
-        fontFamily: '"Times New Roman", Times, serif',
-        fontSize: 0.3,
-        fontStyle: 'italic',
-        text: 'Moon'
-    });
-    moonText.text = "Moon";
-    scene.add(moonText);
+    // let earthText = new THREE.TextSprite({
+    //     alignment: 'left',
+    //     color: '#fff',
+    //     fontFamily: '"Times New Roman", Times, serif',
+    //     fontSize: 0.7,
+    //     fontStyle: 'italic',
+    //     text: 'Earth'
+    // });
+    // scene.add(earthText);
+    // let moonText = new THREE.TextSprite({
+    //     alignment: 'left',
+    //     color: '#fff',
+    //     fontFamily: '"Times New Roman", Times, serif',
+    //     fontSize: 0.3,
+    //     fontStyle: 'italic',
+    //     text: 'Moon'
+    // });
+    // moonText.text = "Moon";
+    // scene.add(moonText);
 
     const geometry = new THREE.SphereGeometry(1, 32, 16);
 
@@ -136,8 +140,8 @@ $(document).ready(() => {
     earthMesh.castShadow = true;
     earthMesh.scale.setScalar(3);
     scene.add(earthMesh);
-    earthText.position = earthMesh.position;
-    earthText.position.y += 4;
+    // earthText.position = earthMesh.position;
+    // earthText.position.y += 4;
 
     const earthAtmosMesh = new THREE.Mesh(geometry, customMaterialAtmosphere);
 
@@ -165,38 +169,35 @@ $(document).ready(() => {
     moonMesh.position.set(13, 0, 0);
     moonMesh.scale.setScalar(.3);
 
-    moonText.position.set(13, 0.5, 0);
+    // moonText.position.set(13, 0.5, 0);
 
     pivotPoint.add(moonMesh);
-    pivotPoint.add(moonText);
+    // pivotPoint.add(moonText);
     earthMesh.add(pivotPoint);
     scene.add(pivotPoint);
 
     // earthMesh.scale.setScalar(0.8);
 
-    const points = [];
-    points.push(earthMesh.position);
-    points.push(moonMesh.position.clone());
+    // const points = [];
+    // points.push(earthMesh.position);
+    // points.push(moonMesh.position.clone());
 
 
-    const curve = new THREE.EllipseCurve(
-        0, 0,            // ax, aY
-        13, 13,           // xRadius, yRadius
-        0, 2 * Math.PI,  // aStartAngle, aEndAngle
-        false,            // aClockwise
-        0                 // aRotation
-    );
+    // const curve = new THREE.EllipseCurve(
+    //     0, 0,            // ax, aY
+    //     13, 13,           // xRadius, yRadius
+    //     0, 2 * Math.PI,  // aStartAngle, aEndAngle
+    //     false,            // aClockwise
+    //     0                 // aRotation
+    // );
 
-    const curvePoints = curve.getPoints(50);
-    const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-
-    const curveMaterial = new THREE.LineBasicMaterial({ color: 0x00fff0 });
-
-    // Create the final object to add to the scene
-    const ellipse = new THREE.Line(curveGeometry, curveMaterial);
-
-    ellipse.rotation.x = Math.PI / 2;
-    scene.add(ellipse);
+    // const curvePoints = curve.getPoints(50);
+    // const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
+    // const curveMaterial = new THREE.LineBasicMaterial({ color: 0x00fff0 });
+    // // Create the final object to add to the scene
+    // const ellipse = new THREE.Line(curveGeometry, curveMaterial);
+    // ellipse.rotation.x = Math.PI / 2;
+    // scene.add(ellipse);
 
     // scene.add(generateArc(13,13,13,17,17,17));
   
@@ -209,15 +210,15 @@ $(document).ready(() => {
     // let nv2 =  getlSphericalNormalVector(v2,3).multiplyScalar(3);
     // let nv3 =  getlSphericalNormalVector(v3,3).multiplyScalar(1);
 
-    let lines= [];
-    let randomPoints =[];
-    for(let i=0;i<360;i++){
-        let q2 = latlonToSphericalProjection(Math.random(-Math.PI*2,Math.PI*2),Math.random(-Math.PI,Math.PI),3);
-        let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(Math.random()* 4);
-        let l2 = addNewLine(q2,nq2,curveMaterial);
-        lines.push(l2);
-        scene.add(l2);
-    }
+    // let lines= [];
+    // let randomPoints =[];
+    // for(let i=0;i<360;i++){
+    //     let q2 = latlonToSphericalProjection(Math.random(-Math.PI*2,Math.PI*2),Math.random(-Math.PI,Math.PI),3);
+    //     let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(Math.random()* 4);
+    //     let l2 = addNewLine(q2,nq2,lineMtl);
+    //     lines.push(l2);
+    //     scene.add(l2);
+    // }
     // USA 37.0902° N, 95.7129° W
     // let q2 = latlonToSphericalProjection(37.0902,95.7129,3);
     // let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(4);
@@ -225,11 +226,11 @@ $(document).ready(() => {
     // lines.push(l2);
     // scene.add(l2);
     // Pakistan
-    let q1 = latlonToSphericalProjection(30.3753,69.3451,1);
-    let nq1 =  getlSphericalNormalVector(q1,3).multiplyScalar(2);
-    let l = addNewLine(q1,nq1,curveMaterial);
-    lines.push(l);
-    scene.add(l);
+    // let q1 = latlonToSphericalProjection(30.3753,69.3451,1);
+    // let nq1 =  getlSphericalNormalVector(q1,3).multiplyScalar(2);
+    // let l = addNewLine(q1,nq1,lineMtl);
+    // lines.push(l);
+    // scene.add(l);
 
     // scene.add(addNewLine(v1,nv1,curveMaterial));
     // scene.add(addNewLine(v2,nv2,curveMaterial));
@@ -272,14 +273,22 @@ $(document).ready(() => {
     // Fog
     scene.fog = new THREE.Fog(0x000011, 1, 40, 4000);
 
+    const loader1 = new THREE.TextureLoader();
+    const texture1= loader1.load(
+      'assets/img/2k_stars.jpg',
+      () => {
+        const rt = new THREE.WebGLCubeRenderTarget(texture1.image.height);
+        rt.fromEquirectangularTexture(renderer, texture1);
+        scene.background = rt;
+      });
 
     const animate = function () {
         requestAnimationFrame(animate);
 
         earthMesh.rotation.y += 0.006;
-        for(let i=0;i<lines.length;i++){
-            lines[i].rotation.y += 0.006;
-        }
+        // for(let i=0;i<lines.length;i++){
+        //     lines[i].rotation.y += 0.006;
+        // }
         earthCloudMesh.rotation.y += 0.005;
         pivotPoint.rotation.y += 0.002;
         // moonMesh.rotateAround(earthMesh.position);
