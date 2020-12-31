@@ -169,107 +169,12 @@ $(document).ready(() => {
     moonMesh.position.set(13, 0, 0);
     moonMesh.scale.setScalar(.3);
 
-    // moonText.position.set(13, 0.5, 0);
-
     pivotPoint.add(moonMesh);
-    // pivotPoint.add(moonText);
+    
     earthMesh.add(pivotPoint);
     scene.add(pivotPoint);
 
-    // earthMesh.scale.setScalar(0.8);
-
-    // const points = [];
-    // points.push(earthMesh.position);
-    // points.push(moonMesh.position.clone());
-
-
-    // const curve = new THREE.EllipseCurve(
-    //     0, 0,            // ax, aY
-    //     13, 13,           // xRadius, yRadius
-    //     0, 2 * Math.PI,  // aStartAngle, aEndAngle
-    //     false,            // aClockwise
-    //     0                 // aRotation
-    // );
-
-    // const curvePoints = curve.getPoints(50);
-    // const curveGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
-    // const curveMaterial = new THREE.LineBasicMaterial({ color: 0x00fff0 });
-    // // Create the final object to add to the scene
-    // const ellipse = new THREE.Line(curveGeometry, curveMaterial);
-    // ellipse.rotation.x = Math.PI / 2;
-    // scene.add(ellipse);
-
-    // scene.add(generateArc(13,13,13,17,17,17));
   
-    /// LatLon test
-    // let v1 =new THREE.Vector3(2.25,2.25,0);
-    // let v2 =new THREE.Vector3(-2.25,2.25,0);
-    // let v3 =new THREE.Vector3((v1.x+v2.x)/2,(v1.y+v2.y)/2,(v1.z+v2.z)/2);
-
-    // let nv1 =  getlSphericalNormalVector(v1,3).multiplyScalar(3);
-    // let nv2 =  getlSphericalNormalVector(v2,3).multiplyScalar(3);
-    // let nv3 =  getlSphericalNormalVector(v3,3).multiplyScalar(1);
-
-    // let lines= [];
-    // let randomPoints =[];
-    // for(let i=0;i<360;i++){
-    //     let q2 = latlonToSphericalProjection(Math.random(-Math.PI*2,Math.PI*2),Math.random(-Math.PI,Math.PI),3);
-    //     let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(Math.random()* 4);
-    //     let l2 = addNewLine(q2,nq2,lineMtl);
-    //     lines.push(l2);
-    //     scene.add(l2);
-    // }
-    // USA 37.0902° N, 95.7129° W
-    // let q2 = latlonToSphericalProjection(37.0902,95.7129,3);
-    // let nq2 =  getlSphericalNormalVector(q2,3).normalize().multiplyScalar(4);
-    // let l2 = addNewLine(q2,nq2,curveMaterial);
-    // lines.push(l2);
-    // scene.add(l2);
-    // Pakistan
-    // let q1 = latlonToSphericalProjection(30.3753,69.3451,1);
-    // let nq1 =  getlSphericalNormalVector(q1,3).multiplyScalar(2);
-    // let l = addNewLine(q1,nq1,lineMtl);
-    // lines.push(l);
-    // scene.add(l);
-
-    // scene.add(addNewLine(v1,nv1,curveMaterial));
-    // scene.add(addNewLine(v2,nv2,curveMaterial));
-    // scene.add(addNewLine(v3,nv3,curveMaterial));
-
-    // scene.add(generateDot(v1.x,v1.y,v1.z));
-    // scene.add(generateDot(v2.x,v2.y,v2.z));
-    // scene.add(generateDot(v3.x,v3.y,v3.z));
-   
-
-
-    /// End of LatLon test
-
-
-
-    // const points1 =  getSplineFromCoords([0,0,100,14]).spline.getPoints( 50 );
-    // const geometry1 = new THREE.BufferGeometry().setFromPoints( points1 );
-
-    // const material1 = new THREE.LineBasicMaterial( { color : 0xff0000 } );
-
-    // // Create the final object to add to the scene
-    // const curveObject1 = new THREE.Line( geometry1, material1 );
-
-    // scene.add(curveObject1)
-    // scene.add(generateDot(-2.25,-2.25,0));
-    // scene.add(generateDot(2.25,-2.25,0));
-
-    
-
-    // const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
-    // lineGeom.attributes.position.needsUpdate = true;
-    // const line = new THREE.Line(lineGeom, lineMtl);
-    // scene.add(line);
-    // HELPERS
-    // scene.add(new THREE.PointLightHelper(light, 1));
-    // scene.add(new THREE.GridHelper(50, 50));
-    // const helper = new THREE.CameraHelper( light.shadow.camera );
-    // scene.add( helper );
-    // camera.position.z = 5;
     // Fog
     scene.fog = new THREE.Fog(0x000011, 1, 40, 4000);
 
@@ -307,56 +212,6 @@ function generateDot(x1,y1,z1){
     var dot = new THREE.Points(dotGeometry, dotMaterial);
     return dot;
 }
-
-// // Credit: https://medium.com/@xiaoyangzhao/drawing-curves-on-webgl-globe-using-three-js-and-d3-draft-7e782ffd7ab
-// function getSplineFromCoords(coords) {
-//     const startLat = coords[0];
-//     const startLng = coords[1];
-//     const endLat = coords[2];
-//     const endLng = coords[3];
-//     console.log(startLat,startLng);
-//     // start and end points
-//     const start = coordinateToPosition(startLat, startLng, GLOBE_RADIUS);
-//     const end = coordinateToPosition(endLat, endLng, GLOBE_RADIUS);
-   
-//     // altitude
-//     const altitude = clamp(start.distanceTo(end) * .75, CURVE_MIN_ALTITUDE, CURVE_MAX_ALTITUDE);
-    
-//     // 2 control points
-//     // const interpolate = geoInterpolate([startLng, startLat], [endLng, endLat]);
-//     const midCoord1 = start.sub(end).multiplyScalar (0.25);
-//     const midCoord2 = end.sub(start).multiplyScalar (0.75);
-//     // const midCoord2 = interpolate(0.75);
-//     const mid1 = coordinateToPosition(midCoord1.x,midCoord1.y, GLOBE_RADIUS + altitude);
-//     const mid2 = coordinateToPosition(midCoord2.x,midCoord2.y, GLOBE_RADIUS + altitude);
-   
-//     return {
-//       start,
-//       end,
-//       spline: new THREE.CubicBezierCurve3(start, mid1, mid2, end)
-//     };
-//   }
-
-//   function latLonTo3d(lat,lon,alt){
-//     let rad = 3;//     
-//     let x = rad* Math.cos(lat) * Math.sin(lon);
-//     let y = rad* Math.sin(lat) * Math.sin(lon);
-//     let z = rad* Math.cos(lon);
-//     return 
-//   }
-//  function coordinateToPosition(lat, lng, radius) {
-//     const phi = (90 - lat) * DEGREE_TO_RADIAN;
-//     const theta = (lng + 180) * DEGREE_TO_RADIAN;
-  
-//     return new THREE.Vector3(
-//       - radius * Math.sin(phi) * Math.cos(theta),
-//       radius * Math.cos(phi),
-//       radius * Math.sin(phi) * Math.sin(theta)
-//     );
-//   }
-//   function clamp(num, min, max) {
-//     return num <= min ? min : (num >= max ? max : num);
-//   }
 
 function getlSphericalNormalVector(vec){
     let _v = new THREE.Vector3(vec.x*2,vec.y*2,vec.z*2);// differentiate
