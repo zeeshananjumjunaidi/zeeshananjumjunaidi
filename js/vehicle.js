@@ -67,26 +67,25 @@ $(document).ready(() => {
             } else if (keyDown[83]) {
                 speed -= 2;
             } else {
-                speed -= 1;
-                if (speed < 0) speed = 0;
+                speed*=0.9;
+                if (Math.abs(speed) < 1) speed = 0;
             }
             if (speed != 0) {
-                if (keyDown[65]) steerAngle += 0.01;
-                if (keyDown[68]) steerAngle -= 0.01;
+                if (keyDown[65]) steerAngle += 0.001;
+                if (keyDown[68]) steerAngle -= 0.001;
             }
             let radius = 20 / 2;
-            steerAngle = steerAngle;
-            constantVelocity = speed; //constant velocity
+            constantVelocity = speed*5; //constant velocity
             heading += (steerAngle * this.constantVelocity) / radius;
-            position.x += constantVelocity * Math.cos(heading);
-            position.z += constantVelocity * Math.sin(heading);
+            position.x += constantVelocity * Math.sin(heading);
+            position.z += constantVelocity * Math.cos(heading);
 
 
 
             car.position.x =  position.x;//speed * Math.sin(car.rotation.y);
             car.position.z =  position.z;//speed * Math.cos(car.rotation.y);
             car.rotation.y=heading;
-
+            steerAngle*=0.5;
             camera.lookAt(car.position);
 
             renderer.render(scene, camera);
