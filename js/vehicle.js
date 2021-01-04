@@ -65,7 +65,9 @@ $(document).ready(() => {
                     speed += 1;
                 }
             } else if (keyDown[83]) {
-                speed -= 2;
+                
+                if (speed >-60) {
+                speed -= 2;}
             } else {
                 speed*=0.9;
                 if (Math.abs(speed) < 1) speed = 0;
@@ -76,7 +78,7 @@ $(document).ready(() => {
             }
             let radius = 20 / 2;
             constantVelocity = speed*5; //constant velocity
-            heading += (steerAngle * this.constantVelocity) / radius;
+            heading += 0.4* (steerAngle * this.constantVelocity) / radius;
             if(leftWheel&&rightWheel){
                 // leftWheel.rotation.y+=0.01;
                 // rightWheel.rotation.y=heading;
@@ -159,7 +161,7 @@ function loadVehicle(sceneRef) {
         //mixer.clipAction(model.animations[0]).play();
         sceneRef.add(model);
         car = model;
-        car.scale.x = car.scale.y = car.scale.z = 200;
+        car.scale.x = car.scale.y = car.scale.z = 100;
         objs.push({ model });
     });
 }
