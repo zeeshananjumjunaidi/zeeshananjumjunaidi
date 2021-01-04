@@ -77,6 +77,10 @@ $(document).ready(() => {
             let radius = 20 / 2;
             constantVelocity = speed*5; //constant velocity
             heading += (steerAngle * this.constantVelocity) / radius;
+            if(leftWheel&&rightWheel){
+                // leftWheel.rotation.y+=0.01;
+                // rightWheel.rotation.y=heading;
+            }
             position.x += constantVelocity * Math.sin(heading);
             position.z += constantVelocity * Math.cos(heading);
 
@@ -122,25 +126,31 @@ function createGroundPlane() {
     plane.scale.x = plane.scale.y = plane.scale.z = 2000;
     return plane;
 }
+var leftWheel;
+var rightWheel;
 function loadVehicle(sceneRef) {
-    let texture = new THREE.TextureLoader().load('../assets/3d/audi/Audi R8-black.jpg');
+   // let texture = new THREE.TextureLoader().load('../assets/3d/military/Audi R8-black.jpg');
     // load fbx model and texture                                               
     const objs = [];
     const loader = new THREE.FBXLoader();
-    loader.load("../assets/3d/audi/Audi_R8.fbx", model => {
+    loader.load("../assets/3d/military/vehicle.fbx", model => {
         // model is a THREE.Group (THREE.Object3D)       
         console.log(model);
 
         const material = new THREE.MeshPhongMaterial({
-            color: 0xFF0000,    // red (can also use a CSS color string here)
+            color: 0xFFFFFF,    // red (can also use a CSS color string here)
             flatShading: true,
         });
         model.traverse(function (child) {
+            if (child instanceof THREE.Group) {
+                if(child.name=='wheelR'){rightWheel=child;}
+                if(child.name=='wheelL'){leftWheel=child;}
+            }
+            
             if (child instanceof THREE.Mesh) {
-
                 // apply texture
                 child.material = material;
-                child.material.map = texture;
+              //  child.material.map = texture;
                 child.material.needsUpdate = true;
             }
         });
@@ -150,6 +160,6 @@ function loadVehicle(sceneRef) {
         sceneRef.add(model);
         car = model;
         car.scale.x = car.scale.y = car.scale.z = 200;
-        objs.push({ model, mixer });
+        objs.push({ model });
     });
 }
