@@ -1,3 +1,5 @@
+
+let wheels=[];
 $(document).ready(() => {
 
     let eleSpeed = document.getElementById('speed');
@@ -63,6 +65,7 @@ $(document).ready(() => {
     let position = new THREE.Vector3();
     let steerAngle=0;
     let heading=0;
+    
     const animate = function (now) {
 
         requestAnimationFrame(animate);
@@ -87,8 +90,21 @@ $(document).ready(() => {
             let radius = 20 / 2;
             constantVelocity = speed*5; //constant velocity
             heading += 0.4* (steerAngle * this.constantVelocity) / radius;
-            if(leftWheel&&rightWheel){
+            //var FrontLeftWheel;
+            // var FrontRightWheel;
+            // var BackLeftWheel;
+            // var BackRightWheel;
+            if(FrontLeftWheel&&FrontRightWheel&&BackLeftWheel&&BackRightWheel){
                 // leftWheel.rotation.y+=0.01;
+                
+                const time = - performance.now() / 1000;
+                for ( let i = 0; i < wheels.length; i ++ ) {
+
+					wheels[ i ].rotation.x +=constantVelocity * Math.cos(heading)/9.6;
+
+				}
+                // FrontRightWheel.rotateOnAxis(new THREE.Vector3(0,0,1),time);
+                // FrontRightWheel.applyMatrix( new THREE.Matrix4().makeRotation(1,1,1));
                 // rightWheel.rotation.y=heading;
             }
             position.x += constantVelocity * Math.sin(heading);
@@ -100,15 +116,17 @@ $(document).ready(() => {
             car.position.z =  position.z;//speed * Math.cos(car.rotation.y);
             car.rotation.y=heading;
             steerAngle*=0.5;
-            camera.lookAt(car.position);
-
+             camera.lookAt(car.position);
+            camera.position.x=car.position.x+0;
+         camera.position.y=car.position.y+6100;
+            camera.position.z=car.position.z-8500;
             renderer.render(scene, camera);
         }
         if (eleSpeed)
             eleSpeed.innerText = "Speed: " + speed;
         if (eleSteer)
             eleSteer.innerText = "Steer: " + speed;
-        controls.update();
+        // controls.update();
         renderer.render(scene, camera);
     };
     animate();
@@ -136,8 +154,10 @@ function createGroundPlane() {
     plane.scale.x = plane.scale.y = plane.scale.z = 2000;
     return plane;
 }
-var leftWheel;
-var rightWheel;
+var FrontLeftWheel;
+var FrontRightWheel;
+var BackLeftWheel;
+var BackRightWheel;
 function loadVehicle(sceneRef) {
    // let texture = new THREE.TextureLoader().load('../assets/3d/military/Audi R8-black.jpg');
     // load fbx model and texture                                               
@@ -150,24 +170,31 @@ function loadVehicle(sceneRef) {
         const material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,    // red (can also use a CSS color string here)
             flatShading: true,
+            combine:100
         });
         model.traverse(function (child) {
             if (child instanceof THREE.Group) {
-                if(child.name=='wheelR'){rightWheel=child;}
-                if(child.name=='wheelL'){leftWheel=child;}
+                
+                if(child.name=='wheelFR'){FrontRightWheel=child;wheels.push(child);}
+                if(child.name=='wheelFL'){FrontLeftWheel=child;wheels.push(child);}
+                if(child.name=='wheelBR'){BackRightWheel=child;wheels.push(child);}
+                if(child.name=='wheelBL'){BackLeftWheel=child;wheels.push(child);}
+                
             }
             
             if (child instanceof THREE.Mesh) {
                 // apply texture
-                child.material = material;
+              //  child.material = material;
               //  child.material.map = texture;
                 child.material.needsUpdate = true;
             }
         });
+        
         const mixer = new THREE.AnimationMixer(model);
         // animations is a list of THREE.AnimationClip                          
         //mixer.clipAction(model.animations[0]).play();
         sceneRef.add(model);
+        
         car = model;
         car.scale.x = car.scale.y = car.scale.z = 100;
         objs.push({ model });
