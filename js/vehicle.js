@@ -38,6 +38,14 @@ $(document).ready(() => {
     light.position.set(50, 0, 0);
     light.castShadow = true; // default false
     scene.add(light);
+    
+    const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
+    light1.position.set(0, 0, 50);
+    scene.add(light1);
+
+    const lightAmbient = new THREE.AmbientLight( 0x404040 ); // soft white light
+    scene.add( lightAmbient );
+
     //Set up shadow properties for the light
     light.shadow.mapSize.width = 512; // default
     light.shadow.mapSize.height = 512; // default
