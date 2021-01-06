@@ -14,7 +14,7 @@ $(document).ready(() => {
     var SCREEN_HEIGHT = window.innerHeight;
     const loader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 100000);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 5000;
     camera.position.z = -5000;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -100,9 +100,11 @@ $(document).ready(() => {
                 const time = - performance.now() / 1000;
                 for ( let i = 0; i < wheels.length; i ++ ) {
 
-					wheels[ i ].rotation.x +=constantVelocity * Math.cos(heading)/9.6;
+					wheels[ i ].rotation.x -=(speed * Math.cos(heading))/(190.2);
 
-				}
+                }
+                //FrontLeftWheel.rotation.z=Math.PI/2;
+                //FrontRightWheel.rotation.z=Math.PI/2;
                 // FrontRightWheel.rotateOnAxis(new THREE.Vector3(0,0,1),time);
                 // FrontRightWheel.applyMatrix( new THREE.Matrix4().makeRotation(1,1,1));
                 // rightWheel.rotation.y=heading;
@@ -117,20 +119,21 @@ $(document).ready(() => {
             car.rotation.y=heading;
             steerAngle*=0.5;
              camera.lookAt(car.position);
-            camera.position.x=car.position.x+0;
-         camera.position.y=car.position.y+6100;
-            camera.position.z=car.position.z-8500;
+              controls.center.set(car.position.x,car.position.y,car.position.z);
+            //camera.position.x=car.position.x+0;
+            //camera.position.y=car.position.y+6100;
+            //camera.position.z=car.position.z-8500;
             renderer.render(scene, camera);
         }
         if (eleSpeed)
             eleSpeed.innerText = "Speed: " + speed;
         if (eleSteer)
             eleSteer.innerText = "Steer: " + speed;
-        // controls.update();
+        controls.update();
         renderer.render(scene, camera);
     };
     animate();
-
+    console.log(controls);
     speed = 0;
   
     document.onkeydown = function (event) {
@@ -148,7 +151,11 @@ $(document).ready(() => {
 var car = undefined;
 function createGroundPlane() {
     var geo = new THREE.PlaneBufferGeometry(500, 500, 8, 8);
-    var mat = new THREE.MeshBasicMaterial({ color: 0xAAAAAA, side: THREE.DoubleSide });
+    let texture = new THREE.TextureLoader().load('../assets/img/ground_grid.jpg');
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set( 10,10 );
+    var mat = new THREE.MeshBasicMaterial({map:texture, color: 0xAAAAAA, side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat); plane.rotateX(- Math.PI / 2);
     
     plane.scale.x = plane.scale.y = plane.scale.z = 2000;
