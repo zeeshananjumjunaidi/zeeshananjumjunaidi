@@ -1,5 +1,5 @@
 
-let wheels=[];
+let wheels = [];
 $(document).ready(() => {
 
     let eleSpeed = document.getElementById('speed');
@@ -23,7 +23,7 @@ $(document).ready(() => {
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
-    
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor("#EEE", 1);
@@ -40,13 +40,13 @@ $(document).ready(() => {
     light.position.set(50, 0, 0);
     light.castShadow = true; // default false
     scene.add(light);
-    
+
     const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
     light1.position.set(0, 0, 50);
     scene.add(light1);
 
-    const lightAmbient = new THREE.AmbientLight( 0x404040 ); // soft white light
-    scene.add( lightAmbient );
+    const lightAmbient = new THREE.AmbientLight(0x404040); // soft white light
+    scene.add(lightAmbient);
 
     //Set up shadow properties for the light
     light.shadow.mapSize.width = 512; // default
@@ -63,9 +63,9 @@ $(document).ready(() => {
         keyDown[i] = false;
     }
     let position = new THREE.Vector3();
-    let steerAngle=0;
-    let heading=0;
-    
+    let steerAngle = 0;
+    let heading = 0;
+
     const animate = function (now) {
 
         requestAnimationFrame(animate);
@@ -76,11 +76,12 @@ $(document).ready(() => {
                     speed += 1;
                 }
             } else if (keyDown[83]) {
-                
-                if (speed >-60) {
-                speed -= 2;}
+
+                if (speed > -60) {
+                    speed -= 2;
+                }
             } else {
-                speed*=0.9;
+                speed *= 0.9;
                 if (Math.abs(speed) < 1) speed = 0;
             }
             if (speed != 0) {
@@ -88,23 +89,23 @@ $(document).ready(() => {
                 if (keyDown[68]) steerAngle -= 0.001;
             }
             let radius = 20 / 2;
-            constantVelocity = speed*5; //constant velocity
-            heading += 0.4* (steerAngle * this.constantVelocity) / radius;
+            constantVelocity = speed * 5; //constant velocity
+            heading += 0.4 * (steerAngle * this.constantVelocity) / radius;
             //var FrontLeftWheel;
             // var FrontRightWheel;
             // var BackLeftWheel;
             // var BackRightWheel;
-            if(FrontLeftWheel&&FrontRightWheel&&BackLeftWheel&&BackRightWheel){
+            if (FrontLeftWheel && FrontRightWheel && BackLeftWheel && BackRightWheel) {
                 // leftWheel.rotation.y+=0.01;
-                
-                const time = - performance.now() / 1000;
-                for ( let i = 0; i < wheels.length; i ++ ) {
 
-					wheels[ i ].rotation.x -=(speed * Math.cos(heading))/(190.2);
+                const time = - performance.now() / 1000;
+                for (let i = 0; i < wheels.length; i++) {
+                    wheels[i].rotateOnAxis (new THREE.Vector3(1, 0, 0), (speed * Math.cos(heading)) / (190.2));
+                   // wheels[i].rotation.x -= (speed * Math.cos(heading)) / (190.2);
 
                 }
-                //FrontLeftWheel.rotation.z=Math.PI/2;
-                //FrontRightWheel.rotation.z=Math.PI/2;
+                FrontLeftWheel.rotateOnAxis (new THREE.Vector3(0, 1, 0),1*steerAngle) ;
+                FrontRightWheel.rotateOnAxis (new THREE.Vector3(0, 1, 0),1*steerAngle);
                 // FrontRightWheel.rotateOnAxis(new THREE.Vector3(0,0,1),time);
                 // FrontRightWheel.applyMatrix( new THREE.Matrix4().makeRotation(1,1,1));
                 // rightWheel.rotation.y=heading;
@@ -114,12 +115,12 @@ $(document).ready(() => {
 
 
 
-            car.position.x =  position.x;//speed * Math.sin(car.rotation.y);
-            car.position.z =  position.z;//speed * Math.cos(car.rotation.y);
-            car.rotation.y=heading;
-            steerAngle*=0.5;
-             camera.lookAt(car.position);
-              controls.center.set(car.position.x,car.position.y,car.position.z);
+            car.position.x = position.x;//speed * Math.sin(car.rotation.y);
+            car.position.z = position.z;//speed * Math.cos(car.rotation.y);
+            car.rotation.y = heading;
+            steerAngle *= 0.5;
+            camera.lookAt(car.position);
+            controls.center.set(car.position.x, car.position.y, car.position.z);
             //camera.position.x=car.position.x+0;
             //camera.position.y=car.position.y+6100;
             //camera.position.z=car.position.z-8500;
@@ -135,7 +136,7 @@ $(document).ready(() => {
     animate();
     console.log(controls);
     speed = 0;
-  
+
     document.onkeydown = function (event) {
         console.log(event.keyCode);
         keyDown[event.keyCode] = true;
@@ -154,10 +155,10 @@ function createGroundPlane() {
     let texture = new THREE.TextureLoader().load('../assets/img/ground_grid.jpg');
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set( 10,10 );
-    var mat = new THREE.MeshBasicMaterial({map:texture, color: 0xAAAAAA, side: THREE.DoubleSide });
+    texture.repeat.set(10, 10);
+    var mat = new THREE.MeshBasicMaterial({ map: texture, color: 0xAAAAAA, side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat); plane.rotateX(- Math.PI / 2);
-    
+
     plane.scale.x = plane.scale.y = plane.scale.z = 2000;
     return plane;
 }
@@ -166,7 +167,7 @@ var FrontRightWheel;
 var BackLeftWheel;
 var BackRightWheel;
 function loadVehicle(sceneRef) {
-   // let texture = new THREE.TextureLoader().load('../assets/3d/military/Audi R8-black.jpg');
+    // let texture = new THREE.TextureLoader().load('../assets/3d/military/Audi R8-black.jpg');
     // load fbx model and texture                                               
     const objs = [];
     const loader = new THREE.FBXLoader();
@@ -177,31 +178,31 @@ function loadVehicle(sceneRef) {
         const material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,    // red (can also use a CSS color string here)
             flatShading: true,
-            combine:100
+            combine: 100
         });
         model.traverse(function (child) {
             if (child instanceof THREE.Group) {
-                
-                if(child.name=='wheelFR'){FrontRightWheel=child;wheels.push(child);}
-                if(child.name=='wheelFL'){FrontLeftWheel=child;wheels.push(child);}
-                if(child.name=='wheelBR'){BackRightWheel=child;wheels.push(child);}
-                if(child.name=='wheelBL'){BackLeftWheel=child;wheels.push(child);}
-                
+
+                if (child.name == 'wheelFR') { FrontRightWheel = child; wheels.push(child); }
+                if (child.name == 'wheelFL') { FrontLeftWheel = child; wheels.push(child); }
+                if (child.name == 'wheelBR') { BackRightWheel = child; wheels.push(child); }
+                if (child.name == 'wheelBL') { BackLeftWheel = child; wheels.push(child); }
+
             }
-            
+
             if (child instanceof THREE.Mesh) {
                 // apply texture
-              //  child.material = material;
-              //  child.material.map = texture;
+                //  child.material = material;
+                //  child.material.map = texture;
                 child.material.needsUpdate = true;
             }
         });
-        
+
         const mixer = new THREE.AnimationMixer(model);
         // animations is a list of THREE.AnimationClip                          
         //mixer.clipAction(model.animations[0]).play();
         sceneRef.add(model);
-        
+
         car = model;
         car.scale.x = car.scale.y = car.scale.z = 100;
         objs.push({ model });
