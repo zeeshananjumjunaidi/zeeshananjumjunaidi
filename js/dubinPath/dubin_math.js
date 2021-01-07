@@ -23,13 +23,13 @@ class DubinMath {
 
         //To get the second coordinate we need a direction
         //This direction is the same as the direction between the center pos of the circles
-        let dirVec = p5.Vector.sub(goalCircle, startCircle);
+        let dirVec = new THREE.Vector2().subVectors(goalCircle, startCircle);
         let xT2 = xT1 + dirVec.x;
         let yT2 = yT1 + dirVec.y;
 
         //The final coordinates of the tangent lines
-        let startTangent = createVector(xT1, yT1);
-        let endTangent = createVector(xT2, yT2);
+        let startTangent = new THREE.Vector2(xT1, yT1);
+        let endTangent = new THREE.Vector2(xT2, yT2);
 
         return { startTangent: startTangent, endTangent: endTangent };
     }
@@ -38,7 +38,7 @@ class DubinMath {
     //Inner tangent (RSL and LSR)
     GetLSRorRSLTangent(startCircle, goalCircle, isBottom) {
         //Find the distance between the circles
-        let D = p5.Vector.sub(startCircle, goalCircle).mag();
+        let D = new THREE.Vector2().subVectors(startCircle, goalCircle).length();
 
 
         //If the circles have the same radius we can use cosine and not the law of cosines 
@@ -62,15 +62,15 @@ class DubinMath {
         let yT1_tmp = startCircle.y + 2 * this.turningRadius * Math.sin(theta);
 
         //The direction is between the new coordinate and the center of the target circle
-        let dirVec = p5.Vector.sub(goalCircle, createVector(xT1_tmp, yT1_tmp));
-        // drawLine(goalCircle,dirVec.mult(2),color(0,255,0));
+        let dirVec = new THREE.Vector2().subVectors(goalCircle, new THREE.Vector2(xT1_tmp, yT1_tmp));
+        // drawLine(goalCircle,dirVec.multiply(2),color(0,255,0));
         //The coordinates of the second tangent point is the 
         let xT2 = xT1 + dirVec.x;
         let yT2 = yT1 + dirVec.y;
 
         //The final coordinates of the tangent lines
-        let startTangent = createVector(xT1, yT1);
-        let endTangent = createVector(xT2, yT2);
+        let startTangent = new THREE.Vector2(xT1, yT1);
+        let endTangent = new THREE.Vector2(xT2, yT2);
         return { startTangent: startTangent, endTangent: endTangent };
     }
     /**
@@ -82,12 +82,12 @@ class DubinMath {
     getRLRorLRLTangentPointsAndMiddleCircle(startCircle, goalCircle, isLRL) {
 
         //The distance between the circles
-        let D = p5.Vector.sub(startCircle, goalCircle).mag();
+        let D = new THREE.Vector2().subVectors(startCircle, goalCircle).length();
 
         //The angle between the goal and the new 3rd circle we create with the law of cosines
         let theta = Math.acos(D / (4 * this.turningRadius));
         //But we need to modify the angle theta if the circles are not on the same line
-        let V1 = p5.Vector.sub(goalCircle, startCircle);
+        let V1 = new THREE.Vector2().subVectors(goalCircle, startCircle);
         //Different depending on if we calculate LRL or RLR
         if (isLRL) {
             theta = Math.atan2(V1.y, V1.x) + theta;
@@ -100,12 +100,12 @@ class DubinMath {
         let x = startCircle.x + 2 * this.turningRadius * Math.cos(theta);
         let y = startCircle.y + 2 * this.turningRadius * Math.sin(theta);
 
-        let middleCircle = createVector(x, y);
+        let middleCircle = new THREE.Vector2(x, y);
         //Calculate the tangent points
-        let V2 = p5.Vector.sub(goalCircle, middleCircle).normalize().mult(50);
-        let V3 = p5.Vector.sub(startCircle, middleCircle).normalize().mult(50);
-        let startTangent = p5.Vector.add(middleCircle, V2);//.mult(50);//.mult(50);
-        let endTangent = p5.Vector.add(middleCircle, V3);//.mult(50);//.mult(50);
+        let V2 = new THREE.Vector2().subVectors(goalCircle, middleCircle).normalize().multiply(50);
+        let V3 = new THREE.Vector2().subVectors(startCircle, middleCircle).normalize().multiply(50);
+        let startTangent = new THREE.Vector2().add(middleCircle, V2);//.multiply(50);//.multiply(50);
+        let endTangent = new THREE.Vector2().add(middleCircle, V3);//.multiply(50);//.multiply(50);
         return { startTangent: startTangent, endTangent: endTangent, middleCircle: middleCircle };
     }
 
@@ -114,7 +114,7 @@ class DubinMath {
         goalPos,
         isLeftCircle,segmentNumber=1) {
         // https://arxiv.org/pdf/1804.07238.pdf
-        noFill();
+        //noFill();
         let radius = 50;
         let startAngle = Math.atan2(startPos.y - circleCenterPos.y, startPos.x - circleCenterPos.x);
         let goalAngle = Math.atan2(goalPos.y - circleCenterPos.y, goalPos.x - circleCenterPos.x);
@@ -154,14 +154,14 @@ class DubinMath {
         // } else {
         //     arc(circleCenterPos.x, circleCenterPos.y, 30, 30, (goalAngle), (startAngle));
         // }
-        noStroke();
-        fill(255);
+       // noStroke();
+       // fill(255);
         //text((theta).toFixed(2), circleCenterPos.x, circleCenterPos.y + 10);
         //text(((theta * 180 / Math.PI*2)%360).toFixed(2), circleCenterPos.x, circleCenterPos.y + 20);
 
 
-        stroke(255);
-        noFill();
+      //  stroke(255);
+       // noFill();
         let length = Math.abs(radius * theta);
         return length;
     }

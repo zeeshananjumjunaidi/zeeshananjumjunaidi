@@ -91,7 +91,7 @@ class Vehicle {
                 this.heading = angle;
                 this.position = vc;
                 // this.drive
-                // this.manualDrive(angle>0?1:angle<0?-1:0,vc.normalize().mag());
+                // this.manualDrive(angle>0?1:angle<0?-1:0,vc.normalize().length());
             } else {
                 this.currentPosIndex++;
             }
@@ -205,19 +205,20 @@ class Vehicle {
             this.updateRSR();
         }
         // LSR # 3
-        if (p5.Vector.sub(this.vLCircle, this.tRCircle).mag() > comparisonSqr) {
+        console.log(new THREE.Vector2);
+        if (new THREE.Vector2().subVectors(this.vLCircle, this.tRCircle).length() > comparisonSqr) {
             this.updateLSR();
         }
         // RSL # 4
-        if (p5.Vector.sub(this.vRCircle, this.tLCircle).mag() > comparisonSqr) {
+        if (new THREE.Vector2().subVectors(this.vRCircle, this.tLCircle).length() > comparisonSqr) {
             this.updateRSL();
         }
         // RLR # 5
-        if (p5.Vector.sub(this.vRCircle, this.tRCircle).mag() < comparisonSqr) {
+        if (new THREE.Vector2().subVectors(this.vRCircle, this.tRCircle).length() < comparisonSqr) {
             this.updateRLR();
         }
         //LRL # 6
-        if (p5.Vector.sub(this.vLCircle, this.tLCircle).mag() < comparisonSqr) {
+        if (new THREE.Vector2().subVectors(this.vLCircle, this.tLCircle).length() < comparisonSqr) {
             this.updateLRL();
         }
         // Reed Shepp Paths paths

@@ -8,6 +8,7 @@ let targetPosition;
 let vehicle;
 $(document).ready(() => {
     vehicle = new Vehicle(0,0,0,1000,1000,0);
+    vehicle.simulateDubinPath();
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
     raycaster = new THREE.Raycaster();
@@ -94,7 +95,7 @@ $(document).ready(() => {
             targetPosition.x=0;
             targetPosition.y=0;
             if (keyDown[38]) {//up
-                targetPosition.y +=100;
+                targetPosition.y +=100;console.log(vehicle.pathDataList);
             } else if (keyDown[40]) {//down
                 targetPosition.y -= 100;
             }
@@ -149,7 +150,7 @@ $(document).ready(() => {
 
 
 
- 
+            
             vehicle.drive(constantVelocity,steerAngle);
             vehicle.updateTargetControl(targetPosition, tHeading);
             // console.log(vehicle.position.x,vehicle.position.y);
