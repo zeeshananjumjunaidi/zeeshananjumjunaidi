@@ -1,9 +1,17 @@
 
 let wheels = [];
+let mousePosition;
+let rayCaster;
+let camera;
+let scene;
+let targetPosition;
+let vehicle;
 $(document).ready(() => {
-
+    vehicle = new Vehicle(0,0,0,1000,1000,0);
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
 
     const settings = {
         animate: true,
@@ -13,8 +21,8 @@ $(document).ready(() => {
     var SCREEN_WIDTH = window.innerWidth;
     var SCREEN_HEIGHT = window.innerHeight;
     const loader = new THREE.TextureLoader();
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 5000;
     camera.position.z = -5000;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -29,10 +37,16 @@ $(document).ready(() => {
     renderer.setClearColor("#EEE", 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
     document.body.appendChild(renderer.domElement);
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-
+    rayCaster = new THREE.Raycaster();
+    targetPosition = new THREE.Vector2();
+    document.addEventListener(
+        "click",
+        function (event) { console.log(event) },
+        false);
     // basic line material
     //const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
     // LIGHTING
@@ -54,6 +68,11 @@ $(document).ready(() => {
     light.shadow.camera.near = 0.5; // default
     light.shadow.camera.far = 500; // default
     scene.add(light);
+    let currentPosRect = createRect(0x0000ff);
+    scene.add(currentPosRect);
+
+    let targetPosRect = createRect(0xff0000);
+    scene.add(targetPosRect);
 
     loadVehicle(scene);
 
@@ -65,20 +84,44 @@ $(document).ready(() => {
     let position = new THREE.Vector3();
     let steerAngle = 0;
     let heading = 0;
-
+    let tHeading = 0;
+    let dir = 1;
     const animate = function (now) {
 
         requestAnimationFrame(animate);
         if (car) {
+            // Target position and orientation
+            targetPosition.x=0;
+            targetPosition.y=0;
+            if (keyDown[38]) {//up
+                targetPosition.y +=100;
+            } else if (keyDown[40]) {//down
+                targetPosition.y -= 100;
+            }
+            if (keyDown[37]) {//left
+                targetPosition.x += 100;
+            } else if (keyDown[39]) {//right
+                targetPosition.x -=100;
+            }
+            tHeading=0;
+            if (keyDown[69]) {//Q
+                tHeading -=  1;
+            } else if (keyDown[81]) {//R
+                tHeading +=1;
+            }
 
+
+            // console.log(targetPosition);
             if (keyDown[87]) {
                 if (speed < 130) {
                     speed += 1;
+                    dir = 1;
                 }
             } else if (keyDown[83]) {
 
                 if (speed > -60) {
                     speed -= 2;
+                    dir = -1;
                 }
             } else {
                 speed *= 0.9;
@@ -91,33 +134,41 @@ $(document).ready(() => {
             let radius = 20 / 2;
             constantVelocity = speed * 5; //constant velocity
             heading += 0.4 * (steerAngle * this.constantVelocity) / radius;
-            //var FrontLeftWheel;
-            // var FrontRightWheel;
-            // var BackLeftWheel;
-            // var BackRightWheel;
+       
             if (FrontLeftWheel && FrontRightWheel && BackLeftWheel && BackRightWheel) {
-                // leftWheel.rotation.y+=0.01;
+  
 
                 const time = - performance.now() / 1000;
                 for (let i = 0; i < wheels.length; i++) {
-                    wheels[i].rotateOnAxis (new THREE.Vector3(1, 0, 0), (speed * Math.cos(heading)) / (190.2));
-                   // wheels[i].rotation.x -= (speed * Math.cos(heading)) / (190.2);
+                    wheels[i].rotateOnAxis(new THREE.Vector3(1, 0, 0), dir * (speed * Math.cos(heading)) / (320.4));
 
                 }
-                FrontLeftWheel.rotateOnAxis (new THREE.Vector3(0, 1, 0),1*steerAngle) ;
-                FrontRightWheel.rotateOnAxis (new THREE.Vector3(0, 1, 0),1*steerAngle);
-                // FrontRightWheel.rotateOnAxis(new THREE.Vector3(0,0,1),time);
-                // FrontRightWheel.applyMatrix( new THREE.Matrix4().makeRotation(1,1,1));
-                // rightWheel.rotation.y=heading;
             }
             position.x += constantVelocity * Math.sin(heading);
             position.z += constantVelocity * Math.cos(heading);
 
 
 
-            car.position.x = position.x;//speed * Math.sin(car.rotation.y);
-            car.position.z = position.z;//speed * Math.cos(car.rotation.y);
-            car.rotation.y = heading;
+ 
+            vehicle.drive(constantVelocity,steerAngle);
+            vehicle.updateTargetControl(targetPosition, tHeading);
+            // console.log(vehicle.position.x,vehicle.position.y);
+            car.position.x = vehicle.position.y;//speed * Math.sin(car.rotation.y);
+            car.position.z = vehicle.position.x;//speed * Math.cos(car.rotation.y);
+            car.rotation.y = vehicle.heading;
+
+                FrontLeftWheel.rotation.x=vehicle.steerAngle*360;//.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
+                FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
+
+            currentPosRect.position.x = vehicle.position.y;
+            currentPosRect.position.z = vehicle.position.x;
+            currentPosRect.rotation.y = vehicle.heading;
+
+            targetPosRect.position.x=vehicle.tPosition.y;
+            targetPosRect.position.y=1000;
+            targetPosRect.position.z=vehicle.tPosition.x;
+            targetPosRect.rotation.y = vehicle.tHeading;
+
             steerAngle *= 0.5;
             camera.lookAt(car.position);
             controls.center.set(car.position.x, car.position.y, car.position.z);
@@ -162,6 +213,7 @@ function createGroundPlane() {
     plane.scale.x = plane.scale.y = plane.scale.z = 2000;
     return plane;
 }
+
 var FrontLeftWheel;
 var FrontRightWheel;
 var BackLeftWheel;
@@ -183,8 +235,10 @@ function loadVehicle(sceneRef) {
         model.traverse(function (child) {
             if (child instanceof THREE.Group) {
 
-                if (child.name == 'wheelFR') { FrontRightWheel = child; wheels.push(child); }
-                if (child.name == 'wheelFL') { FrontLeftWheel = child; wheels.push(child); }
+                if (child.name == 'wheelFR') { FrontRightWheel = child; 
+                    wheels.push(child); }
+                if (child.name == 'wheelFL') { FrontLeftWheel = child;
+                     wheels.push(child); }
                 if (child.name == 'wheelBR') { BackRightWheel = child; wheels.push(child); }
                 if (child.name == 'wheelBL') { BackLeftWheel = child; wheels.push(child); }
 
@@ -198,7 +252,7 @@ function loadVehicle(sceneRef) {
             }
         });
 
-        const mixer = new THREE.AnimationMixer(model);
+        //const mixer = new THREE.AnimationMixer(model);
         // animations is a list of THREE.AnimationClip                          
         //mixer.clipAction(model.animations[0]).play();
         sceneRef.add(model);
@@ -207,4 +261,24 @@ function loadVehicle(sceneRef) {
         car.scale.x = car.scale.y = car.scale.z = 100;
         objs.push({ model });
     });
+}
+function createRect(clr) {
+    const width = 3000;
+    const height = 5500;
+    const material = new THREE.LineBasicMaterial({
+        color: clr
+    });
+
+    const points = [];
+    points.push(new THREE.Vector3(-width, 0, -height));
+    points.push(new THREE.Vector3(-width, 0, height));
+    points.push(new THREE.Vector3(width, 0, height));
+    points.push(new THREE.Vector3(width, 0, -height));
+    points.push(new THREE.Vector3(-width, 0, -height));
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    geometry.translate(0, 0, 2000);
+    const line = new THREE.Line(geometry, material);
+    line.position.y = 100;
+    return line;
 }
