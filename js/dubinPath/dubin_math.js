@@ -102,8 +102,8 @@ class DubinMath {
 
         let middleCircle = new THREE.Vector2(x, y);
         //Calculate the tangent points
-        let V2 = new THREE.Vector2().subVectors(goalCircle, middleCircle).normalize().multiply(50);
-        let V3 = new THREE.Vector2().subVectors(startCircle, middleCircle).normalize().multiply(50);
+        let V2 = new THREE.Vector2().subVectors(goalCircle, middleCircle).normalize().multiply(this.turningRadius);
+        let V3 = new THREE.Vector2().subVectors(startCircle, middleCircle).normalize().multiply(this.turningRadius);
         let startTangent = new THREE.Vector2().add(middleCircle, V2);//.multiply(50);//.multiply(50);
         let endTangent = new THREE.Vector2().add(middleCircle, V3);//.multiply(50);//.multiply(50);
         return { startTangent: startTangent, endTangent: endTangent, middleCircle: middleCircle };
@@ -115,7 +115,7 @@ class DubinMath {
         isLeftCircle,segmentNumber=1) {
         // https://arxiv.org/pdf/1804.07238.pdf
         //noFill();
-        let radius = 50;
+        let radius = this.turningRadius;// 50;
         let startAngle = Math.atan2(startPos.y - circleCenterPos.y, startPos.x - circleCenterPos.x);
         let goalAngle = Math.atan2(goalPos.y - circleCenterPos.y, goalPos.x - circleCenterPos.x);
         // if(segmentNumber==3){

@@ -17,5 +17,5 @@ function rotatePoint(cx, cy, angle, centerPoint) {
     return p;
 }
 function vectorDist(a,b){
-    return dist(a.x,a.y,b.x,b.y);
+    return a.distanceTo(b);//dist(a.x,a.y,b.x,b.y);
 }

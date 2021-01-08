@@ -6,13 +6,16 @@ let camera;
 let scene;
 let targetPosition;
 let vehicle;
+let pathGroup;
+let debugText
 $(document).ready(() => {
-    vehicle = new Vehicle(0,0,0,1000,1000,0);
-    vehicle.simulateDubinPath();
+    vehicle = new Vehicle(0,0,0,6000,1000,0);
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
+    debugText = document.getElementById('debug');
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
+    pathGroup = new THREE.Group();
 
     const settings = {
         animate: true,
@@ -49,7 +52,9 @@ $(document).ready(() => {
         function (event) { console.log(event) },
         false);
     // basic line material
-    //const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    // lineMtl.color=0x00ff00;
+    console.log(lineMtl.color)
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
     light.position.set(50, 0, 0);
@@ -75,7 +80,12 @@ $(document).ready(() => {
     let targetPosRect = createRect(0xff0000);
     scene.add(targetPosRect);
 
+    scene.add(pathGroup);
+
     loadVehicle(scene);
+
+    scene.add(createCircle(vehicle.vLCircle.x,vehicle.vLCircle.y,vehicle.turningRadius));
+
 
     scene.add(createGroundPlane());
     keyDown = new Array();
@@ -95,7 +105,8 @@ $(document).ready(() => {
             targetPosition.x=0;
             targetPosition.y=0;
             if (keyDown[38]) {//up
-                targetPosition.y +=100;console.log(vehicle.pathDataList);
+                targetPosition.y +=100;
+                console.log(vehicle.drivingPathCoordinates)
             } else if (keyDown[40]) {//down
                 targetPosition.y -= 100;
             }
@@ -134,7 +145,7 @@ $(document).ready(() => {
             }
             let radius = 20 / 2;
             constantVelocity = speed * 5; //constant velocity
-            heading += 0.4 * (steerAngle * this.constantVelocity) / radius;
+            heading += 0.4 * (steerAngle * constantVelocity) / radius;
        
             if (FrontLeftWheel && FrontRightWheel && BackLeftWheel && BackRightWheel) {
   
@@ -153,6 +164,9 @@ $(document).ready(() => {
             
             vehicle.drive(constantVelocity,steerAngle);
             vehicle.updateTargetControl(targetPosition, tHeading);
+            vehicle.simulateDubinPath();
+            vehicle.solvePath();
+            drawDrivingPath();
             // console.log(vehicle.position.x,vehicle.position.y);
             car.position.x = vehicle.position.y;//speed * Math.sin(car.rotation.y);
             car.position.z = vehicle.position.x;//speed * Math.cos(car.rotation.y);
@@ -190,7 +204,7 @@ $(document).ready(() => {
     speed = 0;
 
     document.onkeydown = function (event) {
-        console.log(event.keyCode);
+        //console.log(event.keyCode);
         keyDown[event.keyCode] = true;
     }
 
@@ -282,4 +296,113 @@ function createRect(clr) {
     const line = new THREE.Line(geometry, material);
     line.position.y = 100;
     return line;
+}
+function drawRect1(x,y,w,h,mtl){
+   
+    const points = [];
+    points.push(new THREE.Vector3(x, 0, y));
+    points.push(new THREE.Vector3(x, 0, y+h));
+    points.push(new THREE.Vector3(x+w, 0, y+h));
+    points.push(new THREE.Vector3(x+w, 0, y));
+    points.push(new THREE.Vector3(x, 0, y));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    
+    const line = new THREE.Line(geometry, mtl);
+    line.position.y = 1000;
+    return line;
+}
+isDebugStop=false;
+function drawDrivingPath() {
+    const material = new THREE.LineBasicMaterial({
+        color: 0x00ff00
+    });
+    if (vehicle.drivingPathCoordinates.length > 0) {
+       // strokeWeight(1);
+       // noFill();
+        let heading = 10;//vehicle.heading;
+        let pos = vehicle.position;
+       // let frame_id = 1;
+       // let rects = [];//pathGroup.clear();
+        pathGroup.remove(...pathGroup.children);
+        for (let i = 0; i < vehicle.drivingPathCoordinates.length; i+=1000) {
+            let p = vehicle.drivingPathCoordinates[i];
+            if (p.segmentIndex == 1) {
+                material.color.r=255;
+                material.color.g=0;
+                material.color.b=0;
+             //   stroke(0, 255, 0, 50);
+            } else if (p.segmentIndex == 2) {
+                material.color.r=0;
+                material.color.g=255;
+                material.color.b=0;continue;
+            //    stroke(0, 255, 255, 50);
+            //    material.color=0x00ff00;
+            } else {
+                material.color.r=255;
+                material.color.g=0;
+                material.color.b=255;
+           //     stroke(255, 255, 0, 50);
+               // material.color=0xff00ff;
+            }
+            if (i % 100 == 0 || i == vehicle.drivingPathCoordinates.length - 1 || i == 0) {
+                let dr = drawRect1(pos.y,pos.x,3000,5000,material);
+             //   dr.rotation=new THREE.Vector3(0,p.heading != undefined ? p.heading : heading,0);
+                if(!isDebugStop&i==30){
+                    console.log(heading);
+                    isDebugStop=true;
+                }
+                pathGroup.add(dr);
+                //pos = new THREE.Vector2(p.x,p.y);
+                // if (i == 0 && (!vehicle.alwaysSolve || vehicle.autoPilot)) { continue; }
+                // push();
+                // translate(pos);
+                // rotate(p.heading != undefined ? p.heading : heading);
+                // rect(0, 0, 50, 30, 2);
+                // text(frame_id++, 0, -6);
+                // pop();
+            }
+            // 
+           // heading +=p.heading+ Math.atan2(p.y - pos.y, p.x - pos.x);
+            // debugText.innerText=heading;
+            pos = new THREE.Vector2(p.x, p.y);
+            // point(p.x,p.y);
+        }
+    }
+}
+ function rotatePoint(cx, cy, angle, centerPoint) {
+    let p = new THREE.Vector2(centerPoint.x, centerPoint.y);
+    let s = Math.sin(angle);
+    let c = Math.cos(angle);
+
+    // translate point back to origin:
+    p.x -= cx;
+    p.y -= cy;
+
+    // rotate point
+    let xnew = p.x * c - p.y * s;
+    let ynew = p.x * s + p.y * c;
+
+    // translate point back:
+    p.x = xnew + cx;
+    p.y = ynew + cy;
+    return p;
+}
+
+function createCircle(x,y,radius=10){
+    const curve = new THREE.EllipseCurve(
+        x,  y,            // ax, aY
+        radius, radius,           // xRadius, yRadius
+        0,  2 * Math.PI,  // aStartAngle, aEndAngle
+        false,            // aClockwise
+        0                 // aRotation
+    );
+    
+    const points = curve.getPoints( radius );
+    const geometry = new THREE.BufferGeometry().setFromPoints( points );
+    
+    const material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+    // Create the final object to add to the scene
+    const ellipse = new THREE.Line( geometry, material );
+    ellipse.rotation.x=Math.PI/2;
+    return ellipse;
 }
