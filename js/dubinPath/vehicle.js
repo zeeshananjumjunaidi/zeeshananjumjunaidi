@@ -26,9 +26,9 @@ class Vehicle {
         this.tPosition = new THREE.Vector2(tx, ty);
         this.tHeading = th;
         //Constant
-        this.carWidth = 40;
-        this.carHeight = 30;
-        this.turningRadius = 5000;
+        this.carWidth = 4000;
+        this.carHeight = 3000;
+        this.turningRadius = 50;
         this.turningRadiusRadian = (this.turningRadius) * Math.PI * 2;//@TODO: convert to RADIANS
 
       //  this.image = loadImage("../images/car2.png");
@@ -240,7 +240,7 @@ class Vehicle {
             this.pathDataList = this.pathDataList.sort((x, y) => { return x.totalLength - y.totalLength; });
             // calculate final path coordinate from the 1st index of path array as it is the shortest path.
             let path = this.pathDataList[0];
-            let driveDistance = 0.1;
+            let driveDistance = 100.1;
             let theta = this.heading;
             let currentPosition = new THREE.Vector2(this.position.x, this.position.y);
 

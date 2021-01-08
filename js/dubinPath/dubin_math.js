@@ -1,5 +1,5 @@
 class DubinMath {
-    constructor(turningRadius = 100) {
+    constructor(turningRadius = 5000) {
         this.turningRadius = turningRadius / 2;
     }
 
@@ -104,8 +104,8 @@ class DubinMath {
         //Calculate the tangent points
         let V2 = new THREE.Vector2().subVectors(goalCircle, middleCircle).normalize().multiply(this.turningRadius);
         let V3 = new THREE.Vector2().subVectors(startCircle, middleCircle).normalize().multiply(this.turningRadius);
-        let startTangent = new THREE.Vector2().add(middleCircle, V2);//.multiply(50);//.multiply(50);
-        let endTangent = new THREE.Vector2().add(middleCircle, V3);//.multiply(50);//.multiply(50);
+        let startTangent = new THREE.Vector2().addVectors(middleCircle, V2);//.multiply(50);//.multiply(50);
+        let endTangent = new THREE.Vector2().addVectors(middleCircle, V3);//.multiply(50);//.multiply(50);
         return { startTangent: startTangent, endTangent: endTangent, middleCircle: middleCircle };
     }
 

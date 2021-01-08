@@ -9,7 +9,7 @@ let vehicle;
 let pathGroup;
 let debugText
 $(document).ready(() => {
-    vehicle = new Vehicle(0,0,0,6000,1000,0);
+    vehicle = new Vehicle(0, 0, 0, 6000, 1000, 0);
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
     debugText = document.getElementById('debug');
@@ -31,7 +31,6 @@ $(document).ready(() => {
     camera.position.z = -5000;
     camera.lookAt(new THREE.Vector3(0, 0, 0));
     //camera.position.set(0, 3, 5);
-
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
@@ -54,7 +53,9 @@ $(document).ready(() => {
     // basic line material
     const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
     // lineMtl.color=0x00ff00;
-    console.log(lineMtl.color)
+    scene.add(drawRect1(0, 0, 10000, 10000, lineMtl));
+    generateGrid(20, 20, scene,lineMtl);
+
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
     light.position.set(50, 0, 0);
@@ -84,7 +85,7 @@ $(document).ready(() => {
 
     loadVehicle(scene);
 
-    scene.add(createCircle(vehicle.vLCircle.x,vehicle.vLCircle.y,vehicle.turningRadius));
+    scene.add(createCircle(vehicle.vLCircle.x, vehicle.vLCircle.y, vehicle.turningRadius));
 
 
     scene.add(createGroundPlane());
@@ -102,10 +103,10 @@ $(document).ready(() => {
         requestAnimationFrame(animate);
         if (car) {
             // Target position and orientation
-            targetPosition.x=0;
-            targetPosition.y=0;
+            targetPosition.x = 0;
+            targetPosition.y = 0;
             if (keyDown[38]) {//up
-                targetPosition.y +=100;
+                targetPosition.y += 100;
                 console.log(vehicle.drivingPathCoordinates)
             } else if (keyDown[40]) {//down
                 targetPosition.y -= 100;
@@ -113,13 +114,13 @@ $(document).ready(() => {
             if (keyDown[37]) {//left
                 targetPosition.x += 100;
             } else if (keyDown[39]) {//right
-                targetPosition.x -=100;
+                targetPosition.x -= 100;
             }
-            tHeading=0;
+            tHeading = 0;
             if (keyDown[69]) {//Q
-                tHeading -=  1;
+                tHeading -= 1;
             } else if (keyDown[81]) {//R
-                tHeading +=1;
+                tHeading += 1;
             }
 
 
@@ -146,9 +147,9 @@ $(document).ready(() => {
             let radius = 20 / 2;
             constantVelocity = speed * 5; //constant velocity
             heading += 0.4 * (steerAngle * constantVelocity) / radius;
-       
+
             if (FrontLeftWheel && FrontRightWheel && BackLeftWheel && BackRightWheel) {
-  
+
 
                 const time = - performance.now() / 1000;
                 for (let i = 0; i < wheels.length; i++) {
@@ -161,8 +162,8 @@ $(document).ready(() => {
 
 
 
-            
-            vehicle.drive(constantVelocity,steerAngle);
+
+            vehicle.drive(constantVelocity, steerAngle);
             vehicle.updateTargetControl(targetPosition, tHeading);
             vehicle.simulateDubinPath();
             vehicle.solvePath();
@@ -172,16 +173,16 @@ $(document).ready(() => {
             car.position.z = vehicle.position.x;//speed * Math.cos(car.rotation.y);
             car.rotation.y = vehicle.heading;
 
-                FrontLeftWheel.rotation.x=vehicle.steerAngle*360;//.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
-                FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
+            FrontLeftWheel.rotation.x = vehicle.steerAngle * 360;//.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
+            FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
 
             currentPosRect.position.x = vehicle.position.y;
             currentPosRect.position.z = vehicle.position.x;
             currentPosRect.rotation.y = vehicle.heading;
 
-            targetPosRect.position.x=vehicle.tPosition.y;
-            targetPosRect.position.y=1000;
-            targetPosRect.position.z=vehicle.tPosition.x;
+            targetPosRect.position.x = vehicle.tPosition.y;
+            targetPosRect.position.y = 1000;
+            targetPosRect.position.z = vehicle.tPosition.x;
             targetPosRect.rotation.y = vehicle.tHeading;
 
             steerAngle *= 0.5;
@@ -250,10 +251,14 @@ function loadVehicle(sceneRef) {
         model.traverse(function (child) {
             if (child instanceof THREE.Group) {
 
-                if (child.name == 'wheelFR') { FrontRightWheel = child; 
-                    wheels.push(child); }
-                if (child.name == 'wheelFL') { FrontLeftWheel = child;
-                     wheels.push(child); }
+                if (child.name == 'wheelFR') {
+                    FrontRightWheel = child;
+                    wheels.push(child);
+                }
+                if (child.name == 'wheelFL') {
+                    FrontLeftWheel = child;
+                    wheels.push(child);
+                }
                 if (child.name == 'wheelBR') { BackRightWheel = child; wheels.push(child); }
                 if (child.name == 'wheelBL') { BackLeftWheel = child; wheels.push(child); }
 
@@ -297,59 +302,59 @@ function createRect(clr) {
     line.position.y = 100;
     return line;
 }
-function drawRect1(x,y,w,h,mtl){
-   
+function drawRect1(x, y, w, h, mtl) {
+
     const points = [];
     points.push(new THREE.Vector3(x, 0, y));
-    points.push(new THREE.Vector3(x, 0, y+h));
-    points.push(new THREE.Vector3(x+w, 0, y+h));
-    points.push(new THREE.Vector3(x+w, 0, y));
+    points.push(new THREE.Vector3(x, 0, y + h));
+    points.push(new THREE.Vector3(x + w, 0, y + h));
+    points.push(new THREE.Vector3(x + w, 0, y));
     points.push(new THREE.Vector3(x, 0, y));
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    
+
     const line = new THREE.Line(geometry, mtl);
     line.position.y = 1000;
     return line;
 }
-isDebugStop=false;
+isDebugStop = false;
 function drawDrivingPath() {
     const material = new THREE.LineBasicMaterial({
         color: 0x00ff00
     });
     if (vehicle.drivingPathCoordinates.length > 0) {
-       // strokeWeight(1);
-       // noFill();
+        // strokeWeight(1);
+        // noFill();
         let heading = 10;//vehicle.heading;
         let pos = vehicle.position;
-       // let frame_id = 1;
-       // let rects = [];//pathGroup.clear();
+        // let frame_id = 1;
+        // let rects = [];//pathGroup.clear();
         pathGroup.remove(...pathGroup.children);
-        for (let i = 0; i < vehicle.drivingPathCoordinates.length; i+=1000) {
+        for (let i = 0; i < vehicle.drivingPathCoordinates.length; i += 100) {
             let p = vehicle.drivingPathCoordinates[i];
             if (p.segmentIndex == 1) {
-                material.color.r=255;
-                material.color.g=0;
-                material.color.b=0;
-             //   stroke(0, 255, 0, 50);
+                material.color.r = 255;
+                material.color.g = 0;
+                material.color.b = 0;
+                //   stroke(0, 255, 0, 50);
             } else if (p.segmentIndex == 2) {
-                material.color.r=0;
-                material.color.g=255;
-                material.color.b=0;continue;
-            //    stroke(0, 255, 255, 50);
-            //    material.color=0x00ff00;
+                material.color.r = 0;
+                material.color.g = 255;
+                material.color.b = 0;//continue;
+                //    stroke(0, 255, 255, 50);
+                //    material.color=0x00ff00;
             } else {
-                material.color.r=255;
-                material.color.g=0;
-                material.color.b=255;
-           //     stroke(255, 255, 0, 50);
-               // material.color=0xff00ff;
+                material.color.r = 255;
+                material.color.g = 0;
+                material.color.b = 255;
+                //     stroke(255, 255, 0, 50);
+                // material.color=0xff00ff;
             }
             if (i % 100 == 0 || i == vehicle.drivingPathCoordinates.length - 1 || i == 0) {
-                let dr = drawRect1(pos.y,pos.x,3000,5000,material);
-             //   dr.rotation=new THREE.Vector3(0,p.heading != undefined ? p.heading : heading,0);
-                if(!isDebugStop&i==30){
+                let dr = drawRect1(pos.y, pos.x, 3000, 5000, material);
+                //   dr.rotation=new THREE.Vector3(0,p.heading != undefined ? p.heading : heading,0);
+                if (!isDebugStop & i == 30) {
                     console.log(heading);
-                    isDebugStop=true;
+                    isDebugStop = true;
                 }
                 pathGroup.add(dr);
                 //pos = new THREE.Vector2(p.x,p.y);
@@ -362,14 +367,14 @@ function drawDrivingPath() {
                 // pop();
             }
             // 
-           // heading +=p.heading+ Math.atan2(p.y - pos.y, p.x - pos.x);
+            // heading +=p.heading+ Math.atan2(p.y - pos.y, p.x - pos.x);
             // debugText.innerText=heading;
             pos = new THREE.Vector2(p.x, p.y);
             // point(p.x,p.y);
         }
     }
 }
- function rotatePoint(cx, cy, angle, centerPoint) {
+function rotatePoint(cx, cy, angle, centerPoint) {
     let p = new THREE.Vector2(centerPoint.x, centerPoint.y);
     let s = Math.sin(angle);
     let c = Math.cos(angle);
@@ -388,21 +393,29 @@ function drawDrivingPath() {
     return p;
 }
 
-function createCircle(x,y,radius=10){
+function createCircle(x, y, radius = 10) {
     const curve = new THREE.EllipseCurve(
-        x,  y,            // ax, aY
+        x, y,            // ax, aY
         radius, radius,           // xRadius, yRadius
-        0,  2 * Math.PI,  // aStartAngle, aEndAngle
+        0, 2 * Math.PI,  // aStartAngle, aEndAngle
         false,            // aClockwise
         0                 // aRotation
     );
-    
-    const points = curve.getPoints( radius );
-    const geometry = new THREE.BufferGeometry().setFromPoints( points );
-    
-    const material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+
+    const points = curve.getPoints(radius);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
     // Create the final object to add to the scene
-    const ellipse = new THREE.Line( geometry, material );
-    ellipse.rotation.x=Math.PI/2;
+    const ellipse = new THREE.Line(geometry, material);
+    ellipse.rotation.x = Math.PI / 2;
     return ellipse;
+}
+
+function generateGrid(cols, rows, scene,mtl,size=10000) {
+    for (let i = -cols; i < cols; i++) {
+        for (let j = -rows; j < rows;j++) {
+            scene.add(drawRect1(i*size,j*size,size,size,mtl));
+        }
+    }
 }
