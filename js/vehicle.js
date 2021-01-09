@@ -9,6 +9,7 @@ let vehicle;
 let pathGroup;
 let debugText;
 let hybridAStarMap;
+let vehicleRectReference;
 $(document).ready(() => {
     vehicle = new Vehicle(0, 0, 0, 6000, 1000, 0);
     let eleSpeed = document.getElementById('speed');
@@ -21,8 +22,7 @@ $(document).ready(() => {
     // basic line material
     const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
-    hybridAStarMap=new HybridAStarMap(50,50,1000);
-    generateGrid(hybridAStarMap.rows,hybridAStarMap.cols, scene,lineMtl);
+    hybridAStarMap=new HybridAStarMap(25000,25000,1000);
 
     const settings = {
         animate: true,
@@ -33,6 +33,9 @@ $(document).ready(() => {
     var SCREEN_HEIGHT = window.innerHeight;
     const loader = new THREE.TextureLoader();
     scene = new THREE.Scene();
+    
+    generateGrid(hybridAStarMap.rows,hybridAStarMap.cols, scene,lineMtl);
+    hybridAStarMap.setVehicle(vehicle);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 5000;
     camera.position.z = -5000;
@@ -97,6 +100,11 @@ $(document).ready(() => {
     for (i = 0; i < 300; i++) {
         keyDown[i] = false;
     }
+    
+    const referenceMtl = new THREE.LineBasicMaterial({ color: 0x00ffff });
+    vehicleRectReference =drawRect1(0,0,800,800,referenceMtl);
+    scene.add(vehicleRectReference);
+
     let position = new THREE.Vector3();
     let steerAngle = 0;
     let heading = 0;
@@ -106,6 +114,14 @@ $(document).ready(() => {
 
         requestAnimationFrame(animate);
         if (car) {
+            for(let i=0;i<hybridAStarMap.grid.length;i++){
+                for(let j=0;j<hybridAStarMap.grid[i].length;j++){
+                    let hCell=hybridAStarMap.grid[i][j];
+                    if(hCell.value==3){
+                        vehicleRectReference.position.set(hCell.pX,hCell.pY);
+                    }
+                }
+            }
             // Target position and orientation
             targetPosition.x = 0;
             targetPosition.y = 0;

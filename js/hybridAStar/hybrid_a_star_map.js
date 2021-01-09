@@ -8,7 +8,7 @@ class HybridAStarMap {
         this.rows = Math.round(width / cellSize);
         this.cols = Math.round(height / cellSize);
         this.padding = 25;
-        print("Initialized Hybrid A*", this);
+        console.log("Initialized Hybrid A*", this);
         this.vehicle = undefined;
         this.grid = [];
         this.generateGrid();
