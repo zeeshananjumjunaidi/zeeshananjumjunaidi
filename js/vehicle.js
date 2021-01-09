@@ -7,7 +7,8 @@ let scene;
 let targetPosition;
 let vehicle;
 let pathGroup;
-let debugText
+let debugText;
+let hybridAStarMap;
 $(document).ready(() => {
     vehicle = new Vehicle(0, 0, 0, 6000, 1000, 0);
     let eleSpeed = document.getElementById('speed');
@@ -16,6 +17,12 @@ $(document).ready(() => {
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2();
     pathGroup = new THREE.Group();
+    
+    // basic line material
+    const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
+
+    hybridAStarMap=new HybridAStarMap(50,50,1000);
+    generateGrid(hybridAStarMap.rows,hybridAStarMap.cols, scene,lineMtl);
 
     const settings = {
         animate: true,
@@ -50,11 +57,8 @@ $(document).ready(() => {
         "click",
         function (event) { console.log(event) },
         false);
-    // basic line material
-    const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
     // lineMtl.color=0x00ff00;
     scene.add(drawRect1(0, 0, 10000, 10000, lineMtl));
-    generateGrid(20, 20, scene,lineMtl);
 
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
