@@ -10,6 +10,8 @@ let pathGroup;
 let debugText;
 let hybridAStarMap;
 let vehicleRectReference;
+let vehicleTargetRectReference;
+
 $(document).ready(() => {
     vehicle = new Vehicle(0, 0, 0, 6000, 1000, 0);
     let eleSpeed = document.getElementById('speed');
@@ -22,7 +24,7 @@ $(document).ready(() => {
     // basic line material
     const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
-    hybridAStarMap=new HybridAStarMap(25000,25000,1000);
+    hybridAStarMap=new HybridAStarMap(250000,250000,10000);
 
     const settings = {
         animate: true,
@@ -61,7 +63,7 @@ $(document).ready(() => {
         function (event) { console.log(event) },
         false);
     // lineMtl.color=0x00ff00;
-    scene.add(drawRect1(0, 0, 10000, 10000, lineMtl));
+    // scene.add(drawRect1(0, 0, 10000, 10000, lineMtl));
 
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
@@ -102,8 +104,11 @@ $(document).ready(() => {
     }
     
     const referenceMtl = new THREE.LineBasicMaterial({ color: 0x00ffff });
-    vehicleRectReference =drawRect1(0,0,800,800,referenceMtl);
+    vehicleRectReference =drawRect1(0,0,10000,10000,referenceMtl);
     scene.add(vehicleRectReference);
+    vehicleTargetRectReference =drawRect1(0,0,10000,10000,referenceMtl);
+    scene.add(vehicleTargetRectReference);
+    
 
     let position = new THREE.Vector3();
     let steerAngle = 0;
@@ -114,14 +119,21 @@ $(document).ready(() => {
 
         requestAnimationFrame(animate);
         if (car) {
-            for(let i=0;i<hybridAStarMap.grid.length;i++){
-                for(let j=0;j<hybridAStarMap.grid[i].length;j++){
-                    let hCell=hybridAStarMap.grid[i][j];
-                    if(hCell.value==3){
-                        vehicleRectReference.position.set(hCell.pX,hCell.pY);
-                    }
-                }
+            hybridAStarMap.solve();
+            if(hybridAStarMap.currentCell){                
+                vehicleRectReference.position.set(hybridAStarMap.currentCell.pY,1000,hybridAStarMap.currentCell.pX);
             }
+            if(hybridAStarMap.goalCell){
+                vehicleTargetRectReference.position.set(hybridAStarMap.goalCell.pY,1000,hybridAStarMap.goalCell.pX);
+            }
+            // for(let i=0;i<hybridAStarMap.grid.length;i++){
+            //     for(let j=0;j<hybridAStarMap.grid[i].length;j++){
+            //         let hCell=hybridAStarMap.grid[i][j];
+            //         if(hCell.value==3){
+            //             vehicleRectReference.position.set(hCell.pX,hCell.pY);
+            //         }
+            //     }
+            // }
             // Target position and orientation
             targetPosition.x = 0;
             targetPosition.y = 0;
@@ -435,7 +447,7 @@ function createCircle(x, y, radius = 10) {
 function generateGrid(cols, rows, scene,mtl,size=10000) {
     for (let i = -cols; i < cols; i++) {
         for (let j = -rows; j < rows;j++) {
-            scene.add(drawRect1(i*size,j*size,size,size,mtl));
+            scene.add(drawRect1(i*size+size/2,j*size+size/2,size,size,mtl));
         }
     }
 }

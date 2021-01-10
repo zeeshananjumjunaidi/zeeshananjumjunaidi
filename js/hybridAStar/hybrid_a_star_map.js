@@ -119,9 +119,9 @@ class HybridAStarMap {
         let y = Math.abs(Math.ceil(((-this.height / 2) - this.vehicle.position.y) / this.cellSize));
         if (this.isValidCellIndices(x, y)) {
             this.grid[x][y].value = 1;
-            fill(220)
-            text(x + ',' + y, this.vehicle.position.x,
-                this.vehicle.position.y - 50);
+            // fill(220)
+            // text(x + ',' + y, this.vehicle.position.x,
+            //     this.vehicle.position.y - 50);
             this.currentCell = this.grid[x][y];
             this.currentCell.cX=this.vehicle.position.x;
             this.currentCell.cY=this.vehicle.position.y;
@@ -143,17 +143,17 @@ class HybridAStarMap {
     getNeighbourCellsNearVehicle() {
         let fwdDist = 50;//this.vehicle.turningRadius
         //Front Point
-        let pc = createVector();
+        let pc = new THREE.Vector3();
         pc.x = this.vehicle.position.x + Math.cos(this.vehicle.heading) * fwdDist;
         pc.y = this.vehicle.position.y + Math.sin(this.vehicle.heading) * fwdDist;
         // Left Point
         let lPoint = rotatePoint(pc.x, pc.y, Math.PI / 2, this.vehicle.position);
         // Right Point
         let rPoint = rotatePoint(pc.x, pc.y, -Math.PI / 2, this.vehicle.position);
-        fill(255);
-        drawCircle(pc, 10);
-        drawCircle(lPoint, 10);
-        drawCircle(rPoint, 10);
+        // fill(255);
+        // drawCircle(pc, 10);
+        // drawCircle(lPoint, 10);
+        // drawCircle(rPoint, 10);
         let fCell = this.getCellIndexByPosition(pc.x, pc.y);
         let rCell = this.getCellIndexByPosition(rPoint.x, rPoint.y);
         let lCell = this.getCellIndexByPosition(lPoint.x, lPoint.y);
@@ -183,8 +183,8 @@ class HybridAStarMap {
         line(position.x, position.y, x, y);
         let l = rotatePoint(x, y, Math.PI / 2, position);
         let r = rotatePoint(x, y, -Math.PI / 2, position);
-        drawCircle(l, 10);
-        drawCircle(r, 10);
+        // drawCircle(l, 10);
+        // drawCircle(r, 10);
         let arcl = Math.atan2(l.y - position.y, l.x - position.x);
         let arcr = Math.atan2(r.y - position.y, r.x - position.x);
 
@@ -320,14 +320,14 @@ class HybridAStarMap {
         // Generate 3 points in fwd and reverse rotation position.
         let fwdDist = 50;//this.vehicle.turningRadius
         //Front Point
-        let pc = createVector();
+        let pc = new THREE.Vector3();
         pc.x = cell.vX + Math.cos(cell.heading) * fwdDist;
         pc.y = cell.vY + Math.sin(cell.heading) * fwdDist;
         // circle(pc.x,pc.y,20); 
 
         for(let i=-(Math.PI/2);i<=(Math.PI/2);i+=0.3){
 
-            let newCell = rotatePoint(pc.x, pc.y, i,  createVector(cell.vX,cell.vY));   
+            let newCell = rotatePoint(pc.x, pc.y, i,  new THREE.Vector3(cell.vX,cell.vY));   
             let c = this.getCellIndexByPositionA(newCell.x,newCell.y);
             if(cell!=c&&c){
                 c.vX=newCell.x;
@@ -340,7 +340,7 @@ class HybridAStarMap {
     }
     getDistance(A, B) {
         // print(A);
-        return dist(A.i, A.j, B.i, B.j);
+        return Math.sqrt(Math.pow(B.j-A.j,2)+Math.pow(B.i-A.i,2));// A.distanceTo(B);// dist(A.i, A.j, B.i, B.j);
         // return dist(A.pX, A.pY, B.pX, B.pY);
     }
 }
