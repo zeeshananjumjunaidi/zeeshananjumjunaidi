@@ -318,7 +318,7 @@ class HybridAStarMap {
     getHybridAStarNeighbours(cell) {
         let neighbours=[];
         // Generate 3 points in fwd and reverse rotation position.
-        let fwdDist = 50;//this.vehicle.turningRadius
+        let fwdDist = 50;//this.vehicle.turingRadius;//this.vehicle.turningRadius
         //Front Point
         let pc = new THREE.Vector3();
         pc.x = cell.vX + Math.cos(cell.heading) * fwdDist;
