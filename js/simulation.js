@@ -13,7 +13,7 @@ let vehicleRectReference;
 let vehicleTargetRectReference;
 let hybridFinalPath;
 $(document).ready(() => {
-    vehicle = new Vehicle(0, 0, 0, 6000, 1000, 0);
+    vehicle = new Vehicle(30000, 30000, 0, 60000, 10000, 0);
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
     debugText = document.getElementById('debug');
@@ -23,6 +23,8 @@ $(document).ready(() => {
 
     // basic line material
     const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    const blkMtl = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const pathMtl = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
     hybridAStarMap = new HybridAStarMap(250000, 250000, 10000);
 
@@ -36,12 +38,15 @@ $(document).ready(() => {
     const loader = new THREE.TextureLoader();
     scene = new THREE.Scene();
 
-    generateGrid(hybridAStarMap.rows, hybridAStarMap.cols, scene, lineMtl);
+    generateGrid(hybridAStarMap, scene, lineMtl,blkMtl,pathMtl);
     hybridAStarMap.setVehicle(vehicle);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
-    camera.position.y = 5000;
-    camera.position.z = -5000;
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.position.y = 15000;
+    camera.position.z = -35000;
+    camera.lookAt(new THREE.Vector3(250000,0, 250000));
+    const color = 0xEEEEEE;
+    const density = 0.00001;
+    scene.fog = new THREE.FogExp2(color, density);
     //camera.position.set(0, 3, 5);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
@@ -241,6 +246,7 @@ $(document).ready(() => {
         let points=getConstructedHybridAStarPath(hybridAStarMap.finishedAStarPath);
            if(points){
             linegeometry.setFromPoints(points);
+            line.geometry.verticesNeedUpdate = true;
             }
         }
     };
@@ -457,10 +463,17 @@ function createCircle(x, y, radius = 10) {
     return ellipse;
 }
 
-function generateGrid(cols, rows, scene, mtl, size = 10000) {
-    for (let i = -cols; i < cols; i++) {
-        for (let j = -rows; j < rows; j++) {
-            scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size, mtl));
+function generateGrid(hybridAStarMap, scene, mtl,blkMtl,pathMtl, size = 10000) {
+    for (let i = 0; i < hybridAStarMap.cols; i++) {
+        for (let j = 0; j < hybridAStarMap.rows; j++) {
+            let c = hybridAStarMap.grid[i][j];
+            let m = mtl;
+            if(c.value==2){
+                m = pathMtl;
+            }else if(c.isBlocked){
+                m=blkMtl;
+            }
+            scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size,m));
         }
     }
 }
