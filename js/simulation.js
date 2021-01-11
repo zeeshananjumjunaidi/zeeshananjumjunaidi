@@ -46,7 +46,7 @@ $(document).ready(() => {
     camera.lookAt(new THREE.Vector3(250000,0, 250000));
     const color = 0xEEEEEE;
     const density = 0.00001;
-    scene.fog = new THREE.FogExp2(color, density);
+   // scene.fog = new THREE.FogExp2(color, density);
     //camera.position.set(0, 3, 5);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
@@ -251,6 +251,7 @@ $(document).ready(() => {
         }
     };
     
+    loadFont();
     animate();
     console.log(controls);
     speed = 0;
@@ -474,8 +475,10 @@ function generateGrid(hybridAStarMap, scene, mtl,blkMtl,pathMtl, size = 10000) {
                 m=blkMtl;
             }
             scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size,m));
+            createText(i+','+j)
         }
     }
+    scene.add(drawRect1( -95000,  -75000,5000,5000,blkMtl));
 }
 
 
@@ -489,3 +492,57 @@ function getConstructedHybridAStarPath(path){
     }
     return null;
 }
+
+/** Helper Functions  */
+var text = "aems",
+height = 223,
+size = 1000,
+curveSegments = 10,
+bevelThickness = 1,
+bevelSize = 0.3,
+bevelSegments = 3,
+bevelEnabled = true,
+font = undefined;
+
+var cubeMat = new THREE.MeshLambertMaterial({color: 0xff3300})
+// Credit - https://github.com/chalupagrande/threejs-text-example
+function loadFont() {
+    var loader = new THREE.FontLoader();
+    loader.load('js/fonts/helvetiker_regular.typeface.js', function (res) {
+      font = res;
+      createText('1,3',0,1000,0);
+    });
+  }
+  
+  function createText(v,x,y,z) {
+    textGeo = new THREE.TextGeometry( v, {
+      font: font,
+      size: size,
+      height: height,
+      curveSegments:curveSegments,
+      weight: "normal",
+      bevelThickness:bevelThickness,
+      bevelSize:bevelSize,
+      bevelSegments:bevelSegments,
+      bevelEnabled:bevelEnabled
+    });
+    textGeo.computeBoundingBox();
+    textGeo.computeVertexNormals();
+
+    var text = new THREE.Mesh(textGeo, cubeMat)
+    text.position.x =x -textGeo.boundingBox.max.x/2;
+    text.position.y=y;
+    text.position.z=z-textGeo.boundingBox.max.x/2;
+    text.rotation.x=Math.PI/2;
+    text.rotation.y=Math.PI;
+    text.castShadow = true;
+    scene.add(text);
+  }
+  function createSphere(x,y){
+    const geometry = new THREE.SphereGeometry(5, 32, 32);
+    const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.x=x;
+    sphere.position.z=y;
+    return sphere;
+  }
