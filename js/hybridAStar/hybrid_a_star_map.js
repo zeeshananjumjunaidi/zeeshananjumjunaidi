@@ -327,7 +327,7 @@ class HybridAStarMap {
         pc.x = cell.vX + Math.cos(cell.heading) * fwdDist;
         pc.y = cell.vY + Math.sin(cell.heading) * fwdDist;
         // circle(pc.x,pc.y,20); 
-
+        let ij=[];
         for(let i=-(Math.PI/2);i<=(Math.PI/2);i+=0.3){
 
             let newCell = rotatePoint(pc.x, pc.y, i,  new THREE.Vector3(cell.vX,cell.vY));   
@@ -337,8 +337,10 @@ class HybridAStarMap {
                 c.vY=newCell.y;
                 c.heading = Math.atan2(c.vY-cell.vY,c.vX-cell.vX);
                 neighbours.push(c);
+                ij.push({i:c.i,j:c.j});
             }
         }
+        
         return neighbours;
     }
     getDistance(A, B) {

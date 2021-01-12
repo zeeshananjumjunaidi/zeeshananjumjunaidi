@@ -1,6 +1,6 @@
 class Cell {
 
-    constructor(id, x, y, value = 0, isBlocked = false, parent = null, isVisited = false, cellSize) {
+    constructor(id, x, y,z, value = 0, isBlocked = false, parent = null, isVisited = false, cellSize) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -16,11 +16,14 @@ class Cell {
         this.cellSize = cellSize;
         this.pX = (x * cellSize) + (cellSize / 2);
         this.pY = (y * cellSize) + (cellSize / 2);
+        this.pZ = (z * cellSize) + (cellSize / 2);
         this.destPointX=this.pX;
         this.destPointY=this.pY;
+        this.destPointY=this.pZ;
         this.heading = 0;// vehicle/target heading
         this.vX = 0;// vehicle/target X
         this.vY = 0;// vehicle/target Y
+        this.vZ = 0;
         this.neighbours = [];
         this.isStart = false;
         this.isGoal = false;

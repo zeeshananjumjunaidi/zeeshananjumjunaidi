@@ -12,8 +12,9 @@ let hybridAStarMap;
 let vehicleRectReference;
 let vehicleTargetRectReference;
 let hybridFinalPath;
+let heuristicLinePoints=[new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,0)];
 $(document).ready(() => {
-    vehicle = new Vehicle(30000, 30000, 0, 60000, 10000, 0);
+    vehicle = new Vehicle(20000,1000, 20000, 0, 60000,1000, 20000, 0);
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
     debugText = document.getElementById('debug');
@@ -21,12 +22,13 @@ $(document).ready(() => {
     mouse = new THREE.Vector2();
     pathGroup = new THREE.Group();
 
+    loadFont();
     // basic line material
     const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
     const blkMtl = new THREE.LineBasicMaterial({ color: 0xff0000 });
     const pathMtl = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
-    hybridAStarMap = new HybridAStarMap(250000, 250000, 10000);
+    hybridAStarMap = new HybridAStar3d(350000, 350000, 10000);
 
     const settings = {
         animate: true,
@@ -62,7 +64,7 @@ $(document).ready(() => {
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     rayCaster = new THREE.Raycaster();
-    targetPosition = new THREE.Vector2();
+    targetPosition = new THREE.Vector3();
     document.addEventListener(
         "click",
         function (event) { console.log(event) },
@@ -109,16 +111,20 @@ $(document).ready(() => {
     }
 
     const referenceMtl = new THREE.LineBasicMaterial({ color: 0x00ffff });
-    vehicleRectReference = drawRect1(0, 0, 10000, 10000, referenceMtl);
+    vehicleRectReference = drawRect1(0, 0, 10000-2000, 10000-2000, referenceMtl);
     scene.add(vehicleRectReference);
-    vehicleTargetRectReference = drawRect1(0, 0, 10000, 10000, referenceMtl);
+    vehicleTargetRectReference = drawRect1(0, 0, 10000-2000, 10000-2000, referenceMtl);
     scene.add(vehicleTargetRectReference);
-    const linegeometry = new THREE.BufferGeometry().setFromPoints([]);
     
+    const linegeometry = new THREE.BufferGeometry().setFromPoints([]);    
     const line = new THREE.Line(linegeometry, lineMtl);
     line.position.y = 1000;
-    //    scene.remove(line);
      scene.add(line);
+
+     const heuristicLineGeom = new THREE.BufferGeometry().setFromPoints([]);    
+     const heuristicLine = new THREE.Line(heuristicLineGeom, blkMtl);
+     heuristicLine.position.y = 1000;
+    scene.add(heuristicLine);
 
     let position = new THREE.Vector3();
     let steerAngle = 0;
@@ -131,10 +137,10 @@ $(document).ready(() => {
         if (car) {
             hybridAStarMap.solve();
             if (hybridAStarMap.currentCell) {
-                vehicleRectReference.position.set(hybridAStarMap.currentCell.pY, 1000, hybridAStarMap.currentCell.pX);
+                vehicleRectReference.position.set(hybridAStarMap.currentCell.pX+1000, 1000, hybridAStarMap.currentCell.pZ+1000);
             }
             if (hybridAStarMap.goalCell) {
-                vehicleTargetRectReference.position.set(hybridAStarMap.goalCell.pY, 1000, hybridAStarMap.goalCell.pX);
+                vehicleTargetRectReference.position.set(hybridAStarMap.goalCell.pX+1000, 1000, hybridAStarMap.goalCell.pZ+1000);
             }
             // for(let i=0;i<hybridAStarMap.grid.length;i++){
             //     for(let j=0;j<hybridAStarMap.grid[i].length;j++){
@@ -146,12 +152,12 @@ $(document).ready(() => {
             // }
             // Target position and orientation
             targetPosition.x = 0;
-            targetPosition.y = 0;
+            targetPosition.z = 0;
             if (keyDown[38]) {//up
-                targetPosition.y += 100;
+                targetPosition.z += 100;
                 // console.log(vehicle.drivingPathCoordinates)
             } else if (keyDown[40]) {//down
-                targetPosition.y -= 100;
+                targetPosition.z -= 100;
             }
             if (keyDown[37]) {//left
                 targetPosition.x += 100;
@@ -211,21 +217,24 @@ $(document).ready(() => {
             vehicle.solvePath();
             //drawDrivingPath();
             // console.log(vehicle.position.x,vehicle.position.y);
-            car.position.x = vehicle.position.y;//speed * Math.sin(car.rotation.y);
-            car.position.z = vehicle.position.x;//speed * Math.cos(car.rotation.y);
+            car.position.x = vehicle.position.x;//speed * Math.sin(car.rotation.y);
+            car.position.z = vehicle.position.z;//speed * Math.cos(car.rotation.y);
             car.rotation.y = vehicle.heading;
 
             FrontLeftWheel.rotation.x = vehicle.steerAngle * 360;//.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
             FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
 
-            currentPosRect.position.x = vehicle.position.y;
-            currentPosRect.position.z = vehicle.position.x;
+            currentPosRect.position.x = vehicle.position.x;
+            currentPosRect.position.z = vehicle.position.z;
             currentPosRect.rotation.y = vehicle.heading;
-
-            targetPosRect.position.x = vehicle.tPosition.y;
+            heuristicLinePoints[0].x=vehicle.position.z;
+            heuristicLinePoints[0].z=vehicle.position.x;
+            targetPosRect.position.x = vehicle.tPosition.x;
             targetPosRect.position.y = 1000;
-            targetPosRect.position.z = vehicle.tPosition.x;
+            targetPosRect.position.z = vehicle.tPosition.z;
             targetPosRect.rotation.y = vehicle.tHeading;
+            heuristicLinePoints[1].x=vehicle.tPosition.x;
+            heuristicLinePoints[1].z=vehicle.tPosition.z;
 
             steerAngle *= 0.5;
             camera.lookAt(car.position);
@@ -249,9 +258,12 @@ $(document).ready(() => {
             line.geometry.verticesNeedUpdate = true;
             }
         }
+        if(heuristicLinePoints.length==2){
+            heuristicLineGeom.setFromPoints(heuristicLinePoints);
+            heuristicLineGeom.needsUpdate=true;
+        }
     };
     
-    loadFont();
     animate();
     console.log(controls);
     speed = 0;
@@ -465,6 +477,7 @@ function createCircle(x, y, radius = 10) {
 }
 
 function generateGrid(hybridAStarMap, scene, mtl,blkMtl,pathMtl, size = 10000) {
+    size=hybridAStarMap.cellSize;
     for (let i = 0; i < hybridAStarMap.cols; i++) {
         for (let j = 0; j < hybridAStarMap.rows; j++) {
             let c = hybridAStarMap.grid[i][j];
@@ -475,10 +488,13 @@ function generateGrid(hybridAStarMap, scene, mtl,blkMtl,pathMtl, size = 10000) {
                 m=blkMtl;
             }
             scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size,m));
-            createText(i+','+j)
         }
     }
-    scene.add(drawRect1( -95000,  -75000,5000,5000,blkMtl));
+    //25000, y: 1000, z: 55000
+    //x: 55000, y: 1000, z: 65000
+    //-35000, y: 1000, z: -65000
+    scene.add(drawRect1(0, 0,5000,5000,blkMtl));
+    scene.add(drawRect1(350000, 350000,5000,5000,blkMtl));
 }
 
 
