@@ -48,7 +48,7 @@ $(document).ready(() => {
     camera.lookAt(new THREE.Vector3(250000,0, 250000));
     const color = 0xEEEEEE;
     const density = 0.00001;
-   // scene.fog = new THREE.FogExp2(color, density);
+   scene.fog = new THREE.FogExp2(color, density);
     //camera.position.set(0, 3, 5);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
@@ -69,8 +69,6 @@ $(document).ready(() => {
         "click",
         function (event) { console.log(event) },
         false);
-    // lineMtl.color=0x00ff00;
-    // scene.add(drawRect1(0, 0, 10000, 10000, lineMtl));
 
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 3, 100);
@@ -142,27 +140,19 @@ $(document).ready(() => {
             if (hybridAStarMap.goalCell) {
                 vehicleTargetRectReference.position.set(hybridAStarMap.goalCell.pX+1000, 1000, hybridAStarMap.goalCell.pZ+1000);
             }
-            // for(let i=0;i<hybridAStarMap.grid.length;i++){
-            //     for(let j=0;j<hybridAStarMap.grid[i].length;j++){
-            //         let hCell=hybridAStarMap.grid[i][j];
-            //         if(hCell.value==3){
-            //             vehicleRectReference.position.set(hCell.pX,hCell.pY);
-            //         }
-            //     }
-            // }
             // Target position and orientation
             targetPosition.x = 0;
             targetPosition.z = 0;
             if (keyDown[38]) {//up
-                targetPosition.z += 100;
+                targetPosition.z += 400;
                 // console.log(vehicle.drivingPathCoordinates)
             } else if (keyDown[40]) {//down
-                targetPosition.z -= 100;
+                targetPosition.z -= 400;
             }
             if (keyDown[37]) {//left
-                targetPosition.x += 100;
+                targetPosition.x += 400;
             } else if (keyDown[39]) {//right
-                targetPosition.x -= 100;
+                targetPosition.x -= 400;
             }
             tHeading = 0;
             if (keyDown[69]) {//Q
@@ -216,7 +206,6 @@ $(document).ready(() => {
             vehicle.simulateDubinPath();
             vehicle.solvePath();
             //drawDrivingPath();
-            // console.log(vehicle.position.x,vehicle.position.y);
             car.position.x = vehicle.position.x;//speed * Math.sin(car.rotation.y);
             car.position.z = vehicle.position.z;//speed * Math.cos(car.rotation.y);
             car.rotation.y = vehicle.heading;
@@ -239,9 +228,6 @@ $(document).ready(() => {
             steerAngle *= 0.5;
             camera.lookAt(car.position);
             controls.center.set(car.position.x, car.position.y, car.position.z);
-            //camera.position.x=car.position.x+0;
-            //camera.position.y=car.position.y+6100;
-            //camera.position.z=car.position.z-8500;
             renderer.render(scene, camera);
         }
         if (eleSpeed)
@@ -269,7 +255,6 @@ $(document).ready(() => {
     speed = 0;
 
     document.onkeydown = function (event) {
-        //console.log(event.keyCode);
         keyDown[event.keyCode] = true;
     }
 
@@ -299,19 +284,11 @@ var FrontRightWheel;
 var BackLeftWheel;
 var BackRightWheel;
 function loadVehicle(sceneRef) {
-    // let texture = new THREE.TextureLoader().load('../assets/3d/military/Audi R8-black.jpg');
     // load fbx model and texture                                               
     const objs = [];
     const loader = new THREE.FBXLoader();
     loader.load("../assets/3d/military/vehicle.fbx", model => {
-        // model is a THREE.Group (THREE.Object3D)       
         console.log(model);
-
-        const material = new THREE.MeshPhongMaterial({
-            color: 0xFFFFFF,    // red (can also use a CSS color string here)
-            flatShading: true,
-            combine: 100
-        });
         model.traverse(function (child) {
             if (child instanceof THREE.Group) {
 
@@ -330,15 +307,9 @@ function loadVehicle(sceneRef) {
 
             if (child instanceof THREE.Mesh) {
                 // apply texture
-                //  child.material = material;
-                //  child.material.map = texture;
                 child.material.needsUpdate = true;
             }
         });
-
-        //const mixer = new THREE.AnimationMixer(model);
-        // animations is a list of THREE.AnimationClip                          
-        //mixer.clipAction(model.animations[0]).play();
         sceneRef.add(model);
 
         car = model;
@@ -386,12 +357,8 @@ function drawDrivingPath() {
         color: 0x00ff00
     });
     if (vehicle.drivingPathCoordinates.length > 0) {
-        // strokeWeight(1);
-        // noFill();
-        let heading = 10;//vehicle.heading;
+        let heading = 10;
         let pos = vehicle.position;
-        // let frame_id = 1;
-        // let rects = [];//pathGroup.clear();
         pathGroup.remove(...pathGroup.children);
         for (let i = 0; i < vehicle.drivingPathCoordinates.length; i += 100) {
             let p = vehicle.drivingPathCoordinates[i];
@@ -399,42 +366,25 @@ function drawDrivingPath() {
                 material.color.r = 255;
                 material.color.g = 0;
                 material.color.b = 0;
-                //   stroke(0, 255, 0, 50);
             } else if (p.segmentIndex == 2) {
                 material.color.r = 0;
                 material.color.g = 255;
-                material.color.b = 0;//continue;
-                //    stroke(0, 255, 255, 50);
-                //    material.color=0x00ff00;
+                material.color.b = 0;
             } else {
                 material.color.r = 255;
                 material.color.g = 0;
                 material.color.b = 255;
-                //     stroke(255, 255, 0, 50);
-                // material.color=0xff00ff;
             }
             if (i % 100 == 0 || i == vehicle.drivingPathCoordinates.length - 1 || i == 0) {
                 let dr = drawRect1(pos.y, pos.x, 3000, 5000, material);
-                //   dr.rotation=new THREE.Vector3(0,p.heading != undefined ? p.heading : heading,0);
                 if (!isDebugStop & i == 30) {
                     console.log(heading);
                     isDebugStop = true;
                 }
                 pathGroup.add(dr);
-                //pos = new THREE.Vector2(p.x,p.y);
-                // if (i == 0 && (!vehicle.alwaysSolve || vehicle.autoPilot)) { continue; }
-                // push();
-                // translate(pos);
-                // rotate(p.heading != undefined ? p.heading : heading);
-                // rect(0, 0, 50, 30, 2);
-                // text(frame_id++, 0, -6);
-                // pop();
+  
             }
-            // 
-            // heading +=p.heading+ Math.atan2(p.y - pos.y, p.x - pos.x);
-            // debugText.innerText=heading;
             pos = new THREE.Vector2(p.x, p.y);
-            // point(p.x,p.y);
         }
     }
 }

@@ -160,7 +160,7 @@ class HybridAStar3d{
             this.goalCell.value = 0;
         }
         let x = Math.abs(Math.ceil(((-this.width / 2) - this.vehicle.tPosition.x) / this.cellSize));
-        let z = Math.abs(Math.ceil(((-this.height / 2) - this.vehicle.tPosition.y) / this.cellSize));
+        let z = Math.abs(Math.ceil(((-this.height / 2) - this.vehicle.tPosition.z) / this.cellSize));
         if (this.isValidCellIndices(x, z)) {
             this.grid[x][z].value = 3;
             this.goalCell = this.grid[x][z];
