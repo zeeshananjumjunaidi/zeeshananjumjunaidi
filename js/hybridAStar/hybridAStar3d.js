@@ -32,7 +32,7 @@ class HybridAStar3d{
         let openSet = [start];
         let closedSet = [];
         let current = start;
-        this.nextPos = this.getHybridAStarNeighbours(this.currentCell);
+        // this.nextPos = this.getHybridAStarNeighbours(this.currentCell);
         while (!this.isGoalReached && openSet.length > 0) {
 
             openSet.sort((a, b) => { return b.f - a.f });
@@ -55,7 +55,7 @@ class HybridAStar3d{
             }
             // Here we will get neighbours based on 
             // our vehicle heading and orientation.
-            current.neighbours = this.getHybridAStarNeighbours(current);
+            current.neighbours = this.getAStarNeighbors(current);
             for (let neighbour of current.neighbours) {
                 // checking for blocked
                 if(neighbour.isBlocked){
@@ -82,7 +82,27 @@ class HybridAStar3d{
         this.goalCell.value=1;
         this.currentCell.value=3;
     }
-
+    getAStarNeighbors(cell){
+        let n=[]
+        n.push(this.grid[cell.i-1][cell.j-1]);
+        n.push(this.grid[cell.i+1][cell.j+1]);
+        n.push(this.grid[cell.i-1][cell.j+1]);
+        n.push(this.grid[cell.i+1][cell.j-1]);
+        n.push(this.grid[cell.i+0][cell.j+1]);
+        n.push(this.grid[cell.i+1][cell.j+0]);
+        // let l = [[1,0],[0,1],[1,1],[]]
+        // for(let i=-1;i<=1;i++){
+        //     for(let j=-1;j<=1;j++){
+        //         let nI = cell.i+i;
+        //         let nJ = cell.j+j;
+        //         if(nI== cell.i&&nJ== cell.j){continue;}
+        //         if(this.isValidCellIndices(nI,nJ)){
+        //            n.push(this.grid[nI][nJ]);
+        //         }
+        //     }
+        // }
+        return n;
+    }
     
     getHybridAStarNeighbours(cell) {
         let neighbours=[];
