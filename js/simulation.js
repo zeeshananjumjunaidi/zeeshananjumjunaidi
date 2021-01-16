@@ -248,6 +248,7 @@ $(document).ready(() => {
             heuristicLineGeom.setFromPoints(heuristicLinePoints);
             heuristicLineGeom.needsUpdate=true;
         }
+
     };
     
     animate();
@@ -384,7 +385,7 @@ function drawDrivingPath() {
                 pathGroup.add(dr);
   
             }
-            pos = new THREE.Vector2(p.x, p.y);
+            pos = new THREE.Vector3(p.x,1000, p.y);
         }
     }
 }
@@ -452,7 +453,7 @@ function getConstructedHybridAStarPath(path){
     if(path && path.length>2 ){
         const points = [];
         for(let i=0;i<path.length;i++){
-            points.push(new THREE.Vector3(path[i].y,1000,path[i].x));
+            points.push(new THREE.Vector3(path[i].pX,1000,path[i].pZ));
         }
         return points
     }
@@ -476,7 +477,7 @@ function loadFont() {
     var loader = new THREE.FontLoader();
     loader.load('js/fonts/helvetiker_regular.typeface.js', function (res) {
       font = res;
-      createText('1,3',0,1000,0);
+     // createText('1,3',0,1000,0);
     });
   }
   

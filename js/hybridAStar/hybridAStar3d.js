@@ -16,7 +16,7 @@ class HybridAStar3d{
         this.isGoalReached = false;
         this.finishedAStarPath=[];
         this.generateGrid();
-
+        this.nextPos=[];
     } 
     
       /// A* Algorithm
@@ -32,6 +32,7 @@ class HybridAStar3d{
         let openSet = [start];
         let closedSet = [];
         let current = start;
+        this.nextPos = this.getHybridAStarNeighbours(this.currentCell);
         while (!this.isGoalReached && openSet.length > 0) {
 
             openSet.sort((a, b) => { return b.f - a.f });
@@ -86,17 +87,18 @@ class HybridAStar3d{
     getHybridAStarNeighbours(cell) {
         let neighbours=[];
         // Generate 3 points in fwd and reverse rotation position.
-        let fwdDist =this.cellSizeH;// 5000;//this.vehicle.turingRadius;//this.vehicle.turningRadius
+        let fwdDist =25000;//this.cellSizeH/2;// 5000;//this.vehicle.turingRadius;//this.vehicle.turningRadius
         //Front Point
         let pc = new THREE.Vector3();
         pc.x = cell.vX + Math.sin(cell.heading) * fwdDist;
         pc.y = cell.vY ;//+ Math.sin(cell.heading) * fwdDist;
         pc.z = cell.vZ + Math.cos(cell.heading) * fwdDist;
+        // console.log(fwdDist);
         let ij=[];
         for(let i=-(Math.PI/2);i<=(Math.PI/2);i+=0.3){
-            let newCell = rotatePoint(pc.x, pc.z, i,  new THREE.Vector3(cell.vX,cell.vZ));   
+            let newCell = rotatePoint(pc.x, pc.z, i,  new THREE.Vector2(cell.vX,cell.vZ));   
             let c = this.getCellIndexByPositionA(newCell.x,newCell.y);
-            if(cell!=c&&c){
+            if(c&&cell!=c){
                 c.vX=newCell.x;
                 c.vY=cell.y;
                 c.vZ=newCell.y;
@@ -152,7 +154,7 @@ class HybridAStar3d{
     updateVehicleCellIndices() {
         this.updateVehicleGridIndex();
         this.updateVehicleTargetGridIndex();
-        this.getNeighbourCellsNearVehicle();
+     //   this.getNeighbourCellsNearVehicle();
     }
 
     updateVehicleTargetGridIndex() {
