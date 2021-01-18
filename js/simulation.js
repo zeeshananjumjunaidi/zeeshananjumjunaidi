@@ -12,9 +12,9 @@ let hybridAStarMap;
 let vehicleRectReference;
 let vehicleTargetRectReference;
 let hybridFinalPath;
-let heuristicLinePoints=[new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,0)];
+let heuristicLinePoints = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0)];
 $(document).ready(() => {
-    vehicle = new Vehicle(20000,1000, 20000, 0, 60000,1000, 20000, 0);
+    vehicle = new Vehicle(20000, 1000, 20000, 0, 60000, 1000, 20000, 0);
     let eleSpeed = document.getElementById('speed');
     let eleSteer = document.getElementById('steering');
     debugText = document.getElementById('debug');
@@ -40,15 +40,15 @@ $(document).ready(() => {
     const loader = new THREE.TextureLoader();
     scene = new THREE.Scene();
 
-    generateGrid(hybridAStarMap, scene, lineMtl,blkMtl,pathMtl);
+    generateGrid(hybridAStarMap, scene, lineMtl, blkMtl, pathMtl);
     hybridAStarMap.setVehicle(vehicle);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 15000;
     camera.position.z = -35000;
-    camera.lookAt(new THREE.Vector3(250000,0, 250000));
+    camera.lookAt(new THREE.Vector3(250000, 0, 250000));
     const color = 0xEEEEEE;
     const density = 0.00001;
-   scene.fog = new THREE.FogExp2(color, density);
+    //    scene.fog = new THREE.FogExp2(color, density);
     //camera.position.set(0, 3, 5);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
@@ -109,19 +109,19 @@ $(document).ready(() => {
     }
 
     const referenceMtl = new THREE.LineBasicMaterial({ color: 0x00ffff });
-    vehicleRectReference = drawRect1(0, 0, 10000-2000, 10000-2000, referenceMtl);
+    vehicleRectReference = drawRect1(0, 0, 10000 - 2000, 10000 - 2000, referenceMtl);
     scene.add(vehicleRectReference);
-    vehicleTargetRectReference = drawRect1(0, 0, 10000-2000, 10000-2000, referenceMtl);
+    vehicleTargetRectReference = drawRect1(0, 0, 10000 - 2000, 10000 - 2000, referenceMtl);
     scene.add(vehicleTargetRectReference);
-    
-    const linegeometry = new THREE.BufferGeometry().setFromPoints([]);    
+
+    const linegeometry = new THREE.BufferGeometry().setFromPoints([]);
     const line = new THREE.Line(linegeometry, lineMtl);
     line.position.y = 1000;
-     scene.add(line);
+    scene.add(line);
 
-     const heuristicLineGeom = new THREE.BufferGeometry().setFromPoints([]);    
-     const heuristicLine = new THREE.Line(heuristicLineGeom, blkMtl);
-     heuristicLine.position.y = 1000;
+    const heuristicLineGeom = new THREE.BufferGeometry().setFromPoints([]);
+    const heuristicLine = new THREE.Line(heuristicLineGeom, blkMtl);
+    heuristicLine.position.y = 1000;
     scene.add(heuristicLine);
 
     let position = new THREE.Vector3();
@@ -135,10 +135,10 @@ $(document).ready(() => {
         if (car) {
             hybridAStarMap.solve();
             if (hybridAStarMap.currentCell) {
-                vehicleRectReference.position.set(hybridAStarMap.currentCell.pX+1000, 1000, hybridAStarMap.currentCell.pZ+1000);
+                vehicleRectReference.position.set(hybridAStarMap.currentCell.pX - 4000, 1000, hybridAStarMap.currentCell.pZ - 4000);
             }
             if (hybridAStarMap.goalCell) {
-                vehicleTargetRectReference.position.set(hybridAStarMap.goalCell.pX+1000, 1000, hybridAStarMap.goalCell.pZ+1000);
+                vehicleTargetRectReference.position.set(hybridAStarMap.goalCell.pX - 4000, 1000, hybridAStarMap.goalCell.pZ - 4000);
             }
             // Target position and orientation
             targetPosition.x = 0;
@@ -216,14 +216,14 @@ $(document).ready(() => {
             currentPosRect.position.x = vehicle.position.x;
             currentPosRect.position.z = vehicle.position.z;
             currentPosRect.rotation.y = vehicle.heading;
-            heuristicLinePoints[0].x=vehicle.position.z;
-            heuristicLinePoints[0].z=vehicle.position.x;
+            heuristicLinePoints[0].x = vehicle.position.z;
+            heuristicLinePoints[0].z = vehicle.position.x;
             targetPosRect.position.x = vehicle.tPosition.x;
             targetPosRect.position.y = 1000;
             targetPosRect.position.z = vehicle.tPosition.z;
             targetPosRect.rotation.y = vehicle.tHeading;
-            heuristicLinePoints[1].x=vehicle.tPosition.x;
-            heuristicLinePoints[1].z=vehicle.tPosition.z;
+            heuristicLinePoints[1].x = vehicle.tPosition.x;
+            heuristicLinePoints[1].z = vehicle.tPosition.z;
 
             steerAngle *= 0.5;
             camera.lookAt(car.position);
@@ -237,20 +237,20 @@ $(document).ready(() => {
         controls.update();
         renderer.render(scene, camera);
 
-        if(hybridAStarMap.finishedAStarPath){
-        let points=getConstructedHybridAStarPath(hybridAStarMap.finishedAStarPath);
-           if(points){
-            linegeometry.setFromPoints(points);
-            line.geometry.verticesNeedUpdate = true;
+        if (hybridAStarMap.finishedAStarPath) {
+            let points = getConstructedHybridAStarPath(hybridAStarMap.finishedAStarPath);
+            if (points) {
+                linegeometry.setFromPoints(points);
+                line.geometry.verticesNeedUpdate = true;
             }
         }
-        if(heuristicLinePoints.length==2){
+        if (heuristicLinePoints.length == 2) {
             heuristicLineGeom.setFromPoints(heuristicLinePoints);
-            heuristicLineGeom.needsUpdate=true;
+            heuristicLineGeom.needsUpdate = true;
         }
 
     };
-    
+
     animate();
     console.log(controls);
     speed = 0;
@@ -308,12 +308,74 @@ function loadVehicle(sceneRef) {
 
             if (child instanceof THREE.Mesh) {
                 // apply texture
+
+                let toonMtl = new THREE.MeshToonMaterial({
+                    color: 0xaaaaaa, fog: true
+                    , blending: 1
+                    , side: 0
+                    , flatShading: false
+                    , vertexColors: false
+                    , opacity: 1
+                    , transparent: true
+                    , blendSrc: 204
+                    , blendDst: 205
+                    , blendEquation: 100
+                    , blendSrcAlpha: null
+                    , blendDstAlpha: null
+                    , blendEquationAlpha: null
+                    , depthFunc: 3
+                    , depthTest: true
+                    , depthWrite: true
+                    , stencilWriteMask: 255
+                });
+                
+                if (child.material.map)
+                    if (child.material.map.image) {
+                        toonMtl.map = child.material.map;
+                    }
+                // child.material = toonMtl;
+
                 child.material.needsUpdate = true;
             }
         });
         sceneRef.add(model);
 
         car = model;
+        car.traverse(function (child) {
+
+            if(child instanceof THREE.Mesh){
+                if(child.children.length>0){
+                    console.log(child.children);
+                }console.log(child.name,child.material.map);
+                if(child.name=="MainBody"){
+                    console.log(child.material.map.image);
+                }
+                if(child.material.map&&child.material.map.image){
+                    console.error("ASDASD");
+                }
+            }
+        });
+        let toonMtl = new THREE.MeshToonMaterial({
+            color: 0xaaaaaa, fog: true
+            , blending: 1
+            , side: 0
+            , flatShading: false
+            , vertexColors: false
+            , opacity: 1
+            , transparent: true
+            , blendSrc: 204
+            , blendDst: 205
+            , blendEquation: 100
+            , blendSrcAlpha: null
+            , blendDstAlpha: null
+            , blendEquationAlpha: null
+            , depthFunc: 3
+            , depthTest: true
+            , depthWrite: true
+            , stencilWriteMask: 255
+        });
+        // car.material = toonMtl;
+        console.log(car);
         car.scale.x = car.scale.y = car.scale.z = 100;
         objs.push({ model });
     });
@@ -383,9 +445,9 @@ function drawDrivingPath() {
                     isDebugStop = true;
                 }
                 pathGroup.add(dr);
-  
+
             }
-            pos = new THREE.Vector3(p.x,1000, p.y);
+            pos = new THREE.Vector3(p.x, 1000, p.y);
         }
     }
 }
@@ -427,33 +489,33 @@ function createCircle(x, y, radius = 10) {
     return ellipse;
 }
 
-function generateGrid(hybridAStarMap, scene, mtl,blkMtl,pathMtl, size = 10000) {
-    size=hybridAStarMap.cellSize;
+function generateGrid(hybridAStarMap, scene, mtl, blkMtl, pathMtl, size = 10000) {
+    size = hybridAStarMap.cellSize;
     for (let i = 0; i < hybridAStarMap.cols; i++) {
         for (let j = 0; j < hybridAStarMap.rows; j++) {
             let c = hybridAStarMap.grid[i][j];
             let m = mtl;
-            if(c.value==2){
+            if (c.value == 2) {
                 m = pathMtl;
-            }else if(c.isBlocked){
-                m=blkMtl;
+            } else if (c.isBlocked) {
+                m = blkMtl;
             }
-            scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size,m));
+            scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size, m));
         }
     }
     //25000, y: 1000, z: 55000
     //x: 55000, y: 1000, z: 65000
     //-35000, y: 1000, z: -65000
-    scene.add(drawRect1(0, 0,5000,5000,blkMtl));
-    scene.add(drawRect1(350000, 350000,5000,5000,blkMtl));
+    scene.add(drawRect1(0, 0, 5000, 5000, blkMtl));
+    scene.add(drawRect1(350000, 350000, 5000, 5000, blkMtl));
 }
 
 
-function getConstructedHybridAStarPath(path){
-    if(path && path.length>2 ){
+function getConstructedHybridAStarPath(path) {
+    if (path && path.length > 2) {
         const points = [];
-        for(let i=0;i<path.length;i++){
-            points.push(new THREE.Vector3(path[i].pX,1000,path[i].pZ));
+        for (let i = 0; i < path.length; i++) {
+            points.push(new THREE.Vector3(path[i].pX, 1000, path[i].pZ));
         }
         return points
     }
@@ -462,54 +524,54 @@ function getConstructedHybridAStarPath(path){
 
 /** Helper Functions  */
 var text = "aems",
-height = 223,
-size = 1000,
-curveSegments = 10,
-bevelThickness = 1,
-bevelSize = 0.3,
-bevelSegments = 3,
-bevelEnabled = true,
-font = undefined;
+    height = 223,
+    size = 1000,
+    curveSegments = 10,
+    bevelThickness = 1,
+    bevelSize = 0.3,
+    bevelSegments = 3,
+    bevelEnabled = true,
+    font = undefined;
 
-var cubeMat = new THREE.MeshLambertMaterial({color: 0xff3300})
+var cubeMat = new THREE.MeshLambertMaterial({ color: 0xff3300 })
 // Credit - https://github.com/chalupagrande/threejs-text-example
 function loadFont() {
     var loader = new THREE.FontLoader();
     loader.load('js/fonts/helvetiker_regular.typeface.js', function (res) {
-      font = res;
-     // createText('1,3',0,1000,0);
+        font = res;
+        // createText('1,3',0,1000,0);
     });
-  }
-  
-  function createText(v,x,y,z) {
-    textGeo = new THREE.TextGeometry( v, {
-      font: font,
-      size: size,
-      height: height,
-      curveSegments:curveSegments,
-      weight: "normal",
-      bevelThickness:bevelThickness,
-      bevelSize:bevelSize,
-      bevelSegments:bevelSegments,
-      bevelEnabled:bevelEnabled
+}
+
+function createText(v, x, y, z) {
+    textGeo = new THREE.TextGeometry(v, {
+        font: font,
+        size: size,
+        height: height,
+        curveSegments: curveSegments,
+        weight: "normal",
+        bevelThickness: bevelThickness,
+        bevelSize: bevelSize,
+        bevelSegments: bevelSegments,
+        bevelEnabled: bevelEnabled
     });
     textGeo.computeBoundingBox();
     textGeo.computeVertexNormals();
 
     var text = new THREE.Mesh(textGeo, cubeMat)
-    text.position.x =x -textGeo.boundingBox.max.x/2;
-    text.position.y=y;
-    text.position.z=z-textGeo.boundingBox.max.x/2;
-    text.rotation.x=Math.PI/2;
-    text.rotation.y=Math.PI;
+    text.position.x = x - textGeo.boundingBox.max.x / 2;
+    text.position.y = y;
+    text.position.z = z - textGeo.boundingBox.max.x / 2;
+    text.rotation.x = Math.PI / 2;
+    text.rotation.y = Math.PI;
     text.castShadow = true;
     scene.add(text);
-  }
-  function createSphere(x,y){
+}
+function createSphere(x, y) {
     const geometry = new THREE.SphereGeometry(5, 32, 32);
-    const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const sphere = new THREE.Mesh(geometry, material);
-    sphere.position.x=x;
-    sphere.position.z=y;
+    sphere.position.x = x;
+    sphere.position.z = y;
     return sphere;
-  }
+}

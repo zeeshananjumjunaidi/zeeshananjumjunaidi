@@ -26,9 +26,12 @@ class HybridAStar3d{
         this.updateVehicleCellIndices();
         let start =this.currentCell;
         let goal = this.goalCell;
+        if(start)
         start.value=1;
+        if(goal)
         goal.value=3;
         this.isGoalReached = false;
+        if(!start)return;
         let openSet = [start];
         let closedSet = [];
         let current = start;
@@ -56,6 +59,7 @@ class HybridAStar3d{
             // Here we will get neighbours based on 
             // our vehicle heading and orientation.
             current.neighbours = this.getAStarNeighbors(current);
+            // current.neighbours =this.getHybridAStarNeighbours(current);
             for (let neighbour of current.neighbours) {
                 // checking for blocked
                 if(neighbour.isBlocked){
@@ -135,8 +139,8 @@ class HybridAStar3d{
             this.grid.push([]);
             let b = 0;
             for (let j = 0; j < this.cols; j++) {
-                let x = -(this.width / 2) + i * this.cellSize;
-                let y = -this.height / 2 + j * this.cellSize;
+                let x = i * this.cellSize;
+                let y = j * this.cellSize;
                 this.grid[i].push(
                     new Cell(id++, x,0, y, 0, false, null, false, this.cellSize));
                 this.grid[i][j].i = a;
@@ -170,8 +174,8 @@ class HybridAStar3d{
         if (this.goalCell) {
             this.goalCell.value = 0;
         }
-        let x = Math.abs(Math.ceil(((-this.width / 2) - this.vehicle.tPosition.x) / this.cellSize));
-        let z = Math.abs(Math.ceil(((-this.height / 2) - this.vehicle.tPosition.z) / this.cellSize));
+        let x = Math.abs(Math.round((this.vehicle.tPosition.x) / this.cellSize));
+        let z = Math.abs(Math.round((this.vehicle.tPosition.z) / this.cellSize));
         if (this.isValidCellIndices(x, z)) {
             this.grid[x][z].value = 3;
             this.goalCell = this.grid[x][z];
@@ -190,8 +194,8 @@ class HybridAStar3d{
         if (this.currentCell) {
             this.currentCell.value = 0;
         }
-        let x = Math.abs(Math.ceil(((-this.width / 2) - this.vehicle.position.x) / this.cellSize));
-        let z = Math.abs(Math.ceil(((-this.height / 2) - this.vehicle.position.z) / this.cellSize));
+        let x = Math.abs(Math.round(( this.vehicle.position.x) / this.cellSize));
+        let z = Math.abs(Math.round(( this.vehicle.position.z) / this.cellSize));
         if (this.isValidCellIndices(x, z)) {
             this.grid[x][z].value = 1;
             this.currentCell = this.grid[x][z];
@@ -227,8 +231,8 @@ class HybridAStar3d{
 
     }
     getCellIndexByPosition(x, y) {
-        let _x = Math.abs(Math.ceil(((-this.width / 2) - x) / this.cellSize));
-        let _y = Math.abs(Math.ceil(((-this.height / 2) - y) / this.cellSize));
+        let _x = Math.abs(Math.ceil((x) / this.cellSize));
+        let _y = Math.abs(Math.ceil((y) / this.cellSize));
         if (this.isValidCellIndices(_x, _y)) {
             return this.grid[_x][_y];//{ x: _x, y: _y };
         }
@@ -236,11 +240,11 @@ class HybridAStar3d{
     }
         
     getCellIndexByPositionA(x, y) {
-        let _x = Math.abs(Math.ceil(((-this.width / 2) - x) / this.cellSize));
-        let _y = Math.abs(Math.ceil(((-this.height / 2) - y) / this.cellSize));
+        let _x = Math.abs(Math.ceil((x) / this.cellSize));
+        let _y = Math.abs(Math.ceil((y) / this.cellSize));
         if (this.isValidCellIndices(_x, _y)) {
-            this.grid[_x][_y].vX =((-this.width / 2) - x) ;// this.cellSize;
-            this.grid[_x][_y].vY =((-this.height / 2) - y) ;// this.cellSize;
+            this.grid[_x][_y].vX =(x) ;// this.cellSize;
+            this.grid[_x][_y].vY =(y) ;// this.cellSize;
             return this.grid[_x][_y];//{ x: _x, y: _y };
         }
         return null;
