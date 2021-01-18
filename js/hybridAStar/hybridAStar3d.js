@@ -83,26 +83,15 @@ class HybridAStar3d{
         this.currentCell.value=3;
     }
     getAStarNeighbors(cell){
-        let n=[]
-        n.push(this.grid[cell.i-1][cell.j-1]);
-        n.push(this.grid[cell.i+1][cell.j+1]);
-        n.push(this.grid[cell.i-1][cell.j+1]);
-        n.push(this.grid[cell.i+1][cell.j-1]);
-        n.push(this.grid[cell.i+0][cell.j+1]);
-        n.push(this.grid[cell.i+1][cell.j+0]);
-        // let l = [[1,0],[0,1],[1,1],[]]
-        // for(let i=-1;i<=1;i++){
-        //     for(let j=-1;j<=1;j++){
-        //         let nI = cell.i+i;
-        //         let nJ = cell.j+j;
-        //         if(nI== cell.i&&nJ== cell.j){continue;}
-        //         if(this.isValidCellIndices(nI,nJ)){
-        //            n.push(this.grid[nI][nJ]);
-        //         }
-        //     }
-        // }
-        return n;
+        let neighbors = [];
+        for (let n of [[-1, -1], [1, 1], [-1, 1], [1, -1], [0, -1], [-1, 0], [1, 0], [0, 1]]) {
+            if (this.isValidCellIndices(cell.i + n[0], cell.j + n[1])) {
+                neighbors.push(this.grid[cell.i+ n[0]][cell.j + n[1]]);
+            }
+        }
+        return neighbors;
     }
+
     
     getHybridAStarNeighbours(cell) {
         let neighbours=[];
