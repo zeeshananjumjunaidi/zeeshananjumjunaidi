@@ -22,6 +22,8 @@ $(document).ready(() => {
     mouse = new THREE.Vector2();
     pathGroup = new THREE.Group();
 
+   let cameraGroup = new THREE.Group();
+
     loadFont();
     // basic line material
     const lineMtl = new THREE.LineBasicMaterial({ color: 0x0000ff });
@@ -213,9 +215,10 @@ $(document).ready(() => {
             car.position.x = vehicle.position.x;//speed * Math.sin(car.rotation.y);
             car.position.z = vehicle.position.z;//speed * Math.cos(car.rotation.y);
             car.rotation.y = vehicle.heading;
-
+            cameraGroup.position.x=car.position.x;
+            cameraGroup.position.z=car.position.z;
             FrontLeftWheel.rotation.x = vehicle.steerAngle * 360;//.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
-            FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
+            // FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 0, 1), 1 * steerAngle);
 
             currentPosRect.position.x = vehicle.position.x;
             currentPosRect.position.z = vehicle.position.z;
@@ -230,8 +233,10 @@ $(document).ready(() => {
             heuristicLinePoints[1].z = vehicle.tPosition.z;
 
             steerAngle *= 0.5;
-            camera.lookAt(car.position);
+            //camera.lookAt(car.position);
             controls.center.set(car.position.x, car.position.y, car.position.z);
+            cameraGroup.add(camera);
+            scene.add(cameraGroup);
             renderer.render(scene, camera);
         }
         if (eleSpeed)
