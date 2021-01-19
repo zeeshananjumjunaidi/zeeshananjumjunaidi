@@ -40,7 +40,7 @@ $(document).ready(() => {
     const loader = new THREE.TextureLoader();
     scene = new THREE.Scene();
 
-    generateGrid(hybridAStarMap, scene, lineMtl, blkMtl, pathMtl);
+    generateGrid(hybridAStarMap, scene, lineMtl, blkMtl, pathMtl,25000);
     hybridAStarMap.setVehicle(vehicle);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 15000;
@@ -122,7 +122,11 @@ $(document).ready(() => {
     const heuristicLineGeom = new THREE.BufferGeometry().setFromPoints([]);
     const heuristicLine = new THREE.Line(heuristicLineGeom, blkMtl);
     heuristicLine.position.y = 1000;
+    heuristicLineGeom.frustumCulled = false;
+    heuristicLine.frustumCulled = false;
     scene.add(heuristicLine);
+    console.log(heuristicLineGeom);
+    console.log(heuristicLine);
 
     let position = new THREE.Vector3();
     let steerAngle = 0;
@@ -500,7 +504,7 @@ function generateGrid(hybridAStarMap, scene, mtl, blkMtl, pathMtl, size = 10000)
             } else if (c.isBlocked) {
                 m = blkMtl;
             }
-            scene.add(drawRect1(i * size + size / 2, j * size + size / 2, size, size, m));
+            scene.add(drawRect1(i * size - size / 2, j * size - size / 2, size, size, m));
         }
     }
     //25000, y: 1000, z: 55000

@@ -90,6 +90,7 @@ class HybridAStar3d{
         let neighbors = [];
         for (let n of [[-1, -1], [1, 1], [-1, 1], [1, -1], [0, -1], [-1, 0], [1, 0], [0, 1]]) {
             if (this.isValidCellIndices(cell.i + n[0], cell.j + n[1])) {
+                if(!this.grid[cell.i+ n[0]][cell.j + n[1]].isBlocked)
                 neighbors.push(this.grid[cell.i+ n[0]][cell.j + n[1]]);
             }
         }
@@ -100,7 +101,7 @@ class HybridAStar3d{
     getHybridAStarNeighbours(cell) {
         let neighbours=[];
         // Generate 3 points in fwd and reverse rotation position.
-        let fwdDist =25000;//this.cellSizeH/2;// 5000;//this.vehicle.turingRadius;//this.vehicle.turningRadius
+        let fwdDist =20000;//this.cellSizeH/2;// 5000;//this.vehicle.turingRadius;//this.vehicle.turningRadius
         //Front Point
         let pc = new THREE.Vector3();
         pc.x = cell.vX + Math.sin(cell.heading) * fwdDist;
@@ -115,7 +116,7 @@ class HybridAStar3d{
                 c.vX=newCell.x;
                 c.vY=cell.y;
                 c.vZ=newCell.y;
-                c.heading = Math.atan2(c.vZ-cell.vZ,c.vX-cell.vX);
+                c.heading = Math.atan2(c.vX-cell.vX,c.vZ-cell.vZ);
                 neighbours.push(c);
                 ij.push({i:c.i,j:c.j});
             }
@@ -152,12 +153,19 @@ class HybridAStar3d{
             a++;
         }
         // add some testing obstacles
-        this.grid[7][5].isBlocked=true;
-        this.grid[7][6].isBlocked=true;
-        this.grid[6][7].isBlocked=true;
-        this.grid[5][5].isBlocked=true;
-        this.grid[8][8].isBlocked=true;
-        this.grid[5][8].isBlocked=true;
+        // this.grid[7][5].isBlocked=true;
+        // this.grid[7][6].isBlocked=true;
+        // this.grid[6][7].isBlocked=true;
+        // this.grid[5][5].isBlocked=true;
+        // this.grid[8][8].isBlocked=true;
+        // this.grid[5][8].isBlocked=true;
+        for(let i=0;i<10;i++){            
+            this.grid[5][i].isBlocked=true;
+            this.grid[i+5][10].isBlocked=true;
+            this.grid[i+8][12].isBlocked=true;
+            this.grid[i+10][11].isBlocked=true;
+            this.grid[15][15-i].isBlocked=true;
+        }
     }
 
     setVehicle(vehicle) {
