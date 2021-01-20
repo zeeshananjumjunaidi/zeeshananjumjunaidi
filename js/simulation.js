@@ -151,7 +151,6 @@ $(document).ready(() => {
             targetPosition.z = 0;
             if (keyDown[38]) {//up
                 targetPosition.z += 400;
-                // console.log(vehicle.drivingPathCoordinates)
             } else if (keyDown[40]) {//down
                 targetPosition.z -= 400;
             }
@@ -167,8 +166,6 @@ $(document).ready(() => {
                 tHeading += 1;
             }
 
-
-            // console.log(targetPosition);
             if (keyDown[87]) {
                 if (speed < 130) {
                     speed += 1;
@@ -223,8 +220,8 @@ $(document).ready(() => {
             currentPosRect.position.x = vehicle.position.x;
             currentPosRect.position.z = vehicle.position.z;
             currentPosRect.rotation.y = vehicle.heading;
-            heuristicLinePoints[0].x = vehicle.position.z;
-            heuristicLinePoints[0].z = vehicle.position.x;
+            heuristicLinePoints[0].x = vehicle.position.x;
+            heuristicLinePoints[0].z = vehicle.position.z;
             targetPosRect.position.x = vehicle.tPosition.x;
             targetPosRect.position.y = 1000;
             targetPosRect.position.z = vehicle.tPosition.z;
