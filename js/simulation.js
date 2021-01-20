@@ -43,6 +43,10 @@ $(document).ready(() => {
     scene = new THREE.Scene();
 
     generateGrid(hybridAStarMap, scene, lineMtl, blkMtl, pathMtl,25000);
+
+    addTerrain();
+
+
     hybridAStarMap.setVehicle(vehicle);
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 15000;
@@ -258,7 +262,6 @@ $(document).ready(() => {
     };
 
     animate();
-    console.log(controls);
     speed = 0;
 
     document.onkeydown = function (event) {
@@ -580,4 +583,17 @@ function createSphere(x, y) {
     sphere.position.x = x;
     sphere.position.z = y;
     return sphere;
+}
+function addTerrain(){
+    // let peak = 60;
+    // let smoothing = 300;
+    // let geometry = new THREE.PlaneBufferGeometry( 2000, 2000, 256, 256 );
+    // let material = new THREE.MeshLambertMaterial({color: 0x3c3951});
+    // let terrain = new THREE.Mesh( geometry, material );
+    // terrain.rotation.x = -Math.PI / 2;
+    // let vertices = terrain.geometry.attributes.position.array;
+    // for (let i = 0; i <= vertices.length; i += 3) {
+    //     vertices[i+2] = peak * perlin.noise(vertices[i]/smoothing,vertices[i+1])/smoothing);
+    // }
+    // scene.add(terrain);
 }
