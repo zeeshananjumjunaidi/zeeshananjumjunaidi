@@ -81,7 +81,7 @@ $(document).ready(() => {
     light.position.set(50, 0, 0);
     light.castShadow = true; // default false
     scene.add(light);
-
+    let speed=0;
     const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
     light1.position.set(0, 0, 50);
     scene.add(light1);
@@ -249,9 +249,9 @@ $(document).ready(() => {
             renderer.render(scene, camera);
         }
         if (eleSpeed)
-            eleSpeed.innerText = "Speed: " + speed;
+            eleSpeed.innerText = "Speed: " + speed.toFixed(2)+ ` Position: ${(vehicle.position.x/100).toFixed(2)},${(vehicle.position.z/100).toFixed(2)} `;
         if (eleSteer)
-            eleSteer.innerText = "Steer: " + speed;
+            eleSteer.innerText = "Heading: " +  (heading*180/Math.PI).toFixed(2);
         controls.update();
         renderer.render(scene, camera);
 
