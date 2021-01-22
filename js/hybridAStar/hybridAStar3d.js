@@ -79,6 +79,7 @@ class HybridAStar3d{
                     neighbour.h = this.getDistance(neighbour,goal);
                     neighbour.f = neighbour.g + neighbour.h;
                     neighbour.parent = current;
+                    neighbour.isVisited=true;
                     
                 }
             }
@@ -90,7 +91,8 @@ class HybridAStar3d{
         let neighbors = [];
         for (let n of [[-1, -1], [1, 1], [-1, 1], [1, -1], [0, -1], [-1, 0], [1, 0], [0, 1]]) {
             if (this.isValidCellIndices(cell.i + n[0], cell.j + n[1])) {
-                if(!this.grid[cell.i+ n[0]][cell.j + n[1]].isBlocked)
+                if(!this.grid[cell.i+ n[0]][cell.j + n[1]].isBlocked&&
+                    !this.grid[cell.i+ n[0]][cell.j + n[1]].isVisited)
                 neighbors.push(this.grid[cell.i+ n[0]][cell.j + n[1]]);
             }
         }
