@@ -85,7 +85,15 @@ $(document).ready(() => {
     const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
     light1.position.set(0, 0, 50);
     scene.add(light1);
-
+    let carPosText = new THREE.TextSprite({
+        alignment: 'left',
+        color: '#00AA00',
+        fontFamily: '"Times New Roman", Times, serif',
+        fontSize: 1400,
+        fontStyle: 'italic',
+        text:'',
+      });
+      scene.add(carPosText);
     const lightAmbient = new THREE.AmbientLight(0x404040); // soft white light
     scene.add(lightAmbient);
 
@@ -204,8 +212,8 @@ $(document).ready(() => {
             }
             position.x += constantVelocity * Math.sin(heading);
             position.z += constantVelocity * Math.cos(heading);
-
-
+            carPosText.text=`${position.x.toFixed(2)},${position.z.toFixed(2)}`;
+            carPosText.position.set(vehicle.position.x,5000,vehicle.position.z);
 
 
             vehicle.drive(constantVelocity, steerAngle);
