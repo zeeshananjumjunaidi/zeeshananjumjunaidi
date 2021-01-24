@@ -109,14 +109,14 @@ $(document).ready(() => {
         false);
 
     // LIGHTING
-    const light = new THREE.DirectionalLight(0xffffff, 3, 100);
-    light.position.set(50, 0, 0);
+    const light = new THREE.DirectionalLight(0xffffff, 3, 20);
+    light.position.set(50, 0, 45);
     light.castShadow = true; // default false
     scene.add(light);
     let speed=0;
-    const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
-    light1.position.set(0, 0, 50);
-    scene.add(light1);
+    // const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
+    // light1.position.set(0, 0, 50);
+    // scene.add(light1);
     let carPosText = new THREE.TextSprite({
         alignment: 'left',
         color: '#00AA00',
@@ -126,8 +126,8 @@ $(document).ready(() => {
         text:'',
       });
       scene.add(carPosText);
-    const lightAmbient = new THREE.AmbientLight(0x404040); // soft white light
-    scene.add(lightAmbient);
+    // const lightAmbient = new THREE.AmbientLight(0x404040); // soft white light
+    // scene.add(lightAmbient);
 
     //Set up shadow properties for the light
     light.shadow.mapSize.width = 512; // default
@@ -135,6 +135,10 @@ $(document).ready(() => {
     light.shadow.camera.near = 0.5; // default
     light.shadow.camera.far = 500; // default
     scene.add(light);
+
+    var lightH = new THREE.HemisphereLight(0x404040, 0x002288, 1.5);
+    scene.add(lightH);
+
     let currentPosRect = createRect(0x0000ff);
     scene.add(currentPosRect);
 
@@ -400,7 +404,7 @@ function loadVehicle(sceneRef) {
         car.traverse(function (child) {
 
             if(child instanceof THREE.Mesh){
-                child.material=toonMtrl;
+             //   child.material=toonMtrl;
                 child.castShadow = true;
                 child.receiveShadow = false;
                 if(child.children.length>0){
@@ -592,8 +596,7 @@ var text = "aems",
     bevelEnabled = true,
     font = undefined;
 
-var cubeMat = new THREE.MeshLambertMaterial({ color: 0xff3300 })
-// Credit - https://github.com/chalupagrande/threejs-text-example
+var cubeMat = new THREE.MeshLambertMaterial({ color: 0xff3300 });
 function loadFont() {
     var loader = new THREE.FontLoader();
     loader.load('js/fonts/helvetiker_regular.typeface.js', function (res) {

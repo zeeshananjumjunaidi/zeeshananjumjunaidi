@@ -154,13 +154,6 @@ class HybridAStar3d{
             }
             a++;
         }
-        // add some testing obstacles
-        // this.grid[7][5].isBlocked=true;
-        // this.grid[7][6].isBlocked=true;
-        // this.grid[6][7].isBlocked=true;
-        // this.grid[5][5].isBlocked=true;
-        // this.grid[8][8].isBlocked=true;
-        // this.grid[5][8].isBlocked=true;
         for(let i=0;i<10;i++){            
             this.grid[5][i].isBlocked=true;
             this.grid[i+5][10].isBlocked=true;
