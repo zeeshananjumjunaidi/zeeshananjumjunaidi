@@ -27,7 +27,7 @@ lightdir = tmp.xyz;
 eyenorm = normalMatrix * normal;
 }
 `;
-const toonFragmentShader=`
+const toonFragmentShader = `
 varying vec3 lightdir;
 varying vec3 eyenorm;
  
@@ -54,7 +54,7 @@ $(document).ready(() => {
     mouse = new THREE.Vector2();
     pathGroup = new THREE.Group();
 
-   let cameraGroup = new THREE.Group();
+    let cameraGroup = new THREE.Group();
 
     loadFont();
     // basic line material
@@ -74,7 +74,7 @@ $(document).ready(() => {
     const loader = new THREE.TextureLoader();
     scene = new THREE.Scene();
 
-    generateGrid(hybridAStarMap, scene, lineMtl, blkMtl, pathMtl,25000);
+    generateGrid(hybridAStarMap, scene, lineMtl, blkMtl, pathMtl, 25000);
 
     addTerrain();
 
@@ -86,8 +86,6 @@ $(document).ready(() => {
     camera.lookAt(new THREE.Vector3(250000, 0, 250000));
     const color = 0xEEEEEE;
     const density = 0.00001;
-    //    scene.fog = new THREE.FogExp2(color, density);
-    //camera.position.set(0, 3, 5);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
@@ -113,7 +111,7 @@ $(document).ready(() => {
     light.position.set(50, 0, 45);
     light.castShadow = true; // default false
     scene.add(light);
-    let speed=0;
+    let speed = 0;
     // const light1 = new THREE.DirectionalLight(0xffffff, 3, 30);
     // light1.position.set(0, 0, 50);
     // scene.add(light1);
@@ -123,9 +121,9 @@ $(document).ready(() => {
         fontFamily: '"Times New Roman", Times, serif',
         fontSize: 1400,
         fontStyle: 'italic',
-        text:'',
-      });
-      scene.add(carPosText);
+        text: '',
+    });
+    scene.add(carPosText);
     // const lightAmbient = new THREE.AmbientLight(0x404040); // soft white light
     // scene.add(lightAmbient);
 
@@ -152,7 +150,6 @@ $(document).ready(() => {
     scene.add(createCircle(vehicle.vLCircle.x, vehicle.vLCircle.y, vehicle.turningRadius));
 
 
-    // scene.add(createGroundPlane());
     keyDown = new Array();
     for (i = 0; i < 300; i++) {
         keyDown[i] = false;
@@ -248,22 +245,21 @@ $(document).ready(() => {
             }
             position.x += constantVelocity * Math.sin(heading);
             position.z += constantVelocity * Math.cos(heading);
-            carPosText.text=`${position.x.toFixed(2)},${position.z.toFixed(2)}`;
-            carPosText.position.set(vehicle.position.x,5000,vehicle.position.z);
+            carPosText.text = `${position.x.toFixed(2)},${position.z.toFixed(2)}`;
+            carPosText.position.set(vehicle.position.x, 5000, vehicle.position.z);
 
 
             vehicle.drive(constantVelocity, steerAngle);
             vehicle.updateTargetControl(targetPosition, tHeading);
             vehicle.simulateDubinPath();
             vehicle.solvePath();
-            //drawDrivingPath();
+
             car.position.x = vehicle.position.x;//speed * Math.sin(car.rotation.y);
             car.position.z = vehicle.position.z;//speed * Math.cos(car.rotation.y);
             car.rotation.y = vehicle.heading;
-            cameraGroup.position.x=car.position.x;
-            cameraGroup.position.z=car.position.z;
-            FrontLeftWheel.rotation.x = vehicle.steerAngle * 360;//.rotateOnAxis(new THREE.Vector3(0, 1, 0), 1 * steerAngle);
-            // FrontRightWheel.rotateOnAxis(new THREE.Vector3(0, 0, 1), 1 * steerAngle);
+            cameraGroup.position.x = car.position.x;
+            cameraGroup.position.z = car.position.z;
+            FrontLeftWheel.rotation.x = vehicle.steerAngle * 360;
 
             currentPosRect.position.x = vehicle.position.x;
             currentPosRect.position.z = vehicle.position.z;
@@ -285,9 +281,9 @@ $(document).ready(() => {
             renderer.render(scene, camera);
         }
         if (eleSpeed)
-            eleSpeed.innerText = "Speed: " + speed.toFixed(2)+ ` Position: ${(vehicle.position.x/100).toFixed(2)},${(vehicle.position.z/100).toFixed(2)} `;
+            eleSpeed.innerText = "Speed: " + speed.toFixed(2) + ` Position: ${(vehicle.position.x / 100).toFixed(2)},${(vehicle.position.z / 100).toFixed(2)} `;
         if (eleSteer)
-            eleSteer.innerText = "Heading: " +  (heading*180/Math.PI).toFixed(2);
+            eleSteer.innerText = "Heading: " + (heading * 180 / Math.PI).toFixed(2);
         controls.update();
         renderer.render(scene, camera);
 
@@ -381,7 +377,7 @@ function loadVehicle(sceneRef) {
                     , depthWrite: true
                     , stencilWriteMask: 255
                 });
-                
+
                 if (child.material.map)
                     if (child.material.map.image) {
                         toonMtl.map = child.material.map;
@@ -396,25 +392,25 @@ function loadVehicle(sceneRef) {
         car = model;
         toonMtrl = new THREE.ShaderMaterial({
             uniforms: {
-            lightpos: {type: 'v3', value: new THREE.Vector3(0,30,120) }
+                lightpos: { type: 'v3', value: new THREE.Vector3(0, 30, 120) }
             },
             vertexShader: toonVertexShader,
             fragmentShader: toonFragmentShader
-            });
+        });
         car.traverse(function (child) {
 
-            if(child instanceof THREE.Mesh){
-             //   child.material=toonMtrl;
+            if (child instanceof THREE.Mesh) {
+                //   child.material=toonMtrl;
                 child.castShadow = true;
                 child.receiveShadow = false;
-                if(child.children.length>0){
+                if (child.children.length > 0) {
                     console.log(child.children);
                 }
-                if(child.name=="MainBody"){
-                 //   console.log(child.material.map.image);
+                if (child.name == "MainBody") {
+                    //   console.log(child.material.map.image);
                 }
-                if(child.material.map&&child.material.map.image){
-                 //   console.error("ASDASD");
+                if (child.material.map && child.material.map.image) {
+                    //   console.error("ASDASD");
                 }
             }
         });
@@ -637,7 +633,7 @@ function createSphere(x, y) {
     sphere.position.z = y;
     return sphere;
 }
-function addTerrain(){
+function addTerrain() {
     // let peak = 60;
     // let smoothing = 300;
     // let geometry = new THREE.PlaneBufferGeometry( 2000, 2000, 256, 256 );
