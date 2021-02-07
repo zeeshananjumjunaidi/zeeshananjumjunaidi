@@ -61,6 +61,7 @@ function setup() {
     toggleWallsButton=new Button(100,height/2-20,100,30,"reset",()=>{
         // toggleWallsButton
     });
+    vehicle.toggleAlwaysSolve();
 }
 function draw() {
     translate(width / 2, height / 2);
@@ -80,8 +81,8 @@ function draw() {
     if (this.showHelp) {
         displayHelp();
     }
-    toggleWallsButton.show();
-    toggleWallsButton.hover();
+ //   toggleWallsButton.show();
+  //  toggleWallsButton.hover();
 }
 
 
