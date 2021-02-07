@@ -45,12 +45,16 @@ function showAboutMe() {
 function showPortfolio() {
   $('#portfolio').load('portfolio.html');
 }
+function showExperimentalView(){
+  $('#experiment').load('experiment.html');
+}
 function shhowProjects() {
   $('#projects').load('projects.html');
 }
 $(document).ready(()=>{
   showAboutMe();
   showPortfolio();
+  showExperimentalView();
   // shhowProjects();
 });
 function openProjectsPage(){
