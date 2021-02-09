@@ -13,6 +13,7 @@ class Lidar {
         this.range = range;
         this.rays = [];
         this.initializeSensor();
+        window.rays = this.rays;
     }
     initializeSensor() {
         for (let i = 0; i < 200; i +=1) {
@@ -23,9 +24,7 @@ class Lidar {
         this.debug = !this.debug;
     }
     scan() {
-        // print(this.vehicle.position);
         fill(255)
-        // drawCircle(this.vehicle.position,30,color(0,255,0));
         // update LIDAR position
         this.position = createVector(this.vehicle.position.x, this.vehicle.position.y);
         this.position = p5.Vector.add(this.position, createVector(this.xOffset, this.yOffset));
@@ -38,6 +37,7 @@ class Lidar {
             ray.lookAt(lookX, lookY);
             let rec = Infinity;
             let closestPoint = null;
+            ray.pos=this.vehicle.position;
             if(!this.vehicle||!this.vehicle.environment)
                 continue;
             for (let wall of this.vehicle.environment.walls) {
@@ -45,6 +45,7 @@ class Lidar {
                 if (pt) {
 
                     const distance = vectorDist(this.position, pt);
+           
                     if (distance < rec) {
                         closestPoint = pt;
                         rec = distance;

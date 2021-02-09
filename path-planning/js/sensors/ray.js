@@ -12,6 +12,7 @@ class Ray {
     update(){
         push();
         translate(this.pos.x, this.pos.y);
+        fill(255);
         line(0, 0, this.dir.x * this.range, this.dir.y * this.range);
         pop();
     }

@@ -16,6 +16,8 @@ var canvasHalfHeight = 100;
 var showHelp = false;
 var toggleWallsButton;
 function setup() {
+    canvasWidth = round(window.innerWidth);
+    canvasHeight = round(window.innerHeight);
     createCanvas(canvasWidth, canvasHeight);
     canvasHalfHeight = canvasHeight / 2;
     canvasHalfWidth = canvasWidth / 2;
@@ -24,23 +26,29 @@ function setup() {
     // angleMode(DEGREES);
     frameRate(100);
     textSize(9);
-    vehicle = new Vehicle(200, 0, 0);
+    vehicle = new Vehicle(250, 0, 0);
     let environment = new Environment();
     vehicle.setEnvironment(environment);
-    environment.addWall(-200, -200, -200, 200);
-    environment.addWall(200, -200, 200, 200);
+    environment.addWall(-200, -150, -200, 200);
+
+
+    environment.addWall(200, -100, 200, 100);
     environment.addWall(-width / 2, 200, -200, 200);
-    environment.addWall(-width / 2, -200, -200, -200);
+    environment.addWall(-width / 2, -150, -width/3, -150);
 
     environment.addWall(200, -200, width / 2, -200);
-    environment.addWall(200, 200, width / 2, 200);
+    environment.addWall(200, 200, width / 3, 200);
+
+
+    environment.addWall(200, 150, width / 5, 150);
+    environment.addWall(200, 150, 200, 200);
 
 
     environment.addWall(-50, -30, 50, -30);
     environment.addWall(-50, 30, 50, 30);
 
     environment.addWall(-50, -30, -50, 30);
-    environment.addWall(50, -30, 50, 30);
+    // environment.addWall(50, -30, 50, 30);
 
     // Hybrid A* Map
     hybridMap = new HybridAStarMap(width, height, 50);
