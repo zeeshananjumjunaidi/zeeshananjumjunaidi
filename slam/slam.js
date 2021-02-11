@@ -18,7 +18,7 @@ $(document).ready(() => {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 15000;
     camera.position.z = -10000;
-    camera.lookAt(new THREE.Vector3(250000, 0, 250000));
+    // camera.lookAt(new THREE.Vector3(250000, 0, 250000));
    
     camera.rotation.x = 0;
     camera.rotation.y = 0;
@@ -61,10 +61,12 @@ $(document).ready(() => {
     function addGrid(){
         for(let i=-20;i<20;i++){
             for(let j=-20;j<20;j++){
-                let clr = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+                let clr =0xFF00FF;// `#${Math.floor(Math.random()*16777215).toString(16)}`;
                scene.add(createRect(i*1000,j*1000,1000,1000,clr));
+               scene.add(createPlane(i*1000-100,1000,j*1000-100,1000-100,1000-100,`#${Math.floor(Math.random()*16777215).toString(16)}`));
             }
         }
+        // scene.add(createPlane(-20000,0,-20000,1000,1000));
     }
     function addBoids(scene){
         let boid = new Boid(0,1000,0,500,1);
@@ -73,12 +75,7 @@ $(document).ready(() => {
     }
     function updateBoids(){
         for(let i=0;i<boids.length;i++){
-            let boid = boids[i];
-            // boid.position.set(
-            //     boid.position.x+11,
-            //     boid.position.y,
-            //     boid.position.z+11
-            // )
+            let boid = boids[i];           
         }
     }
 });
