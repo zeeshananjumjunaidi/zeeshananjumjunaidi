@@ -1,6 +1,10 @@
 
 var vehicle;
-function setup(){ 
+var landmarkOrigins = [];
+
+var GPS_estimate = new p5.Vector();
+var GPS_INTERVAL = 1000;
+function setup() {
     canvasWidth = round(window.innerWidth);
     canvasHeight = round(window.innerHeight);
     createCanvas(canvasWidth, canvasHeight);
@@ -12,36 +16,62 @@ function setup(){
     frameRate(100);
     textSize(9);
     vehicle = new Vehicle(250, 0, 0);
+
+    for (let i = -5; i < 5; i++) {
+        landmarkOrigins.push([i * 100, -250]);
+        landmarkOrigins.push([i * 100, 250]);
+    }
+    setInterval(() => {
+        GPS_estimate = new p5.Vector(vehicle.position.x+Math.random(-30,30),vehicle.position.y+Math.random(-30,30),
+        vehicle.heading+Math.random(-0.2,0.2));
+        print(GPS_estimate);
+    }, GPS_INTERVAL);
 }
 
 
-function draw(){
+function draw() {
     translate(width / 2, height / 2);
-    background(0xEEE);    
+    background(0xEEE);
     color(0x333);
     vehicle.draw();
     inputController();
     drawLandmark();
     drawDebugInfo();
+    update();
 }
-function drawDebugInfo(){
+let angle=0;
+function drawDebugInfo() {
+    noFill();
+    stroke(1,50);
+    let scannerRadius = 700;
+    circle(vehicle.position.x, vehicle.position.y, scannerRadius);
+
+    angle += 0.02;
+    circle(vehicle.position.x, vehicle.position.y, Math.sin(angle)*scannerRadius);
+
+    for(let i=0;i<landmarkOrigins.length;i++){
+        if(dist(landmarkOrigins[i][0],landmarkOrigins[i][1],this.vehicle.position.x,this.vehicle.position.y)<scannerRadius/2){
+            line(landmarkOrigins[i][0],landmarkOrigins[i][1],this.vehicle.position.x,this.vehicle.position.y);
+            fill(255,0,0);
+            circle(landmarkOrigins[i][0],landmarkOrigins[i][1],10);
+        }
+    }
+}
+function update(){
+    vehicle.tPosition.x=GPS_estimate.x;
+    vehicle.tPosition.y=GPS_estimate.y;
+    vehicle.tHeading=GPS_estimate.z;
+}
+function drawLandmark() {
     noFill();
     stroke(1);
-    circle(vehicle.position.x,vehicle.position.y,500);
-}
-function drawLandmark(){
-    noFill();
-    rect(0,0,100,100,10);
-
-    for(let i=-5;i<5;i++){
+    rect(0, 0, 100, 100, 10);
+    for (let i = 0; i < landmarkOrigins.length; i++) {
+        let lMark = landmarkOrigins[i];
         noFill();
-    rect(i*100,-250,30,30,3);    
-    fill(0);
-    text(i+1,i*100,-250);    
-    noFill();
-    rect(i*100,250,30,30,3);
-    fill(0);
-    text(i+1,i*100,250);    
+        rect(lMark[0], lMark[1], 30, 30, 3);
+        fill(0);
+        text(i + 1, lMark[0], lMark[1]);
     }
 }
 
@@ -85,6 +115,7 @@ function inputController() {
     else { }
 
     vehicle.drive(constantSpeed * 2, constantAngle);
+  
     vehicle.updateTargetControl(targetPosition, targetHeading);
 
     // Mouse Control for moving target
