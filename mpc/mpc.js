@@ -3,10 +3,12 @@ var vehicle;
 var landmarkOrigins = [];
 
 var GPS_estimate = new p5.Vector();
-var GPS_INTERVAL = 500;
+var GPS_INTERVAL = 1000;
 
 var particleSamples=[];
-
+var weights= [];
+var NUMBER_OF_PARTICLES = 500;
+var EPS = 0.001;
 function setup() {
     canvasWidth = round(window.innerWidth);
     canvasHeight = round(window.innerHeight);
@@ -24,9 +26,10 @@ function setup() {
         landmarkOrigins.push([i * 100, -250]);
         landmarkOrigins.push([i * 100, 250]);
     }
-    for(let i=0;i<1000;i++){
+    for(let i=0;i<NUMBER_OF_PARTICLES;i++){
         particleSamples.push([random(-canvasHalfWidth,canvasHalfWidth),
-        random(-canvasHalfHeight,canvasHalfHeight),0,random(0.5,4)]);
+        random(-canvasHalfHeight,canvasHalfHeight),0]);
+        weights.push(random(0.5,4));
     }
     print(particleSamples,canvasHalfWidth,canvasHalfHeight)
     setInterval(() => {
@@ -70,9 +73,9 @@ function drawDebugInfo() {
     -canvasHalfWidth+30,-canvasHalfHeight+30);
 
   stroke(255,0,0);
-    for(let i=0;i<particleSamples.length;i++){
+    for(let i=0;i<NUMBER_OF_PARTICLES;i++){
         
-        strokeWeight(particleSamples[i][3]);
+        strokeWeight(weights[i]);
         point(particleSamples[i][0],particleSamples[i][1]);
     }
 }
