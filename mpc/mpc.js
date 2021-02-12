@@ -3,7 +3,10 @@ var vehicle;
 var landmarkOrigins = [];
 
 var GPS_estimate = new p5.Vector();
-var GPS_INTERVAL = 1000;
+var GPS_INTERVAL = 500;
+
+var particleSamples=[];
+
 function setup() {
     canvasWidth = round(window.innerWidth);
     canvasHeight = round(window.innerHeight);
@@ -21,11 +24,17 @@ function setup() {
         landmarkOrigins.push([i * 100, -250]);
         landmarkOrigins.push([i * 100, 250]);
     }
+    for(let i=0;i<1000;i++){
+        particleSamples.push([random(-canvasHalfWidth,canvasHalfWidth),
+        random(-canvasHalfHeight,canvasHalfHeight),0,random(0.5,4)]);
+    }
+    print(particleSamples,canvasHalfWidth,canvasHalfHeight)
     setInterval(() => {
         GPS_estimate = new p5.Vector(vehicle.position.x+Math.random(-30,30),vehicle.position.y+Math.random(-30,30),
         vehicle.heading+Math.random(-0.2,0.2));
-        print(GPS_estimate);
+      
     }, GPS_INTERVAL);
+
 }
 
 
@@ -43,6 +52,7 @@ let angle=0;
 function drawDebugInfo() {
     noFill();
     stroke(1,50);
+    strokeWeight(1)
     let scannerRadius = 700;
     circle(vehicle.position.x, vehicle.position.y, scannerRadius);
 
@@ -55,6 +65,15 @@ function drawDebugInfo() {
             fill(255,0,0);
             circle(landmarkOrigins[i][0],landmarkOrigins[i][1],10);
         }
+    }
+    text(`GPS estimate: ${GPS_estimate.x.toFixed(2)},${GPS_estimate.y.toFixed(2)},${GPS_estimate.z.toFixed(2)}`,
+    -canvasHalfWidth+30,-canvasHalfHeight+30);
+
+  stroke(255,0,0);
+    for(let i=0;i<particleSamples.length;i++){
+        
+        strokeWeight(particleSamples[i][3]);
+        point(particleSamples[i][0],particleSamples[i][1]);
     }
 }
 function update(){
