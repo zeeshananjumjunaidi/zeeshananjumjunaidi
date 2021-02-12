@@ -21,6 +21,28 @@ function draw(){
     color(0x333);
     vehicle.draw();
     inputController();
+    drawLandmark();
+    drawDebugInfo();
+}
+function drawDebugInfo(){
+    noFill();
+    stroke(1);
+    circle(vehicle.position.x,vehicle.position.y,500);
+}
+function drawLandmark(){
+    noFill();
+    rect(0,0,100,100,10);
+
+    for(let i=-5;i<5;i++){
+        noFill();
+    rect(i*100,-250,30,30,3);    
+    fill(0);
+    text(i+1,i*100,-250);    
+    noFill();
+    rect(i*100,250,30,30,3);
+    fill(0);
+    text(i+1,i*100,250);    
+    }
 }
 
 function inputController() {
