@@ -32,6 +32,12 @@ function setup() {
     vehicle.environment.addWall(-100,0,-200,100);
     vehicle.environment.addWall(-100,100,100,100);
     vehicle.environment.addWall(-100,100,-200,200);
+    vehicle.environment.addWall(-canvasHalfWidth/2,100,-canvasHalfWidth/2,200);
+    vehicle.environment.addWall(-canvasHalfWidth/2,-100,-canvasHalfWidth/2,-200);
+    vehicle.environment.addWall(-canvasHalfWidth+100,200,-canvasHalfWidth+100,-200);
+
+    vehicle.environment.addWall(-canvasHalfWidth+50,-canvasHalfHeight+50,-canvasHalfWidth+50,canvasHalfHeight-50);
+    vehicle.environment.addWall(canvasHalfWidth-50,-canvasHalfHeight+50,canvasHalfWidth-50,canvasHalfHeight-50);
     // for (let i = -5; i < 5; i++) {
     //     landmarkOrigins.push([i * 100, -250]);
     //     landmarkOrigins.push([i * 100, 250]);

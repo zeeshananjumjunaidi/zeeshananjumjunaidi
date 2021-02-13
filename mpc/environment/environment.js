@@ -7,7 +7,7 @@ class Environment{
     }
     show(){
         
-        stroke(0);
+        stroke(0,50);
         strokeWeight(2);
         for(let wall of this.walls){
             wall.show();

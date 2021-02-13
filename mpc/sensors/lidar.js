@@ -14,6 +14,12 @@ class Lidar {
         this.rays = [];
         this.initializeSensor();
         window.rays = this.rays;
+        this.map=[];
+        this.mapPointer=0;
+        for(let i=0;i<200;i++){
+            // x,y, weight
+            this.map.push([0,0,0]);
+        }
     }
     initializeSensor() {
         for (let i = 0; i < 200; i +=1) {
@@ -29,6 +35,7 @@ class Lidar {
     }
     scan() {
         fill(255)
+        strokeWeight(1)
         // update LIDAR position
         this.position = createVector(this.vehicle.position.x, this.vehicle.position.y);
         this.position = p5.Vector.add(this.position, createVector(this.xOffset, this.yOffset));
@@ -50,7 +57,7 @@ class Lidar {
 
                     const distance = this.vectorDist(this.position, pt);
            
-                    if (distance < rec) {
+                    if (distance < rec && distance < this.range) {
                         closestPoint = pt;
                         rec = distance;
 
@@ -65,10 +72,26 @@ class Lidar {
                 drawCircle(closestPoint,5);
                 stroke(2550,0,0,50);
                 ray.pos = this.position;
-                line(ray.pos.x,ray.pos.y,closestPoint.x,closestPoint.y);
+                line(ray.pos.x,ray.pos.y,closestPoint.x,closestPoint.y);    
+                let newPoint = true;     
+                for(let m=0;m<this.map.length;m++){
+                    if(dist(this.map[m][0],this.map[m][1],closestPoint.x,closestPoint.y)<10)
+                    {newPoint=false; break;}
+                }       
+                if(newPoint){
+                this.map[this.mapPointer++]=[closestPoint.x,closestPoint.y,5];
+                if(this.mapPointer>=this.map.length){this.mapPointer=0;}
+            }
+
                 noFill();
+
                 noStroke();
             }
+        }
+        for(let i=0;i<this.map.length;i++){
+            stroke(0,0,255);
+            strokeWeight(this.map[i][2]);
+            point(this.map[i][0],this.map[i][1]);
         }
     }
 
