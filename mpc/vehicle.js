@@ -70,6 +70,9 @@ class Vehicle {
         // rectMode(CENTER);
         this.drawVehicle();
         this.drawTarget();
+        if(this.environment){
+            this.environment.show();
+        }
     }
     /**
      * Draw Vehicle UI
