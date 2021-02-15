@@ -7,16 +7,20 @@ var vehicle;
 
 var GPS_estimate = new p5.Vector();
 var GPS_INTERVAL = 1000;
-
+var cols = 1;
+var rows = 1;
+var cellSize = 20;
 var lidar;
 
-var particleSamples=[];
-var weights= [];
+var particleSamples = [];
+var weights = [];
 var NUMBER_OF_PARTICLES = 500;
 var EPS = 0.001;
 function setup() {
     canvasWidth = round(window.innerWidth);
     canvasHeight = round(window.innerHeight);
+    cols = round(window.innerWidth / cellSize);
+    rows = round(window.innerHeight / cellSize);
     createCanvas(canvasWidth, canvasHeight);
     canvasHalfHeight = canvasHeight / 2;
     canvasHalfWidth = canvasWidth / 2;
@@ -26,32 +30,32 @@ function setup() {
     frameRate(100);
     textSize(9);
     vehicle = new Vehicle(250, 0, 0);
-    lidar = new Lidar(vehicle,0,0);
+    lidar = new Lidar(vehicle, 0, 0);
     vehicle.environment = new Environment();
-    vehicle.environment.addWall(-100,0,100,0);
-    vehicle.environment.addWall(-100,0,-200,100);
-    vehicle.environment.addWall(-100,100,100,100);
-    vehicle.environment.addWall(-100,100,-200,200);
-    vehicle.environment.addWall(-canvasHalfWidth/2,100,-canvasHalfWidth/2,200);
-    vehicle.environment.addWall(-canvasHalfWidth/2,-100,-canvasHalfWidth/2,-200);
-    vehicle.environment.addWall(-canvasHalfWidth+100,200,-canvasHalfWidth+100,-200);
+    vehicle.environment.addWall(-100, 0, 100, 0);
+    vehicle.environment.addWall(-100, 0, -200, 100);
+    vehicle.environment.addWall(-100, 100, 100, 100);
+    vehicle.environment.addWall(-100, 100, -200, 200);
+    vehicle.environment.addWall(-canvasHalfWidth / 2, 100, -canvasHalfWidth / 2, 200);
+    vehicle.environment.addWall(-canvasHalfWidth / 2, -100, -canvasHalfWidth / 2, -200);
+    vehicle.environment.addWall(-canvasHalfWidth + 100, 200, -canvasHalfWidth + 100, -200);
 
-    vehicle.environment.addWall(-canvasHalfWidth+50,-canvasHalfHeight+50,-canvasHalfWidth+50,canvasHalfHeight-50);
-    vehicle.environment.addWall(canvasHalfWidth-50,-canvasHalfHeight+50,canvasHalfWidth-50,canvasHalfHeight-50);
+    vehicle.environment.addWall(-canvasHalfWidth + 50, -canvasHalfHeight + 50, -canvasHalfWidth + 50, canvasHalfHeight - 50);
+    vehicle.environment.addWall(canvasHalfWidth - 50, -canvasHalfHeight + 50, canvasHalfWidth - 50, canvasHalfHeight - 50);
     // for (let i = -5; i < 5; i++) {
     //     landmarkOrigins.push([i * 100, -250]);
     //     landmarkOrigins.push([i * 100, 250]);
     // }
-    for(let i=0;i<NUMBER_OF_PARTICLES;i++){
-        particleSamples.push([random(-canvasHalfWidth,canvasHalfWidth),
-        random(-canvasHalfHeight,canvasHalfHeight),0]);
-        weights.push(random(0.5,4));
+    for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
+        particleSamples.push([random(-canvasHalfWidth, canvasHalfWidth),
+        random(-canvasHalfHeight, canvasHalfHeight), 0]);
+        weights.push(random(0.5, 4));
     }
-    print(particleSamples,canvasHalfWidth,canvasHalfHeight)
+    print(particleSamples, canvasHalfWidth, canvasHalfHeight)
     setInterval(() => {
-        GPS_estimate = new p5.Vector(vehicle.position.x+Math.random(-30,30),vehicle.position.y+Math.random(-30,30),
-        vehicle.heading+Math.random(-0.2,0.2));
-      
+        GPS_estimate = new p5.Vector(vehicle.position.x + Math.random(-30, 30), vehicle.position.y + Math.random(-30, 30),
+            vehicle.heading + Math.random(-0.2, 0.2));
+
     }, GPS_INTERVAL);
 
 }
@@ -61,22 +65,38 @@ function draw() {
     translate(width / 2, height / 2);
     background(0xEEE);
     color(0x333);
+    drawGrid();
+
+
+
     vehicle.draw();
     inputController();
     drawLandmark();
     drawDebugInfo();
     update();
 }
-let angle=0;
+
+function drawGrid() {
+    stroke(0,0,90,50)
+    strokeWeight(0.5)
+    for (let i = -rows; i < rows; i++) {
+        for (let j = -cols/2; j < cols/2; j++) {
+            rect(i*cellSize,j*cellSize,cellSize,cellSize);
+        }
+    }
+}
+
+
+let angle = 0;
 function drawDebugInfo() {
     noFill();
-    stroke(1,50);
+    stroke(1, 50);
     strokeWeight(1)
     let scannerRadius = 700;
     circle(vehicle.position.x, vehicle.position.y, scannerRadius);
 
     angle += 0.02;
-    circle(vehicle.position.x, vehicle.position.y, Math.sin(angle)*scannerRadius);
+    circle(vehicle.position.x, vehicle.position.y, Math.sin(angle) * scannerRadius);
 
     // for(let i=0;i<landmarkOrigins.length;i++){
     //     if(dist(landmarkOrigins[i][0],landmarkOrigins[i][1],this.vehicle.position.x,this.vehicle.position.y)<scannerRadius/2){
@@ -86,19 +106,19 @@ function drawDebugInfo() {
     //     }
     // }
     text(`GPS estimate: ${GPS_estimate.x.toFixed(2)},${GPS_estimate.y.toFixed(2)},${GPS_estimate.z.toFixed(2)}`,
-    -canvasHalfWidth+30,-canvasHalfHeight+30);
+        -canvasHalfWidth + 30, -canvasHalfHeight + 30);
 
-  stroke(255,0,0);
-    for(let i=0;i<NUMBER_OF_PARTICLES;i++){
-        
+    stroke(255, 0, 0);
+    for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
+
         strokeWeight(weights[i]);
-        point(particleSamples[i][0],particleSamples[i][1]);
+        point(particleSamples[i][0], particleSamples[i][1]);
     }
 }
-function update(){
-    vehicle.tPosition.x=GPS_estimate.x;
-    vehicle.tPosition.y=GPS_estimate.y;
-    vehicle.tHeading=GPS_estimate.z;
+function update() {
+    vehicle.tPosition.x = GPS_estimate.x;
+    vehicle.tPosition.y = GPS_estimate.y;
+    vehicle.tHeading = GPS_estimate.z;
     lidar.scan();
 }
 function drawLandmark() {
@@ -154,7 +174,7 @@ function inputController() {
     else { }
 
     vehicle.drive(constantSpeed * 2, constantAngle);
-  
+
     vehicle.updateTargetControl(targetPosition, targetHeading);
 
     // Mouse Control for moving target
