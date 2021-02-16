@@ -46,11 +46,11 @@ function setup() {
     //     landmarkOrigins.push([i * 100, -250]);
     //     landmarkOrigins.push([i * 100, 250]);
     // }
-    for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
-        particleSamples.push([random(-canvasHalfWidth, canvasHalfWidth),
-        random(-canvasHalfHeight, canvasHalfHeight), 0]);
-        weights.push(random(0.5, 4));
-    }
+    // for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
+    //     particleSamples.push([random(-canvasHalfWidth, canvasHalfWidth),
+    //     random(-canvasHalfHeight, canvasHalfHeight), 0]);
+    //     weights.push(random(0.5, 4));
+    // }
     print(particleSamples, canvasHalfWidth, canvasHalfHeight)
     setInterval(() => {
         GPS_estimate = new p5.Vector(vehicle.position.x + Math.random(-30, 30), vehicle.position.y + Math.random(-30, 30),
@@ -108,12 +108,12 @@ function drawDebugInfo() {
     text(`GPS estimate: ${GPS_estimate.x.toFixed(2)},${GPS_estimate.y.toFixed(2)},${GPS_estimate.z.toFixed(2)}`,
         -canvasHalfWidth + 30, -canvasHalfHeight + 30);
 
-    stroke(255, 0, 0);
-    for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
+    // stroke(255, 0, 0);
+    // for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
 
-        strokeWeight(weights[i]);
-        point(particleSamples[i][0], particleSamples[i][1]);
-    }
+    //     strokeWeight(weights[i]);
+    //     point(particleSamples[i][0], particleSamples[i][1]);
+    // }
 }
 function update() {
     vehicle.tPosition.x = GPS_estimate.x;
