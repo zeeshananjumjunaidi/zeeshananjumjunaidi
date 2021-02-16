@@ -19,6 +19,7 @@ var EPS = 0.001;
 function setup() {
     canvasWidth = round(window.innerWidth);
     canvasHeight = round(window.innerHeight);
+    cellSize = round((window.innerWidth + window.innerHeight) / 40);
     cols = round(window.innerWidth / cellSize);
     rows = round(window.innerHeight / cellSize);
     createCanvas(canvasWidth, canvasHeight);
@@ -77,11 +78,11 @@ function draw() {
 }
 
 function drawGrid() {
-    stroke(0,0,90,50)
+    stroke(0, 0, 90, 50)
     strokeWeight(0.5)
     for (let i = -rows; i < rows; i++) {
-        for (let j = -cols/2; j < cols/2; j++) {
-            rect(i*cellSize,j*cellSize,cellSize,cellSize);
+        for (let j = -cols / 2; j < cols / 2; j++) {
+            rect(i * cellSize, j * cellSize, cellSize, cellSize);
         }
     }
 }
@@ -105,9 +106,26 @@ function drawDebugInfo() {
     //         circle(landmarkOrigins[i][0],landmarkOrigins[i][1],10);
     //     }
     // }
+    fill(0);
     text(`GPS estimate: ${GPS_estimate.x.toFixed(2)},${GPS_estimate.y.toFixed(2)},${GPS_estimate.z.toFixed(2)}`,
         -canvasHalfWidth + 30, -canvasHalfHeight + 30);
-
+    let dirVect = vehicle.position.copy();
+    dirVect.x += Math.cos(vehicle.heading) * 100;
+    dirVect.y += Math.sin(vehicle.heading) * 100;
+    stroke(255, 0, 0);
+    line(vehicle.position.x, vehicle.position.y, dirVect.x, dirVect.y);
+    dirVect = vehicle.position.copy();
+    dirVect.x += Math.cos(vehicle.heading + PI / 2) * 100;
+    dirVect.y += Math.sin(vehicle.heading + PI / 2) * 100;
+    stroke(0, 255, 0);
+    line(vehicle.position.x, vehicle.position.y, dirVect.x, dirVect.y);
+    push();
+    noFill();
+    stroke(30, 30, 30);
+    translate(vehicle.position.x, vehicle.position.y);
+    rotate(vehicle.heading);
+    rect(0, 0, 50, 25);
+    pop();
     // stroke(255, 0, 0);
     // for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
 
