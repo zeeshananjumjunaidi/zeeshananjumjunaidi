@@ -3,7 +3,6 @@
 Article for the reference: https://medium.com/intro-to-artificial-intelligence/kidnapped-vehicle-project-using-particle-filters-udacitys-self-driving-car-nanodegree-aa1d37c40d49
 */
 var vehicle;
-// var landmarkOrigins = [];
 
 var GPS_estimate = new p5.Vector();
 var GPS_INTERVAL = 1000;
@@ -99,13 +98,6 @@ function drawDebugInfo() {
     angle += 0.02;
     circle(vehicle.position.x, vehicle.position.y, Math.sin(angle) * scannerRadius);
 
-    // for(let i=0;i<landmarkOrigins.length;i++){
-    //     if(dist(landmarkOrigins[i][0],landmarkOrigins[i][1],this.vehicle.position.x,this.vehicle.position.y)<scannerRadius/2){
-    //         line(landmarkOrigins[i][0],landmarkOrigins[i][1],this.vehicle.position.x,this.vehicle.position.y);
-    //         fill(255,0,0);
-    //         circle(landmarkOrigins[i][0],landmarkOrigins[i][1],10);
-    //     }
-    // }
     fill(0);
     text(`GPS estimate: ${GPS_estimate.x.toFixed(2)},${GPS_estimate.y.toFixed(2)},${GPS_estimate.z.toFixed(2)}`,
         -canvasHalfWidth + 30, -canvasHalfHeight + 30);
@@ -126,12 +118,6 @@ function drawDebugInfo() {
     rotate(vehicle.heading);
     rect(0, 0, 50, 25);
     pop();
-    // stroke(255, 0, 0);
-    // for (let i = 0; i < NUMBER_OF_PARTICLES; i++) {
-
-    //     strokeWeight(weights[i]);
-    //     point(particleSamples[i][0], particleSamples[i][1]);
-    // }
 }
 function update() {
     vehicle.tPosition.x = GPS_estimate.x;
@@ -142,14 +128,6 @@ function update() {
 function drawLandmark() {
     noFill();
     stroke(1);
-    // rect(0, 0, 100, 100, 10);
-    // for (let i = 0; i < landmarkOrigins.length; i++) {
-    //     let lMark = landmarkOrigins[i];
-    //     noFill();
-    //     rect(lMark[0], lMark[1], 30, 30, 3);
-    //     fill(0);
-    //     text(i + 1, lMark[0], lMark[1]);
-    // }
 }
 
 function inputController() {
@@ -216,12 +194,10 @@ function mousePressed() {
     let mx = mouseX - width / 2;
     let my = mouseY - height / 2;
     if (mx >= this.vehicle.tPosition.x - 25 && mx <= this.vehicle.tPosition.x + 25
-        &&
-        my >= this.vehicle.tPosition.y - 10 && my <= this.vehicle.tPosition.y + 10) {
+        && my >= this.vehicle.tPosition.y - 10 && my <= this.vehicle.tPosition.y + 10) {
         this.targetDragEnabled = true;
     }
 }
 function mouseReleased() {
-    // print('release');
     this.targetDragEnabled = false;
 }
