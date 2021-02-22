@@ -5,6 +5,7 @@ class UUV {
         this.power = 0;
         this.debug = debug;
         this.target = null;
+        this.deltaSteerVel=0;
     }
 
     setTarget(t) {
@@ -27,20 +28,32 @@ class UUV {
         pop();
     }
     drive(power, steering) {
-        this.power = power;
         // this.position.y-=2;
         if (!this.target) {
             this.heading += steering;
-        } else if (dist(this.target.x, this.target.y, this.position.x, this.position.y) > 50) {
+        } else if (dist(this.target.x, this.target.y, this.position.x, this.position.y) > 100) {
+            this.power = power;
             let dir = p5.Vector.sub(this.target, this.position);
             dir.normalize();
             // let rotateAmount = p5.Vector.cross (dir).y;
             let angle = Math.atan2(this.target.y - this.position.y, this.target.x - this.position.x);
             // angle = Math.max(angle,0);
             // angle = Math.min(angle,Math.PI*2);
-            this.heading = lerp(this.heading, angle, 0.11);
+            if(this.deltaSteerVel<=1){
+                this.deltaSteerVel+=0.0021;
+            }else{this.deltaSteerVel=0;}
+            // if(angle<0){
+            //     angle =Math.PI*2 +angle;
+            // }
+            this.heading = lerp(this.heading, angle, this.deltaSteerVel);
+            // this.heading= constrain(this.heading,-Math.PI*2,Math.PI*2);
+            // this.heading= map(this.heading,-Math.PI*2,Math.PI*2,-Math.PI*2,Math.PI*2);
             text(angle.toFixed(2), 100, 100);
-        } else { power = 0; }
+            let d = dist(this.target.x, this.target.y, this.position.x, this.position.y);
+            text(d.toFixed(2),100,150);
+        } else { this.power *=0.99; 
+        text("Target Reached",100,100);
+        }
     }
     drawDebug() {
         noFill();
