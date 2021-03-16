@@ -39,27 +39,27 @@ class PID {
                 this.iTerm = this.windupGuard;
             }
             this.dTerm = 0.0;
-            if (deltaTime >0){
+            if (deltaTime > 0) {
                 this.dTerm = deltaError / deltaTime
             }
-            this.lastTime  = this.currentTime
+            this.lastTime = this.currentTime
             this.lastError = error;
-            this.output = this.pTerm + (this.kI*this.iTerm) + (this.kD*this.dTerm);
+            this.output = this.pTerm + (this.kI * this.iTerm) + (this.kD * this.dTerm);
         }
     }
-    setKp(proportionalGain){
+    setKp(proportionalGain) {
         this.kP = proportionalGain;
     }
-    setKi(integralGain){
+    setKi(integralGain) {
         this.kI = integralGain;
     }
-    setKd(differentialGain){
+    setKd(differentialGain) {
         this.kD = differentialGain;
     }
-    setWindup(windup){
+    setWindup(windup) {
         this.windupGuard = windup
     }
-    setSampleTime(sampleTime){
-        this.sampleTime =sampleTime;
+    setSampleTime(sampleTime) {
+        this.sampleTime = sampleTime;
     }
 }
