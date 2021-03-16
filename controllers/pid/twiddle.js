@@ -3,6 +3,8 @@ class Twiddle {
     constructor(pid) {
         this.pid = pid;
         this.p = [this.pid.kP, this.pid.kI, this.pid.kD];
+        this.dp = [1,1,1];
+        console.log(this.dp);
     }
     calcError() {
         return this.pid.setPoint - this.pid.output;
@@ -11,26 +13,26 @@ class Twiddle {
         return v[0]+v[1]+v[2];
     }
     update(){
-        this.p =  [this.pid.kP, this.pid.kI, this.pid.kD];
-        dp = [0,0,0]
+        // this.p =  [this.pid.kP, this.pid.kI, this.pid.kD];
+        //let dp = [0,0,0]
         let bestError = this.calcError();
         let threshhold = 0.01
-        while(this.sum(dp)>threshhold){
+        while(this.sum(this.dp)>threshhold){
             for(let i=0;i<3;i++){
-                this.p[i] +=dp[i];
+                this.p[i] +=this.dp[i];
                 let err = this.calcError()
                 if(err < bestError){
                     bestError = err
-                    dp[i] *=1.1
+                    this.dp[i] *=1.1
                 }else{
-                    this.p[i]-= 2 * dp[i]
+                    this.p[i]-= 2 * this.dp[i]
                     err = this.calcError()
                     if(err<bestError){
                         bestError=err
-                        dp[i] *= 1.05
+                        this.dp[i] *= 1.05
                     }else{
-                        this.p[i] += dp[i]
-                        dp[i] *= 0.95
+                        this.p[i] += this.dp[i]
+                        this.dp[i] *= 0.95
                     }
                 }
             }

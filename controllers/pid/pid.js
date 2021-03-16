@@ -4,7 +4,7 @@ class PID {
         this.kD = kD;
         this.kI = kI;
         this.sampleTime = 0.0;
-        this.currentTime = currentTime ? currentTime : Date.now();
+        this.currentTime = currentTime!=undefined ? currentTime : Date.now();
         this.lastTime = this.currentTime;
         this.lastError = 0.0;
         this.output = 0.0;
@@ -26,13 +26,13 @@ class PID {
         /* PID UPDATE
          u(t) = K_p e(t) + K_i \int_{0}^{t} e(t)dt + K_d {de}/{dt}
          */
-        let error = this.setPoint - feedbackValue
-        this.currentTime = currentTime ? currentTime : Date.now()
+        let error = this.setPoint - feedbackValue;
+        this.currentTime = currentTime!=undefined ? currentTime : Date.now()
         let deltaTime = this.currentTime - this.lastTime;
         let deltaError = error - this.lastTime;
         if (deltaTime >= this.sampleTime) {
             this.pTerm = this.kP * error;
-            this.iTerm = error * deltaTime;
+            this.iTerm += error * deltaTime;
             if (this.iTerm < -this.windupGuard) {
                 this.iTerm = -this.windupGuard
             } else if (this.iTerm > this.windupGuard) {
@@ -42,7 +42,7 @@ class PID {
             if (deltaTime > 0) {
                 this.dTerm = deltaError / deltaTime
             }
-            this.lastTime = this.currentTime
+            this.lastTime = this.currentTime;
             this.lastError = error;
             this.output = this.pTerm + (this.kI * this.iTerm) + (this.kD * this.dTerm);
         }
