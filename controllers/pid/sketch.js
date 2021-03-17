@@ -3,12 +3,11 @@
 var width=window.innerWidth;
 var height = window.innerHeight;
 
-// Element
-var pEle = document.querySelector('#pEle');
-var iEle = document.querySelector('#iEle');
-var dEle = document.querySelector('#dEle');
-var setPointEle = document.querySelector('#setPointEle');
 
+$(document).ready(function () {
+    ko.options.useOnlyNativeEvents = true;
+    ko.applyBindings(pid);
+});
 
 // PID
 var t = 0;
@@ -47,8 +46,9 @@ function draw(){
     strokeWeight(1);
 
     color(0);
-    setPoint=mouseY- height/2;
-    line(0,setPoint,width,setPoint);
+   // setPoint=mouseY- height/2;
+
+    line(0,pid.setPoint,width,pid.setPoint);
     text((-pid.setPoint).toFixed(2),width/2+30,setPoint-10);
     pidUpdate();
     if(cY.length>2){
@@ -82,13 +82,14 @@ function pidUpdate() {
     cY.push(currentValue);
     sY.push(pid.setPoint);
 
-    let c =  twiddle.update();
-    pid.kP = c[0];
-    pid.kI = c[1];
-    pid.kD = c[2];
+    // let c =  twiddle.update();
+    // pid.kP = c[0];
+    // pid.kI = c[1];
+    // pid.kD = c[2];
 }
 function displayStats(){
     text(`P = ${pid.kP}`,10,20);
     text(`I = ${pid.kI}`,10,35);
     text(`D = ${pid.kD}`,10,50);
 }
+
