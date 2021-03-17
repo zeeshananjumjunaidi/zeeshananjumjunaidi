@@ -10,18 +10,20 @@ class PID {
         this.kD = kD;
 
         this.sampleTime = 0.0;
-        this.currentTime = currentTime!=undefined ? currentTime : Date.now();
+        this.currentTime = currentTime != undefined ? currentTime : Date.now();
         this.lastTime = this.currentTime;
         this.lastError = 0.0;
         this.output = 0.0;
         this.clear();
-        this.useBindingUpdate=true;
+        this.useBindingUpdate = true;
+        this.useMouseToControlSetPoint = true;
+        this.useMouseToControlSetPointBind = ko.observable(false);
     }
 
     clear() {
         
-        this.setPointBind = ko.observable(0.0);
-        this.setPoint = 0.0;
+        this.setPoint = -20.0;
+        this.setPointBind = ko.observable( this.setPoint);
         this.pTerm = 0.0;
         this.iTerm = 0.0;
         this.dTerm = 0.0;
@@ -37,16 +39,22 @@ class PID {
          u(t) = K_p e(t) + K_i \int_{0}^{t} e(t)dt + K_d {de}/{dt}
          */
         // KnockJS Binding
-        if(this.useBindingUpdate){
-            this.kP=this.kPBind();
-            this.kI=this.kIBind();
-            this.kD=this.kDBind();
+        if (this.useBindingUpdate) {
+            this.kP = this.kPBind();
+            this.kI = this.kIBind();
+            this.kD = this.kDBind();
             // This - symbol is specific for this project.
-            this.setPoint =-this.setPointBind();
+            this.useMouseToControlSetPoint=this.useMouseToControlSetPointBind();
+            if (this.useMouseToControlSetPoint) {
+                // -height/2 is because we move the y axis origin to the middle.
+                this.setPoint=mouseY- height/2;
+            } else {
+                this.setPoint = -this.setPointBind();
+            }
         }
 
         let error = this.setPoint - feedbackValue;
-        this.currentTime = currentTime!=undefined ? currentTime : Date.now()
+        this.currentTime = currentTime != undefined ? currentTime : Date.now()
         let deltaTime = this.currentTime - this.lastTime;
         let deltaError = error - this.lastError;
         if (deltaTime >= this.sampleTime) {
@@ -59,7 +67,7 @@ class PID {
             }
             // this.dTerm = 0.0;
             //if (deltaTime > 0) {
-                this.dTerm = deltaError;// - deltaTime
+            this.dTerm = deltaError;// - deltaTime
             //}
             this.lastTime = this.currentTime;
             this.lastError = error;

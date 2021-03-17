@@ -2,41 +2,80 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Portfolio" />
-    <meta name="author" content="Zeeshan Anjum Junaidi" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="Portfolio" />
+  <meta name="author" content="Zeeshan Anjum Junaidi" />
 
-    <script src="../../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
-    <!-- <script src="../../js/vendors/threejs/three.min.js"> -->
-    </script>
-    <script src="../../js/vendors/p5.js"></script>
+  <script src="../../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
+  <!-- <script src="../../js/vendors/threejs/three.min.js"> -->
+  </script>
+  <script src="../../js/vendors/p5.js"></script>
 
-    <script src="../../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="../../js/vendors/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="../../js/vendors/knockout-3.5.1.js" crossorigin="anonymous"></script>
-    <script src="pid.js" ></script>
-    <script src="twiddle.js" ></script>
-    <script src="sketch.js"></script>
+  <script src="../../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+  <script src="../../js/vendors/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="../../js/vendors/knockout-3.5.1.js" crossorigin="anonymous"></script>
+  <script src="pid.js"></script>
+  <script src="twiddle.js"></script>
+  <script src="sketch.js"></script>
 
 
-    <link href="../../style/styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../style/default.css" />
-    
-    <title>PID Controller</title>
+  <link href="../../style/styles.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../style/default.css" />
+  <style>
+    * {
+      color: #333;
+    }
+
+    input {
+      padding: 2px;
+      margin: 3px;
+    }
+  </style>
+  <title> 🛩 PID Controller</title>
 
 </head>
 
 <body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
-  <div class="controls" style="position: fixed; padding-bottom: 20px; margin:10px; bottom: 0; background: #00000021; height:20%; display: flex; flex-direction: row;">
-      <input type="range" data-bind="value: pid.kPBind" min="0" max="2" step="0.00001" style="width: 100%;"/>
-      <input type="range" data-bind="value: pid.kIBind" min="0" max="2" step="0.00001" style="width: 100%;"/>
-      <input type="range" data-bind="value: pid.kDBind" min="0" max="2" step="0.00001" style="width: 100%;"/>
-      <input type="range" data-bind="value: pid.setPointBind" min="-200" max="200" step="0.00001" style="width: 100%;"/>
+  <div class="controls"
+    style="position: fixed; padding:10px 22px; margin:10px; bottom: 0; background: #00000021; height:170px; display: flex; flex-direction: row;">
+    <table style="width: 90%;">
+      <tr><td colspan="2">
+      <span style="vertical-align: middle;">Use Mouse to set Setpoint</span>
+        <input type="checkbox" data-bind="checked: pid.useMouseToControlSetPointBind" style="margin:0; height: auto; display:inline" />
+      </td></tr>
+      <tr>
+        <td>
+          <!-- <span data-bind="text:  pid.kPBind"></span> -->
+          <!-- <input type="range" data-bind="value: pid.kPBind" min="0" max="2" step="0.0001" /> -->
+          P <input data-bind="value: pid.kPBind"></input>
+        </td>
+        <td>
+          <!-- <span data-bind="text:  pid.kIBind"></span> -->
+          <!-- <input type="range" data-bind="value: pid.kIBind" min="0" max="2" step="0.00001" /> -->
+          I <input data-bind="value: pid.kIBind"></input>
+        </td>
+      </tr>
 
-     
+      <tr>
+        <td>
+          <!-- <span data-bind="text:  pid.kDBind"></span> -->
+          <!-- <input type="range" data-bind="value: pid.kDBind" min="0" max="2" step="0.00001" /> -->
+          D <input data-bind="value: pid.kDBind"></input>
+        </td>
+        <td>
+          <!-- <input data-bind="value:  pid.setPointBind"></input> -->
+          Setpoint <input type="range" data-bind="value: pid.setPointBind" min="-200" max="200" step="0.00001"
+            style="margin: auto; width:90%" />
+        </td>
+      </tr>
+    </table>
+
+
+
+
   </div>
-<!-- </div> -->
+  <!-- </div> -->
 </body>
 
 </html>
