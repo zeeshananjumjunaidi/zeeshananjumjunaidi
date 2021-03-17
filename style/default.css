@@ -30,6 +30,11 @@ canvas{
   margin-top:25px;
 
 }
+
+ul{
+  list-style: lower-roman;
+}
+
 .score-box{
   background: #bbada0;
 border-radius: 3px;

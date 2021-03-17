@@ -25,6 +25,7 @@
   <style>
     * {
       color: #333;
+      font-family: monospace;
     }
 
     input {
@@ -37,11 +38,12 @@
 </head>
 
 <body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
+  <h1 style="position:absolute;">PID Controller</h1>
   <div class="controls"
     style="position: fixed; padding:10px 22px; margin:10px; bottom: 0; background: #00000021; height:170px; display: flex; flex-direction: row;">
     <table style="width: 90%;">
       <tr><td colspan="2">
-      <span style="vertical-align: middle;">Use Mouse to set Setpoint</span>
+      <span style="vertical-align: middle;">Use Mouse to control Setpoint</span>
         <input type="checkbox" data-bind="checked: pid.useMouseToControlSetPointBind" style="margin:0; height: auto; display:inline" />
       </td></tr>
       <tr>
