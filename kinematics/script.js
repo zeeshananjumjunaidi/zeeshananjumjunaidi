@@ -1,5 +1,4 @@
-var roboticArmRef;
-var armBase,arm1,arm2,arm3;
+var roboticArm;
 
 $(document).ready(() => {
 
@@ -12,12 +11,12 @@ $(document).ready(() => {
     
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
-     camera.position.y = 10;
-     camera.position.z = 20;
+    camera.position.y = 100;
+    camera.position.z = 40;
     
 
 
-     camera.up.set(0,1,0);
+    camera.up.set(0,1,0);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
@@ -43,12 +42,6 @@ $(document).ready(() => {
 
     var lightH = new THREE.HemisphereLight(0x404040, 0x002288, 1.5);
     scene.add(lightH);
-
-    // var geo = new THREE.PlaneBufferGeometry(2000, 2000, 8, 8);
-    // var mat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, side: THREE.DoubleSide });
-    // var plane = new THREE.Mesh(geo, mat);
-    // scene.add(plane);
-
     // Add robotic arm
     loadRoboticArm(scene);
     const animate = function (now) {
@@ -56,64 +49,43 @@ $(document).ready(() => {
         requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
-        if(arm1&&arm2&&arm3&&armBase){
-            // armBase.rotate(now);
-            // armBase.rotation.y+=0.01;
-            // console.log(now);
+        if(roboticArm){
+            roboticArm.randomAnimate(now);
         }
     }
 
     animate();
 
 });
-function loadRoboticArm(sceneRef) {
-    const loader = new THREE.FBXLoader();
-    loader.load("../assets/3d/robotic_arm/robotic_arm.fbx", model => {
-        console.log(model);
-        model.traverse(function (child) {
-            if (child instanceof THREE.Group) {       
-                //  console.log(child.name);       
-                if(child.name=='Base'){
-                    armBase =child;
-                }else if(child.name=='Arm1'){
-                    arm1=child;
-                }else if(child.name=='Arm2'){
-                    arm2=child;
-                }else if(child.name=='Arm3'){
-                    arm3=child;
-                }
-            }
-        });
-        roboticArmRef=model;
-        sceneRef.add(model);
-    });
 
+function loadRoboticArm(sceneRef) {
+    roboticArm = new RoboticArm(sceneRef);
 }
 function armBaseChange(e){
     e.stopPropagation();
     e.preventDefault(); 
-    if(armBase){
-        armBase.rotation.y = e.target.value;
+    if(roboticArm.armBase){
+        roboticArm.armBase.rotation.y = e.target.value;
     }
 }
 function arm1Change(e){
     e.stopPropagation();
     e.preventDefault();
-    if(arm1){
-        arm1.rotation.x = e.target.value;
+    if(roboticArm.arm1){
+        roboticArm.arm1.rotation.x = e.target.value;
     }
 }
 function arm2Change(e){
     e.stopPropagation();
     e.preventDefault();
-    if(arm2){
-        arm2.rotation.x = e.target.value;
+    if(roboticArm.arm2){
+        roboticArm.arm2.rotation.x = e.target.value;
     }
 }
 function arm3Change(e){
     e.stopPropagation();
     e.preventDefault();
-    if(arm3){
-        arm3.rotation.x = e.target.value;
+    if(roboticArm.arm3){
+        roboticArm.arm3.rotation.x = e.target.value;
     }
 }
