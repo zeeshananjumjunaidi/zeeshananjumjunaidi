@@ -6,7 +6,15 @@ const {
  
 var roboticArm;
 
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 $(document).ready(() => {
+
+    
+
+    window.addEventListener( 'mousemove', onMouseMove, false );
+
+    // window.requestAnimationFrame(render);
 
     const settings = {
         animate: true,
@@ -20,6 +28,7 @@ $(document).ready(() => {
     camera.position.y = 100;
     camera.position.z = 40;
     
+    var kinematicSolver =new KinematicSolver(roboticArm,scene);
 
 
     camera.up.set(0,1,0);
@@ -34,12 +43,12 @@ $(document).ready(() => {
     document.body.appendChild(renderer.domElement);
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    rayCaster = new THREE.Raycaster();
+    //rayCaster = new THREE.Raycaster();
     targetPosition = new THREE.Vector3();
-    document.addEventListener(
-        "click",
-        function (event) { console.log(event) },
-        false);
+    // document.addEventListener(
+    //     "click",
+    //     function (event) { console.log(event) },
+    //     false);
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 5, 20);
     light.position.set(50, 51, 45);
@@ -54,10 +63,21 @@ $(document).ready(() => {
         // console.log(now);
         requestAnimationFrame(animate);
         controls.update();
+
+        raycaster.setFromCamera(mouse, camera );
+        const intersects = raycaster.intersectObjects( scene.children );
+        for ( let i = 0; i < intersects.length; i ++ ) {
+            console.log(i)
+            intersects[ i ].object.material.color.set( 0xff0000 );
+    
+        }
+
         renderer.render(scene, camera);
         if(roboticArm){
-            roboticArm.randomAnimate(now);
+       //     roboticArm.randomAnimate(now);
         }
+        
+    
     }
 
     animate();
@@ -94,4 +114,12 @@ function arm3Change(e){
     if(roboticArm.arm3){
         roboticArm.arm3.rotation.x = e.target.value;
     }
+}
+
+function onMouseMove( event ) {
+    	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    // console.warn(mouse);
 }
