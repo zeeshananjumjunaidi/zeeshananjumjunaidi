@@ -1,3 +1,9 @@
+const blas = window.BLAS;
+//fetch some level3 complex 64 bit precision matrix-matrix operations
+const {
+    level3: { zsyrk, ztrmm, ztrsm }
+ } = blas;
+ 
 var roboticArm;
 
 $(document).ready(() => {
