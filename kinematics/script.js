@@ -2,17 +2,24 @@ const blas = window.BLAS;
 //fetch some level3 complex 64 bit precision matrix-matrix operations
 const {
     level3: { zsyrk, ztrmm, ztrsm }
- } = blas;
- 
+} = blas;
+
 var roboticArm;
 
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
+
+var selectionObject;
+var clicked=false;
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+
 $(document).ready(() => {
 
-    
 
-    window.addEventListener( 'mousemove', onMouseMove, false );
+
+    window.addEventListener('mousemove', onMouseMove, false);
+    window.addEventListener('mouseup', onMouseUp, false);
+    window.addEventListener('mousedown', onMouseDown, false);
 
     // window.requestAnimationFrame(render);
 
@@ -22,20 +29,19 @@ $(document).ready(() => {
         scaleToView: true
     };
 
-    
+
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
     camera.position.y = 100;
     camera.position.z = 40;
-    
-    var kinematicSolver =new KinematicSolver(roboticArm,scene);
+
+    var kinematicSolver = new KinematicSolver(roboticArm, scene);
 
 
-    camera.up.set(0,1,0);
+    camera.up.set(0, 1, 0);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor("#333", 1);
     renderer.shadowMap.enabled = true;
@@ -43,12 +49,8 @@ $(document).ready(() => {
     document.body.appendChild(renderer.domElement);
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    //rayCaster = new THREE.Raycaster();
     targetPosition = new THREE.Vector3();
-    // document.addEventListener(
-    //     "click",
-    //     function (event) { console.log(event) },
-    //     false);
+
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 5, 20);
     light.position.set(50, 51, 45);
@@ -63,21 +65,23 @@ $(document).ready(() => {
         // console.log(now);
         requestAnimationFrame(animate);
         controls.update();
-
-        raycaster.setFromCamera(mouse, camera );
-        const intersects = raycaster.intersectObjects( scene.children );
-        for ( let i = 0; i < intersects.length; i ++ ) {
-            console.log(i)
-            intersects[ i ].object.material.color.set( 0xff0000 );
-    
+        if(!clicked){
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children,true);
+          
+            selectionObject=null;
+            for (let i = 0; i < intersects.length; i++) {
+                //console.log(i);
+                // intersects[i].object.material.color.set(0xff0000);
+                selectionObject=intersects[i];break;
+            }        
         }
-
         renderer.render(scene, camera);
-        if(roboticArm){
-       //     roboticArm.randomAnimate(now);
+        if (roboticArm) {
+            //     roboticArm.randomAnimate(now);
         }
-        
-    
+
+
     }
 
     animate();
@@ -87,39 +91,48 @@ $(document).ready(() => {
 function loadRoboticArm(sceneRef) {
     roboticArm = new RoboticArm(sceneRef);
 }
-function armBaseChange(e){
+function armBaseChange(e) {
     e.stopPropagation();
-    e.preventDefault(); 
-    if(roboticArm.armBase){
+    e.preventDefault();
+    if (roboticArm.armBase) {
         roboticArm.armBase.rotation.y = e.target.value;
     }
 }
-function arm1Change(e){
+function arm1Change(e) {
     e.stopPropagation();
     e.preventDefault();
-    if(roboticArm.arm1){
-        roboticArm.arm1.rotation.x = e.target.value;
+    if (roboticArm.endEffector) {
+        roboticArm.endEffector.rotation.x = e.target.value;
     }
 }
-function arm2Change(e){
+function arm2Change(e) {
     e.stopPropagation();
     e.preventDefault();
-    if(roboticArm.arm2){
+    if (roboticArm.arm2) {
         roboticArm.arm2.rotation.x = e.target.value;
     }
 }
-function arm3Change(e){
+function arm3Change(e) {
     e.stopPropagation();
     e.preventDefault();
-    if(roboticArm.arm3){
+    if (roboticArm.arm3) {
         roboticArm.arm3.rotation.x = e.target.value;
     }
 }
 
-function onMouseMove( event ) {
-    	// calculate mouse position in normalized device coordinates
-	// (-1 to +1) for both components
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    // console.warn(mouse);
+function onMouseMove(event) {
+    // calculate mouse position in normalized device coordinates
+    mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+    mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+    // if(clicked && selectionObject){
+    // selectionObject.object.position.set(selectionObject.point.x,
+    //     selectionObject.point.y,selectionObject.point.z);
+    // console.log(selectionObject);
+    // }
+}
+function onMouseUp(event){
+    clicked = false;
+}
+function onMouseDown(event){
+    clicked=true;
 }
