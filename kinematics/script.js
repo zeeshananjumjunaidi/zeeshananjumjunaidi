@@ -103,13 +103,15 @@ function armBaseChange(e) {
     e.preventDefault();
     if (roboticArm.armBase) {
         roboticArm.armBase.rotation.y = e.target.value;
+        console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value*57.2958));
     }
 }
 function arm1Change(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.endEffector) {
-        roboticArm.endEffector.rotation.x = e.target.value;
+        roboticArm.endEffector.rotation.x = e.target.value;        
+        console.log(roboticArm.joint1.rotateAroundZAxis(e.target.value));
     }
 }
 function arm2Change(e) {

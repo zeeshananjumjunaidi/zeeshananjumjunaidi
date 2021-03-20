@@ -23,7 +23,7 @@ class Joint{
             0 cosγ −sin γ
             0 sinγ cos γ
         */
-        let x = (1 * (Math.cos(y)*Math.cos(y)));
+        let x = (1 * (Math.cos(y)*Math.cos(y) - Math.pow(Math.sin(y))));
         return x;
     }
     rotateAroundYAxis(b){
@@ -41,7 +41,7 @@ class Joint{
         sin α cos α 0
         0     0     1
         */
-        let z = (Math.cos(a) * (Math.cos(a))) - (Math.sin(a)*-Math.sin(a));
+        let z = (Math.cos(a) * (Math.cos(a))) - (Math.sin(a)*Math.cos(a));
         return z;
     }
 }
