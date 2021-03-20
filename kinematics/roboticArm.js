@@ -14,6 +14,10 @@ class RoboticArm {
         this.targetPos = new THREE.Vector3();
         this.sceneRef = sceneRef;
         this.loadRoboticArm(this.sceneRef);
+        this.baseJoint;
+        this.joint1;
+        this.joint2;
+        this.Joint3;
     }
     loadRoboticArm(sceneRef) {
         const loader = new THREE.FBXLoader();
@@ -24,21 +28,36 @@ class RoboticArm {
                     if (child instanceof THREE.Group) {
                         //  console.log(child.name);       
                         if (child.name == 'Base') {
-                            this.armBase = child;                           
+                            this.armBase = child;         
+                            this.baseJoint = new Joint(JointType.Revolute,this.armBase,this.groundLevel,0);                  
                         } else if (child.name == 'endEffector') {
-                            this.endEffector = child;                       
+                            this.endEffector = child;         
+                            this.joint1 = new Joint(JointType.Revolute,this.endEffector,this.endEffectorLen,0);                
                         } else if (child.name == 'Arm2') {
-                            this.arm2 = child;
+                            this.arm2 = child;  
+                            this.joint2 = new Joint(JointType.Revolute,this.arm2,this.arm2Len,0);
                         } else if (child.name == 'Arm3') {
-                            this.arm3 = child;
+                            this.arm3 = child;  
+                            this.joint3 = new Joint(JointType.Revolute,this.arm3,this.arm3Len,0);
                         }
+                    }else if (child instanceof THREE.Mesh){
+                        if(child.name =='plane'){
+                        console.log(child.name);
+                            child.visible=false;
+                    }
                     }
                 });
                 sceneRef.add(model);
         });
     }
+    getEndEffectorPosition(){
+        if(this.baseJoint&&this.joint1&&this.joint2&&this.joint3){
+       
+        }
+    }
+
     update() {
-        window.BLAS
+        
     }
     moveToTarget(targetPos) {
 

@@ -4,6 +4,8 @@ const {
     level3: { zsyrk, ztrmm, ztrsm }
 } = blas;
 
+
+
 var roboticArm;
 
 const raycaster = new THREE.Raycaster();
@@ -35,8 +37,13 @@ $(document).ready(() => {
     camera.position.y = 100;
     camera.position.z = 40;
 
-    var kinematicSolver = new KinematicSolver(roboticArm, scene);
-
+    //var kinematicSolver = new KinematicSolver(roboticArm, scene);
+    const geometry = new THREE.CircleGeometry( 5, 32 );
+    const material = new THREE.MeshBasicMaterial( { color: 0xffffee } );
+    const circle = new THREE.Mesh( geometry, material );
+    circle.rotation.x=-Math.PI/2;
+    circle.scale.set(4,4,4);
+    scene.add( circle );
 
     camera.up.set(0, 1, 0);
     camera.rotation.x = 0;
