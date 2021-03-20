@@ -32,17 +32,51 @@
     <link href="../style/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="../style/default.css" />
     <!-- Core theme CSS (includes Bootstrap)-->
+    <style>
+        * {
+            outline: none;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        input[type="range"] {
+            background-color: #333;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track,
+        input[type=range]::-moz-slider-runnable-track {
+            /* height: .35em; */
+            background: white;
+            border: none;
+            border-radius: 100%;
+        }
+
+        input[type=range]::-webkit-slider-thumb,
+        input[type=range]::-moz-range-thumb {
+            -webkit-appearance: none;
+            border: 2px solid orange;
+            height: 1.1em;
+            width: 1.1em;
+            border-radius: 30%;
+            background: #EEE;
+            /* margin-top: -4px; */
+        }
+    </style>
     <title>Kinematics</title>
 
 </head>
 
 <body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
-<div class="control" style="position:absolute; left:0; top:50%; transform: translateY(-50%); pointer-events: fill; background:white">
-    <input type="range" min="-1.57" max="1.57" step="0.001" value="0" oninput="arm1Change(event)"/>
-    <input type="range" min="-1.57" max="1.57" step="0.001" value="0" oninput="arm2Change(event)"/>
-    <input type="range" min="-1.57" max="1.57" step="0.001" value="0" oninput="arm3Change(event)"/>
-    <input type="range" min="-3.14" max="3.14" step="0.001" value="0" oninput="armBaseChange(event)"/>
-</div>
+    <div class="control"
+        style="position:absolute; left:0; top:50%; transform: translateY(-50%); pointer-events: fill; background:white">
+        <input type="range" min="-1.57" max="1.57" step="0.001" value="0" oninput="arm1Change(event)" />
+        <input type="range" min="-1.57" max="1.57" step="0.001" value="0" oninput="arm2Change(event)" />
+        <input type="range" min="-1.57" max="1.57" step="0.001" value="0" oninput="arm3Change(event)" />
+        <input type="range" min="-3.14" max="3.14" step="0.001" value="0" oninput="armBaseChange(event)" />
+    </div>
 </body>
 
 </html>
