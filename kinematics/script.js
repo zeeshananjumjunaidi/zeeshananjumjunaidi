@@ -103,7 +103,7 @@ function armBaseChange(e) {
     e.preventDefault();
     if (roboticArm.armBase) {
         roboticArm.armBase.rotation.y = e.target.value;
-        console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value*57.2958));
+        console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value));
     }
 }
 function arm1Change(e) {
@@ -111,7 +111,7 @@ function arm1Change(e) {
     e.preventDefault();
     if (roboticArm.endEffector) {
         roboticArm.endEffector.rotation.x = e.target.value;        
-        console.log(roboticArm.joint1.rotateAroundZAxis(e.target.value));
+        console.log(roboticArm.joint1.rotateAroundXAxis(e.target.value));
     }
 }
 function arm2Change(e) {
@@ -119,6 +119,7 @@ function arm2Change(e) {
     e.preventDefault();
     if (roboticArm.arm2) {
         roboticArm.arm2.rotation.x = e.target.value;
+        console.log(roboticArm.joint2.rotateAroundXAxis(e.target.value));
     }
 }
 function arm3Change(e) {
@@ -126,6 +127,7 @@ function arm3Change(e) {
     e.preventDefault();
     if (roboticArm.arm3) {
         roboticArm.arm3.rotation.x = e.target.value;
+        console.log(roboticArm.joint3.rotateAroundXAxis(e.target.value));
     }
 }
 

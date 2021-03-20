@@ -17,7 +17,7 @@ class RoboticArm {
         this.baseJoint;
         this.joint1;
         this.joint2;
-        this.Joint3;
+        this.Joint3;     
     }
     loadRoboticArm(sceneRef) {
         const loader = new THREE.FBXLoader();
