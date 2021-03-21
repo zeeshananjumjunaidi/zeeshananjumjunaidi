@@ -61,7 +61,7 @@ class RoboticArm {
     }
     getEndEffectorPosition() {
         if (this.baseJoint && this.joint1 && this.joint2 && this.joint3) {
-
+            return 1;
         }
     }
 

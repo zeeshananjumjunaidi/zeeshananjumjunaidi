@@ -39,8 +39,8 @@ $(document).ready(() => {
 
     //var kinematicSolver = new KinematicSolver(roboticArm, scene);
     const geometry = new THREE.CircleGeometry( 5, 32 );
-    geometry.scale(4,4,4);
-    const material = new THREE.MeshPhongMaterial( { color: 0xffffee } );
+    geometry.scale(14,14,14);
+    const material = new THREE.MeshPhongMaterial( { color: 0xeeeeee } );
     const circle = new THREE.Mesh( geometry, material );
     circle.receiveShadow=true;
     circle.rotation.x=-Math.PI/2;
@@ -52,7 +52,7 @@ $(document).ready(() => {
     camera.rotation.y = 0;
     camera.rotation.z = 0;
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor("#333", 1);
+    renderer.setClearColor("#EEE", 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
@@ -106,7 +106,7 @@ function armBaseChange(e) {
     e.preventDefault();
     if (roboticArm.armBase) {
         roboticArm.armBase.rotation.y = e.target.value;
-        console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value));
+    //    console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value));
     }
 }
 function arm1Change(e) {
@@ -114,7 +114,7 @@ function arm1Change(e) {
     e.preventDefault();
     if (roboticArm.endEffector) {
         roboticArm.endEffector.rotation.x = e.target.value;        
-        console.log(roboticArm.joint1.rotateAroundXAxis(e.target.value));
+    //    console.log(roboticArm.joint1.rotateAroundXAxis(e.target.value));
     }
 }
 function arm2Change(e) {
@@ -122,7 +122,7 @@ function arm2Change(e) {
     e.preventDefault();
     if (roboticArm.arm2) {
         roboticArm.arm2.rotation.x = e.target.value;
-        console.log(roboticArm.joint2.rotateAroundXAxis(e.target.value));
+      //  console.log(roboticArm.joint2.rotateAroundXAxis(e.target.value));
     }
 }
 function arm3Change(e) {
@@ -130,7 +130,7 @@ function arm3Change(e) {
     e.preventDefault();
     if (roboticArm.arm3) {
         roboticArm.arm3.rotation.x = e.target.value;
-        console.log(roboticArm.joint3.rotateAroundXAxis(e.target.value));
+       // console.log(roboticArm.joint3.rotateAroundXAxis(e.target.value));
     }
 }
 
