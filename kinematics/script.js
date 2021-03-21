@@ -39,10 +39,12 @@ $(document).ready(() => {
 
     //var kinematicSolver = new KinematicSolver(roboticArm, scene);
     const geometry = new THREE.CircleGeometry( 5, 32 );
-    const material = new THREE.MeshBasicMaterial( { color: 0xffffee } );
+    geometry.scale(4,4,4);
+    const material = new THREE.MeshPhongMaterial( { color: 0xffffee } );
     const circle = new THREE.Mesh( geometry, material );
+    circle.receiveShadow=true;
     circle.rotation.x=-Math.PI/2;
-    circle.scale.set(4,4,4);
+    // circle.scale.set(4,4,4);
     scene.add( circle );
 
     camera.up.set(0, 1, 0);
@@ -62,6 +64,7 @@ $(document).ready(() => {
     const light = new THREE.DirectionalLight(0xffffff, 5, 20);
     light.position.set(50, 51, 45);
     light.castShadow = true; // default false
+    light.shadow.camera = new THREE.OrthographicCamera( -100, 100, 100, -100, 0.5, 1000 ); 
     scene.add(light);
 
     var lightH = new THREE.HemisphereLight(0x404040, 0x002288, 1.5);

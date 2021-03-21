@@ -21,30 +21,42 @@ class RoboticArm {
     }
     loadRoboticArm(sceneRef) {
         const loader = new THREE.FBXLoader();
-
-        loader.load("../assets/3d/robotic_arm/robotic_arm.fbx", model => {
-            model.traverse((child) => {
-                if (child instanceof THREE.Group) {
-                    if (child.name == 'Base') {
-                        this.armBase = child;
-                        this.baseJoint = new Joint(JointType.Revolute, this.armBase, this.groundLevel, 0);
-                    } else if (child.name == 'endEffector') {
-                        this.endEffector = child;
-                        this.joint1 = new Joint(JointType.Revolute, this.endEffector, this.endEffectorLen, 0);
-                    } else if (child.name == 'Arm2') {
-                        this.arm2 = child;
-                        this.joint2 = new Joint(JointType.Revolute, this.arm2, this.arm2Len, 0);
-                    } else if (child.name == 'Arm3') {
-                        this.arm3 = child;
-                        this.joint3 = new Joint(JointType.Revolute, this.arm3, this.arm3Len, 0);
+        loader.load('../assets/3d/robotic_arm/axis.fbx', axisModel => {
+            loader.load("../assets/3d/robotic_arm/robotic_arm.fbx", model => {
+                model.traverse((child) => {
+                    if (child instanceof THREE.Group) {
+                        if (child.name == 'Base') {
+                            this.armBase = child;
+                            this.armBase.add(axisModel.clone());
+                            this.baseJoint = new Joint(JointType.Revolute, this.armBase, this.groundLevel, 0);
+                        } else if (child.name == 'endEffector') {
+                            this.endEffector = child;
+                            let _axis = axisModel.clone();
+                            this.endEffector.add(_axis);
+                            this.joint1 = new Joint(JointType.Revolute, this.endEffector, this.endEffectorLen, 0);
+                        } else if (child.name == 'Arm2') {
+                            this.arm2 = child;
+                            this.endEffector = child;
+                            let _axis = axisModel.clone();
+                            this.arm2.add(_axis);
+                            this.joint2 = new Joint(JointType.Revolute, this.arm2, this.arm2Len, 0);
+                        } else if (child.name == 'Arm3') {
+                            this.arm3 = child;
+                            this.endEffector = child;
+                            let _axis = axisModel.clone();
+                            this.arm3.add(_axis);
+                            this.joint3 = new Joint(JointType.Revolute, this.arm3, this.arm3Len, 0);
+                        }
+                    } else if (child instanceof THREE.Mesh) {
+                        if (child.name == 'plane') {
+                            child.visible = false;
+                        }else{
+                            child.castShadow = true;
+                        }
                     }
-                } else if (child instanceof THREE.Mesh) {
-                    if (child.name == 'plane') {
-                        child.visible = false;
-                    }
-                }
+                });
+                sceneRef.add(model);
             });
-            sceneRef.add(model);
         });
     }
     getEndEffectorPosition() {
