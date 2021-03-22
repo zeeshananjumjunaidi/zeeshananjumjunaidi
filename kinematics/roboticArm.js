@@ -6,11 +6,31 @@ class RoboticArm {
         this.arm2; // Length = 24.357
         this.arm3; // Length = 28.534
 
-        this.groundLevel = 1.941; // armBaseFromGround = 1.941
-        this.arm3Len = 28.534;
-        this.arm2Len = 24.357;
+        this.groundLevel = 1.941 + 3.5; // armBaseFromGround = 1.941
         this.endEffectorLen = 4.958;
-        this.armFullLength = 61.043;
+        this.arm2Len = 24.357;
+        this.arm3Len = 28.534;
+
+        // setInterval(() => {
+        //     let a1 = (Math.sin(this.armBase.rotation.y) * this.groundLevel); // BaseArm  
+        //     let a2 = (Math.cos(this.arm2.rotation.x) * this.arm2Len);// Arm 2 rotation
+        //     let a3 = (Math.cos(this.arm3.rotation.x) * this.arm3Len);// Arm 3 rotation
+        //     let a4 = (Math.cos(this.endEffector.rotation.x) * this.endEffectorLen);//End Effector
+        //     let a = a1+a2+a3+a4;
+        //     console.log(a);
+        // }, 1000);
+        // setInterval(() => { console.clear(); }, 10000);
+
+        // Testing ground level height
+        const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        // base_height = 1.941, Base joint = 3.5
+        const sphere = new THREE.Mesh(geometry, material);
+        sphere.position.y = 1.941 + 3.5 + 24.357 + 28.534 + 4.958;
+        // sphere.position.x = -2.941;
+        sceneRef.add(sphere);
+
+
         this.targetPos = new THREE.Vector3();
         this.sceneRef = sceneRef;
         this.loadRoboticArm(this.sceneRef);
@@ -50,15 +70,24 @@ class RoboticArm {
                     } else if (child instanceof THREE.Mesh) {
                         if (child.name == 'plane') {
                             child.visible = false;
-                        }else{
+                        } else {
                             child.castShadow = true;
                         }
                     }
                 });
                 sceneRef.add(model);
+                this.recalculateLinkLength();
             });
         });
     }
+
+    // This is only applicable in simulator
+    recalculateLinkLength() {
+
+        console.log(this.arm3.rotation.y);
+
+    }
+
     getEndEffectorPosition() {
         if (this.baseJoint && this.joint1 && this.joint2 && this.joint3) {
             return 1;
