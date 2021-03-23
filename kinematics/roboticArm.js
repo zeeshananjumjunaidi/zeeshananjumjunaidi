@@ -110,6 +110,16 @@ class RoboticArm {
             // let _x = Math.sin(this.armBase.rotation.y+this.arm3.rotation.y)*this.arm3Len;
             //  _y +=   +  Math.cos(this.arm2.rotation.x)* this.arm3Len;
             //  _z +=  +Math.sin(this.arm2.rotation.x)* this.arm3Len;
+           
+           // https://medium.com/@ringlayer/forward-kinematics-calculation-for-robotic-arm-6393934f847
+            // let d3 = Math.sin(this.arm3.rotation.x)* this.arm3Len;
+            // let d2 = Math.sin(this.arm2.rotation.x)* this.arm2Len;
+            // let t4 = 2*Math.PI - (this.arm3.rotation.x-Math.PI);
+            // // t3 = t4 + t5
+            // let t3 = this.arm2.rotation.x;
+            // let t5 = t3-t4
+            // let d6 = Math.cos(t5)*this.arm2Len;
+            // _z = d2 + d3  - d6;
 
             this.target.position.y=_y;
             this.target.position.z=_z;
