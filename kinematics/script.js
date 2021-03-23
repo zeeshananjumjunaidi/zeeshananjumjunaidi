@@ -12,7 +12,7 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 var selectionObject;
-var clicked=false;
+var clicked = false;
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 $(document).ready(() => {
@@ -38,14 +38,14 @@ $(document).ready(() => {
     camera.position.z = 40;
 
     //var kinematicSolver = new KinematicSolver(roboticArm, scene);
-    const geometry = new THREE.CircleGeometry( 5, 32 );
-    geometry.scale(14,14,14);
-    const material = new THREE.MeshPhongMaterial( { color: 0xeeeeee } );
-    const circle = new THREE.Mesh( geometry, material );
-    circle.receiveShadow=true;
-    circle.rotation.x=-Math.PI/2;
+    const geometry = new THREE.CircleGeometry(5, 32);
+    geometry.scale(14, 14, 14);
+    const material = new THREE.MeshPhongMaterial({ color: 0xeeeeee });
+    const circle = new THREE.Mesh(geometry, material);
+    circle.receiveShadow = true;
+    circle.rotation.x = -Math.PI / 2;
     // circle.scale.set(4,4,4);
-    scene.add( circle );
+    scene.add(circle);
 
     camera.up.set(0, 1, 0);
     camera.rotation.x = 0;
@@ -64,34 +64,38 @@ $(document).ready(() => {
     const light = new THREE.DirectionalLight(0xffffff, 5, 20);
     light.position.set(50, 51, 45);
     light.castShadow = true; // default false
-    light.shadow.camera = new THREE.OrthographicCamera( -100, 100, 100, -100, 0.5, 1000 ); 
+    light.shadow.camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 0.5, 1000);
     scene.add(light);
-
     var lightH = new THREE.HemisphereLight(0x404040, 0x002288, 1.5);
     scene.add(lightH);
+    // addText(scene);
+
     // Add robotic arm
     loadRoboticArm(scene);
     const animate = function (now) {
+
+        ThreeMeshUI.update();
         // console.log(now);
         requestAnimationFrame(animate);
         controls.update();
-        if(!clicked){
+        if (!clicked) {
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children,true);
-          
-            selectionObject=null;
+            const intersects = raycaster.intersectObjects(scene.children, true);
+
+            selectionObject = null;
             for (let i = 0; i < intersects.length; i++) {
                 //console.log(i);
                 // intersects[i].object.material.color.set(0xff0000);
-                selectionObject=intersects[i];break;
-            }        
+                selectionObject = intersects[i]; break;
+            }
         }
         renderer.render(scene, camera);
         if (roboticArm) {
+            roboticArm.update();
             //     roboticArm.randomAnimate(now);
         }
 
-
+        
     }
 
     animate();
@@ -106,15 +110,15 @@ function armBaseChange(e) {
     e.preventDefault();
     if (roboticArm.armBase) {
         roboticArm.armBase.rotation.y = e.target.value;
-    //    console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value));
+        //    console.log(roboticArm.baseJoint.rotateAroundZAxis(e.target.value));
     }
 }
 function arm1Change(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.endEffector) {
-        roboticArm.endEffector.rotation.x = e.target.value;        
-    //    console.log(roboticArm.joint1.rotateAroundXAxis(e.target.value));
+        roboticArm.endEffector.rotation.x = e.target.value;
+        //    console.log(roboticArm.joint1.rotateAroundXAxis(e.target.value));
     }
 }
 function arm2Change(e) {
@@ -122,7 +126,7 @@ function arm2Change(e) {
     e.preventDefault();
     if (roboticArm.arm2) {
         roboticArm.arm2.rotation.x = e.target.value;
-      //  console.log(roboticArm.joint2.rotateAroundXAxis(e.target.value));
+        //  console.log(roboticArm.joint2.rotateAroundXAxis(e.target.value));
     }
 }
 function arm3Change(e) {
@@ -130,7 +134,7 @@ function arm3Change(e) {
     e.preventDefault();
     if (roboticArm.arm3) {
         roboticArm.arm3.rotation.x = e.target.value;
-       // console.log(roboticArm.joint3.rotateAroundXAxis(e.target.value));
+        // console.log(roboticArm.joint3.rotateAroundXAxis(e.target.value));
     }
 }
 
@@ -144,9 +148,9 @@ function onMouseMove(event) {
     // console.log(selectionObject);
     // }
 }
-function onMouseUp(event){
+function onMouseUp(event) {
     clicked = false;
 }
-function onMouseDown(event){
-    clicked=true;
+function onMouseDown(event) {
+    clicked = true;
 }

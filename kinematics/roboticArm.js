@@ -10,7 +10,7 @@ class RoboticArm {
         this.endEffectorLen = 4.958;
         this.arm2Len = 24.357;
         this.arm3Len = 28.534;
-
+        this.textObjects=[];
         // setInterval(() => {
         //     let a1 = (Math.sin(this.armBase.rotation.y) * this.groundLevel); // BaseArm  
         //     let a2 = (Math.cos(this.arm2.rotation.x) * this.arm2Len);// Arm 2 rotation
@@ -47,6 +47,8 @@ class RoboticArm {
                     if (child instanceof THREE.Group) {
                         if (child.name == 'Base') {
                             this.armBase = child;
+                            this.armBase.add(this.addText('RobX'));
+
                             this.armBase.add(axisModel.clone());
                             this.baseJoint = new Joint(JointType.Revolute, this.armBase, this.groundLevel, 0);
                         } else if (child.name == 'endEffector') {
@@ -77,10 +79,15 @@ class RoboticArm {
                 });
                 sceneRef.add(model);
                 this.recalculateLinkLength();
+                this.setInitialPose();
             });
         });
     }
-
+    setInitialPose() {
+        this.endEffector.rotation.x = Math.PI / 3;
+        this.arm2.rotation.x = Math.PI / 3;
+        this.arm3.rotation.x = Math.PI / 3;
+    }
     // This is only applicable in simulator
     recalculateLinkLength() {
 
@@ -95,7 +102,13 @@ class RoboticArm {
     }
 
     update() {
-
+        // for(let i=0;i<this.textObjects.length;i++){
+        //     let tO = this.textObjects[i];
+        //     tO[0].position.x=tO[1].position.x;
+        //     tO[0].position.y=tO[1].position.y;
+        //     tO[0].position.z=tO[1].position.z;
+        //     // console.log(tO[0].children[0])
+        // }
     }
     moveToTarget(targetPos) {
 
@@ -110,5 +123,34 @@ class RoboticArm {
             this.arm2.rotation.x = Math.cos(dt * 0.0005);
             this.arm3.rotation.x = Math.cos(dt * 0.0005);
         }
+    }
+
+    addText(textData,position) {
+        const container = new ThreeMeshUI.Block({
+            width: 10.2,
+            height: 3,
+            padding: 0.05,
+            justifyContent: 'center',
+            alignContent: 'center',
+            fontFamily: '../assets/fonts/Roboto-msdf.json',
+            fontTexture: '../assets/img/Roboto-msdf.png'
+        });
+        console.log(container);
+        container.position.y =1;// position.y;
+        container.position.x =-6;// position.x;
+        container.position.z =0;// position.z;
+        // container.rotation.y = -Math.PI/2;
+        container.rotation.z = -Math.PI/2;
+        container.rotation.x = -Math.PI/2;
+        const text = new ThreeMeshUI.Text({
+            fontSize: 2.08,
+            content: textData//'x:23.54'
+        });
+
+        container.add(text);
+
+        // scene is a THREE.Scene (see three.js)
+        // this.sceneRef.add(container);
+        return container;
     }
 }
