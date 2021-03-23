@@ -22,13 +22,13 @@ class RoboticArm {
         // setInterval(() => { console.clear(); }, 10000);
 
         // Testing ground level height
-        const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+        const geometry = new THREE.SphereGeometry(2.5, 32, 32);
         const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         // base_height = 1.941, Base joint = 3.5
-        const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.y = 1.941 + 3.5 + 24.357 + 28.534 + 4.958;
+        this.target = new THREE.Mesh(geometry, material);
+        this.target.position.y = 1.941 + 3.5 + 24.357 + 28.534 + 4.958;
         // sphere.position.x = -2.941;
-        sceneRef.add(sphere);
+        sceneRef.add(this.target);
 
 
         this.targetPos = new THREE.Vector3();
@@ -78,8 +78,8 @@ class RoboticArm {
                     }
                 });
                 sceneRef.add(model);
-                this.recalculateLinkLength();
                 this.setInitialPose();
+                this.recalculateLinkLength();
             });
         });
     }
@@ -102,6 +102,19 @@ class RoboticArm {
     }
 
     update() {
+        if(this.target&&this.arm3){
+            // this.target.position.x = this.arm2.position.x;
+            // this.target.position.z = this.arm2.position.z;
+            let _y = Math.cos(this.arm3.rotation.x)* this.arm3Len;
+            let _z =Math.sin(this.arm3.rotation.x)* this.arm3Len;
+            // let _x = Math.sin(this.armBase.rotation.y+this.arm3.rotation.y)*this.arm3Len;
+            //  _y +=   +  Math.cos(this.arm2.rotation.x)* this.arm3Len;
+            //  _z +=  +Math.sin(this.arm2.rotation.x)* this.arm3Len;
+
+            this.target.position.y=_y;
+            this.target.position.z=_z;
+            // this.target.position.x=_x;
+        }
         // for(let i=0;i<this.textObjects.length;i++){
         //     let tO = this.textObjects[i];
         //     tO[0].position.x=tO[1].position.x;
