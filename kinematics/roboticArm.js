@@ -5,11 +5,13 @@ class RoboticArm {
         this.endEffector; // Length = 4.958
         this.arm2; // Length = 24.357
         this.arm3; // Length = 28.534
+        this.arm4; // Length = 28.534
 
         this.groundLevel = 1.941 + 3.5; // armBaseFromGround = 1.941
         this.endEffectorLen = 4.958;
         this.arm2Len = 24.357;
         this.arm3Len = 28.534;
+        this.arm4Len = 24.357;
         this.textObjects=[];
         // setInterval(() => {
         //     let a1 = (Math.sin(this.armBase.rotation.y) * this.groundLevel); // BaseArm  
@@ -38,11 +40,12 @@ class RoboticArm {
         this.joint1;
         this.joint2;
         this.Joint3;
+        this.Joint4;
     }
     loadRoboticArm(sceneRef) {
         const loader = new THREE.FBXLoader();
         loader.load('../assets/3d/robotic_arm/axis.fbx', axisModel => {
-            loader.load("../assets/3d/robotic_arm/robotic_arm.fbx", model => {
+            loader.load("../assets/3d/robotic_arm/robotic_arm_4_joints.fbx", model => {
                 model.traverse((child) => {
                     if (child instanceof THREE.Group) {
                         if (child.name == 'Base') {
@@ -58,16 +61,19 @@ class RoboticArm {
                             this.joint1 = new Joint(JointType.Revolute, this.endEffector, this.endEffectorLen, 0);
                         } else if (child.name == 'Arm2') {
                             this.arm2 = child;
-                            this.endEffector = child;
                             let _axis = axisModel.clone();
                             this.arm2.add(_axis);
                             this.joint2 = new Joint(JointType.Revolute, this.arm2, this.arm2Len, 0);
                         } else if (child.name == 'Arm3') {
                             this.arm3 = child;
-                            this.endEffector = child;
                             let _axis = axisModel.clone();
                             this.arm3.add(_axis);
                             this.joint3 = new Joint(JointType.Revolute, this.arm3, this.arm3Len, 0);
+                        } else if (child.name == 'Arm4') {
+                            this.arm4 = child;
+                            let _axis = axisModel.clone();
+                            this.arm4.add(_axis);
+                            this.joint4 = new Joint(JointType.Revolute, this.arm4, this.arm4Len, 0);
                         }
                     } else if (child instanceof THREE.Mesh) {
                         if (child.name == 'plane') {
@@ -145,6 +151,7 @@ class RoboticArm {
             this.endEffector.rotation.x = Math.cos(dt * 0.0005);
             this.arm2.rotation.x = Math.cos(dt * 0.0005);
             this.arm3.rotation.x = Math.cos(dt * 0.0005);
+            this.arm4.rotation.x = Math.cos(dt * 0.0005);
         }
     }
 

@@ -131,6 +131,13 @@ function arm3Change(e) {
         roboticArm.arm3.rotation.x = e.target.value;
     }
 }
+function arm4Change(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (roboticArm.arm4) {
+        roboticArm.arm4.rotation.x = e.target.value;
+    }
+}
 
 function onMouseMove(event) {
     // calculate mouse position in normalized device coordinates
