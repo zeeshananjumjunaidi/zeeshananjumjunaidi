@@ -84,15 +84,12 @@ $(document).ready(() => {
 
             selectionObject = null;
             for (let i = 0; i < intersects.length; i++) {
-                //console.log(i);
-                // intersects[i].object.material.color.set(0xff0000);
                 selectionObject = intersects[i]; break;
             }
         }
         renderer.render(scene, camera);
         if (roboticArm) {
             roboticArm.update();
-            //     roboticArm.randomAnimate(now);
         }
 
         
@@ -142,12 +139,7 @@ function arm4Change(e) {
 function onMouseMove(event) {
     // calculate mouse position in normalized device coordinates
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-    mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
-    // if(clicked && selectionObject){
-    // selectionObject.object.position.set(selectionObject.point.x,
-    //     selectionObject.point.y,selectionObject.point.z);
-    // console.log(selectionObject);
-    // }
+    mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;  
 }
 function onMouseUp(event) {
     clicked = false;

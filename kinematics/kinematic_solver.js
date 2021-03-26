@@ -26,12 +26,7 @@ class KinematicSolver{
                 }
             });
             sceneRef.add(model);
-        });    
-    
-    }
-
-    getDesiredAngles(x,y,z){
-        //TODO: return desired angles.
+        });        
     }
 
 }

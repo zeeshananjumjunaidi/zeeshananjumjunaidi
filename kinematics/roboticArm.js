@@ -13,16 +13,6 @@ class RoboticArm {
         this.arm3Len = 28.534;
         this.arm4Len = 24.357;
         this.textObjects=[];
-        // setInterval(() => {
-        //     let a1 = (Math.sin(this.armBase.rotation.y) * this.groundLevel); // BaseArm  
-        //     let a2 = (Math.cos(this.arm2.rotation.x) * this.arm2Len);// Arm 2 rotation
-        //     let a3 = (Math.cos(this.arm3.rotation.x) * this.arm3Len);// Arm 3 rotation
-        //     let a4 = (Math.cos(this.endEffector.rotation.x) * this.endEffectorLen);//End Effector
-        //     let a = a1+a2+a3+a4;
-        //     console.log(a);
-        // }, 1000);
-        // setInterval(() => { console.clear(); }, 10000);
-
         // Testing ground level height
         const geometry = new THREE.SphereGeometry(2.5, 32, 32);
         const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -109,39 +99,15 @@ class RoboticArm {
 
     update() {
         if(this.target&&this.arm3){
-            // this.target.position.x = this.arm2.position.x;
-            // this.target.position.z = this.arm2.position.z;
             let _y = Math.cos(this.arm3.rotation.x)* this.arm3Len;
             let _z =Math.sin(this.arm3.rotation.x)* this.arm3Len;
-            // let _x = Math.sin(this.armBase.rotation.y+this.arm3.rotation.y)*this.arm3Len;
-            //  _y +=   +  Math.cos(this.arm2.rotation.x)* this.arm3Len;
-            //  _z +=  +Math.sin(this.arm2.rotation.x)* this.arm3Len;
-           
-           // https://medium.com/@ringlayer/forward-kinematics-calculation-for-robotic-arm-6393934f847
-            // let d3 = Math.sin(this.arm3.rotation.x)* this.arm3Len;
-            // let d2 = Math.sin(this.arm2.rotation.x)* this.arm2Len;
-            // let t4 = 2*Math.PI - (this.arm3.rotation.x-Math.PI);
-            // // t3 = t4 + t5
-            // let t3 = this.arm2.rotation.x;
-            // let t5 = t3-t4
-            // let d6 = Math.cos(t5)*this.arm2Len;
-            // _z = d2 + d3  - d6;
+   
 
             this.target.position.y=_y;
             this.target.position.z=_z;
-            // this.target.position.x=_x;
         }
-        // for(let i=0;i<this.textObjects.length;i++){
-        //     let tO = this.textObjects[i];
-        //     tO[0].position.x=tO[1].position.x;
-        //     tO[0].position.y=tO[1].position.y;
-        //     tO[0].position.z=tO[1].position.z;
-        //     // console.log(tO[0].children[0])
-        // }
     }
-    moveToTarget(targetPos) {
-
-    }
+   
     distanceToTarget() {
         return this.endEffector.position.distanceTo(this.targetPos);
     }
