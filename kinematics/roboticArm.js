@@ -15,7 +15,7 @@ class RoboticArm {
         this.textObjects=[];
         // Testing ground level height
         const geometry = new THREE.SphereGeometry(2.5, 32, 32);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const material = new THREE.MeshPhongMaterial({ color: 0xff0000 });
         // base_height = 1.941, Base joint = 3.5
         this.target = new THREE.Mesh(geometry, material);
         this.target.position.y = 1.941 + 3.5 + 24.357 + 28.534 + 4.958;
@@ -31,6 +31,24 @@ class RoboticArm {
         this.joint2;
         this.Joint3;
         this.Joint4;
+        this.linePoints = [new THREE.Vector3( - 10, 0, 0), new THREE.Vector3( 10, 0, 0 )];
+        this.line;
+        this.addDistanceLine();
+    }
+    addDistanceLine(){
+        const material = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+        
+        const points = [];
+        points.push( this.linePoints[0]);
+        points.push( this.linePoints[1]);
+        
+        let lineGeom = new THREE.BufferGeometry().setFromPoints( points );
+        lineGeom.verticesNeedUpdate =true;
+        this.line = new THREE.Line(lineGeom, material );
+        this.line.matrixAutoUpdate  = true;
+        this.sceneRef.add( this.line );
     }
     loadRoboticArm(sceneRef) {
         const loader = new THREE.FBXLoader();
@@ -104,6 +122,10 @@ class RoboticArm {
         //     // this.target.position.y=_y;
         //     // this.target.position.z=_z;
         // }
+        if(this.endEffector){
+            this.linePoints[0] = this.endEffector.position;
+            this.line.updateMatrix();
+        }
     }
    
     distanceToTarget() {
