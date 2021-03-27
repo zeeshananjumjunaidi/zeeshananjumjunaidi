@@ -98,14 +98,12 @@ class RoboticArm {
     }
 
     update() {
-        if(this.target&&this.arm3){
-            let _y = Math.cos(this.arm3.rotation.x)* this.arm3Len;
-            let _z =Math.sin(this.arm3.rotation.x)* this.arm3Len;
-   
-
-            this.target.position.y=_y;
-            this.target.position.z=_z;
-        }
+        // if(this.target&&this.arm3){
+        //     let _y = Math.cos(this.arm3.rotation.x)* this.arm3Len;
+        //     let _z =Math.sin(this.arm3.rotation.x)* this.arm3Len;
+        //     // this.target.position.y=_y;
+        //     // this.target.position.z=_z;
+        // }
     }
    
     distanceToTarget() {

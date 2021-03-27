@@ -147,3 +147,14 @@ function onMouseUp(event) {
 function onMouseDown(event) {
     clicked = true;
 }
+function moveTargetX(e){
+    roboticArm.target.position.x=e.target.value;
+}
+
+function moveTargetY(e){
+    roboticArm.target.position.y=e.target.value;    
+}
+
+function moveTargetZ(e){   
+     roboticArm.target.position.z=e.target.value;
+}

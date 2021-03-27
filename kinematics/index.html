@@ -11,7 +11,7 @@
     <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
     <script src="../js/vendors/threejs/three.min.js">
     </script>
-    <script src="../js/vendors/cannon.min.js   "></script>
+    <script src="../js/vendors/cannon.min.js"></script>
     <script src="../js/dubinPath/dubin_math.js"></script>
     <script src="../js/dubinPath/dubin_path.js"></script>
 
@@ -53,6 +53,13 @@
       Arm 4  <input type="range" class="z-input" min="-1.57" max="1.57" step="0.001" value="0" id="arm4Ele" oninput="arm4Change(event)" />
       Base  <input type="range" class="z-input" min="-3.14" max="3.14" step="0.001" value="0" id="baseEle" oninput="armBaseChange(event)" />
     </div>
+    <div class="control"
+    style="box-shadow: 0px 0px 10px #999; position:absolute; right:0; padding:5px; border-radius: 5px; top:50%; transform: translateY(-50%); pointer-events: fill; background:white">
+   <h3>Target Position</h3>
+   Target X <input type="range" class="z-input" min="-50" max="50" step="0.001" value="0" id="eeEle" oninput="moveTargetX(event)" />
+   Target Y <input type="range" class="z-input" min="-50" max="50" step="0.001" value="0" id="eeEle" oninput="moveTargetY(event)" />
+   Target Z <input type="range" class="z-input" min="-50" max="50" step="0.001" value="0" id="eeEle" oninput="moveTargetZ(event)" />
+   </div>
 </body>
 
 </html>
