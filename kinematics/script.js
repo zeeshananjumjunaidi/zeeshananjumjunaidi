@@ -152,7 +152,7 @@ function moveTargetX(e){
 }
 
 function moveTargetY(e){
-    roboticArm.target.position.y=e.target.value;    
+    roboticArm.target.position.y=63.2899999+parseFloat(e.target.value);
 }
 
 function moveTargetZ(e){   

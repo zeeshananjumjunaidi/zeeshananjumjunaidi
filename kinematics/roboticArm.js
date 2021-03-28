@@ -24,6 +24,10 @@ class RoboticArm {
 
 
         this.targetPos = new THREE.Vector3();
+        this.targetPos.y =63.2899999; // 1.941 + 3.5 + 24.357 + 28.534 + 4.958;
+        // this.target.position.x = this.targetPos.x;
+        // this.target.position.y = this.targetPos.y;
+        // this.target.position.z = this.targetPos.Z;
         this.sceneRef = sceneRef;
         this.loadRoboticArm(this.sceneRef);
         this.baseJoint;
