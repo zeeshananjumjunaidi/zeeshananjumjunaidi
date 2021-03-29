@@ -1,10 +1,3 @@
-const blas = window.BLAS;
-//fetch some level3 complex 64 bit precision matrix-matrix operations
-const {
-    level3: { zsyrk, ztrmm, ztrsm }
-} = blas;
-
-
 
 var roboticArm;
 
@@ -158,3 +151,9 @@ function moveTargetY(e){
 function moveTargetZ(e){   
      roboticArm.target.position.z=e.target.value;
 }
+const array = [[2, 0], [-1, 3]]               // Array
+const matrix = math.matrix([[7, 1], [-2, 3]]) // Matrix
+
+// perform a calculation on an array and matrix
+math.square(array)                            // Array,  [[4, 0], [1, 9]]
+math.square(matrix)                           // Matrix, [[49, 1], [4, 9]]

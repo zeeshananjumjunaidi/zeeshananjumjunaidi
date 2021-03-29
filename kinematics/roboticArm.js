@@ -130,6 +130,16 @@ class RoboticArm {
             this.linePoints[0] = this.endEffector.position;
             this.line.updateMatrix();
         }
+        let armLength = this.groundLevel +
+        this.endEffectorLen +
+        this.arm2Len +
+        this.arm3Len +
+        this.arm4Len;
+        if(armLength>Math.sqrt(Math.pow(this.target.position.x,2)+Math.pow(this.target.position.y,2)+Math.pow(this.target.position.z,2))){
+            // console.log("reachable");
+        }else{
+            // console.log("unreachable");
+        }
     }
    
     distanceToTarget() {
