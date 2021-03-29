@@ -60,12 +60,15 @@ class RoboticArm {
         loader.load('../assets/3d/robotic_arm/axis.fbx', axisModel => {
             loader.load("../assets/3d/robotic_arm/robotic_arm_4_joints.fbx", model => {
                 let poses=[];
+               // model.rotation.x=Math.PI/2;
                 model.traverse((child) => {
                     if (child instanceof THREE.Group) {
                         if (child.name == 'Base') {
                             this.armBase = child;
-                            this.armBase.add(this.addText('RobX'));
-                            this.armBase.add(axisModel.clone());
+                            this.armBase.add(this.addText('Y is up'));
+                            let armAxis=axisModel.clone();
+                            armAxis.scale.set(3,3,3);
+                            this.armBase.add(armAxis);
                             this.baseJoint = new Joint(JointType.Revolute, this.armBase, this.groundLevel, 0);
                         } else if (child.name == 'endEffector') {
                             this.endEffector = child;

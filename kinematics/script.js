@@ -11,6 +11,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 $(document).ready(() => {
 
 
+    // THREE.Object3D.DefaultUp.set(0, 0, 1);// to use z as up axis, currently orbital control is not working properly with z up.
 
     window.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('mouseup', onMouseUp, false);
@@ -26,20 +27,27 @@ $(document).ready(() => {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 700000);
+
+   // camera.up.set(0, 1, 0); // Default axis, y is top. 
+
+    //camera.up = new THREE.Vector3( 0, 0, 1 ); // we are using z'axis as top because of the IK DH table convention.
     camera.position.y = 100;
     camera.position.z = 40;
 
 
     const geometry = new THREE.CircleGeometry(5, 32);
     geometry.scale(14, 14, 14);
-    const material = new THREE.MeshPhongMaterial({ color: 0xeeeeee });
+    const material = new THREE.MeshPhongMaterial({ 
+        color: 0xeeeeee,
+        shininess:0,
+        reflectivity: 0,
+        specular:0 });
     const circle = new THREE.Mesh(geometry, material);
     circle.receiveShadow = true;
-    circle.rotation.x = -Math.PI / 2;
+     circle.rotation.x =-Math.PI / 2;
     // circle.scale.set(4,4,4);
     scene.add(circle);
 
-    camera.up.set(0, 1, 0);
     camera.rotation.x = 0;
     camera.rotation.y = 0;
     camera.rotation.z = 0;
@@ -50,6 +58,7 @@ $(document).ready(() => {
     document.body.appendChild(renderer.domElement);
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    console.log(controls);
     targetPosition = new THREE.Vector3();
 
     // LIGHTING
@@ -57,6 +66,7 @@ $(document).ready(() => {
     light.position.set(50, 51, 45);
     light.castShadow = true; // default false
     light.shadow.camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 0.5, 1000);
+    light.shadow.camera.up = new THREE.Vector3( 0, 0, 1 );
     scene.add(light);
     var lightH = new THREE.HemisphereLight(0x404040, 0x002288, 1.5);
     scene.add(lightH);
@@ -84,9 +94,9 @@ $(document).ready(() => {
             roboticArm.update();
         }
 
-        
+
     }
-    animate();    
+    animate();
 });
 
 function loadRoboticArm(sceneRef) {
@@ -131,7 +141,7 @@ function arm4Change(e) {
 function onMouseMove(event) {
     // calculate mouse position in normalized device coordinates
     mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
-    mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;  
+    mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 }
 function onMouseUp(event) {
     clicked = false;
@@ -147,7 +157,7 @@ function moveTargetY(e){
     roboticArm.target.position.y=63.2899999+parseFloat(e.target.value);
 }
 
-function moveTargetZ(e){   
+function moveTargetZ(e){
      roboticArm.target.position.z=e.target.value;
 }
 const array = [[2, 0], [-1, 3]]               // Array
