@@ -53,17 +53,18 @@ class RoboticArm {
         this.line = new THREE.Line(lineGeom, material );
         this.line.matrixAutoUpdate  = true;
         this.sceneRef.add( this.line );
+        this.kinematicSolver; 
     }
     loadRoboticArm(sceneRef) {
         const loader = new THREE.FBXLoader();
         loader.load('../assets/3d/robotic_arm/axis.fbx', axisModel => {
             loader.load("../assets/3d/robotic_arm/robotic_arm_4_joints.fbx", model => {
+                let poses=[];
                 model.traverse((child) => {
                     if (child instanceof THREE.Group) {
                         if (child.name == 'Base') {
                             this.armBase = child;
                             this.armBase.add(this.addText('RobX'));
-
                             this.armBase.add(axisModel.clone());
                             this.baseJoint = new Joint(JointType.Revolute, this.armBase, this.groundLevel, 0);
                         } else if (child.name == 'endEffector') {
@@ -95,11 +96,38 @@ class RoboticArm {
                         }
                     }
                 });
+                poses.push(new Pose(this.armBase.position,this.armBase.rotation,this.armBase,
+                    new THREE.Vector3(0,1,0)));
+                poses.push(new Pose(this.arm2.position,this.arm2.rotation,this.arm2,
+                    new THREE.Vector3(0,1,0)));
+                poses.push(new Pose(this.arm3.position,this.arm3.rotation,this.arm3,
+                    new THREE.Vector3(0,1,0)));
+                poses.push(new Pose(this.arm4.position,this.arm4.rotation,this.arm4,
+                    new THREE.Vector3(0,1,0)));
+                poses.push(new Pose(this.endEffector.position,this.endEffector.rotation,this.endEffector,
+                    new THREE.Vector3(0,1,0)));
+
+                this.kinematicSolver = new KinematicSolver(poses);
+                window.ttt = this.arm2;
+                document.addEventListener('keydown',(event)=>{
+                    if(event.key==' '){
+                     console.log("test solving FK");   
+                     let angels = [this.getEulerAngle(this.armBase.rotation),
+                        this.getEulerAngle(this.arm2.rotation),
+                        this.getEulerAngle(this.arm3.rotation),
+                        this.getEulerAngle(this.arm4.rotation),
+                        this.getEulerAngle(this.endEffector.rotation)];
+                      this.kinematicSolver.forwardKinematics(angels);
+                    }
+                });
                 sceneRef.add(model);
                 this.setInitialPose();
                 this.recalculateLinkLength();
             });
         });
+    }
+    getEulerAngle(rotation,eulerAxis='xyz'){
+        return new THREE.Euler().setFromQuaternion(rotation, eulerAxis );
     }
     setInitialPose() {
         this.endEffector.rotation.x = Math.PI / 3;
@@ -137,6 +165,10 @@ class RoboticArm {
         this.arm4Len;
         if(armLength>Math.sqrt(Math.pow(this.target.position.x,2)+Math.pow(this.target.position.y,2)+Math.pow(this.target.position.z,2))){
             // console.log("reachable");
+            // Formula
+            /*
+            Pi = Pi-1 + rotate(Di,Pi-1,SumOf(Ak, where k=0 to i-1))
+            */
         }else{
             // console.log("unreachable");
         }

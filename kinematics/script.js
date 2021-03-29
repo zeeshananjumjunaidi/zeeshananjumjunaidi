@@ -16,7 +16,6 @@ $(document).ready(() => {
     window.addEventListener('mouseup', onMouseUp, false);
     window.addEventListener('mousedown', onMouseDown, false);
 
-    // window.requestAnimationFrame(render);
 
     const settings = {
         animate: true,
@@ -30,7 +29,7 @@ $(document).ready(() => {
     camera.position.y = 100;
     camera.position.z = 40;
 
-    //var kinematicSolver = new KinematicSolver(roboticArm, scene);
+
     const geometry = new THREE.CircleGeometry(5, 32);
     geometry.scale(14, 14, 14);
     const material = new THREE.MeshPhongMaterial({ color: 0xeeeeee });
