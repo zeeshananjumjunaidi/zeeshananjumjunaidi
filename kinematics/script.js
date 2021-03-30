@@ -38,7 +38,7 @@ $(document).ready(() => {
     const geometry = new THREE.CircleGeometry(5, 32);
     geometry.scale(14, 14, 14);
     const material = new THREE.MeshPhongMaterial({ 
-        color: 0xeeeeee,
+        color: '#333333',
         shininess:0,
         reflectivity: 0,
         specular:0 });
@@ -52,7 +52,7 @@ $(document).ready(() => {
     camera.rotation.y = 0;
     camera.rotation.z = 0;
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor("#EEE", 1);
+    renderer.setClearColor("#2e3d49", 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
@@ -68,7 +68,7 @@ $(document).ready(() => {
     light.shadow.camera = new THREE.OrthographicCamera(-100, 100, 100, -100, 0.5, 1000);
     light.shadow.camera.up = new THREE.Vector3( 0, 0, 1 );
     scene.add(light);
-    var lightH = new THREE.HemisphereLight(0x404040, 0x002288, 1.5);
+    var lightH = new THREE.HemisphereLight(0x404040, 0xffffff, 5.5);
     scene.add(lightH);
     // addText(scene);
 
