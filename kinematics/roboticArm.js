@@ -56,6 +56,18 @@ class RoboticArm {
         this.kinematicSolver; 
     }
     loadRoboticArm(sceneRef) {
+        let colors = ['0xff0000','0x00ff00','0x770000'];
+        const gradientMap = new THREE.DataTexture( colors, colors.length, 1, THREE.RGBFormat );
+					gradientMap.minFilter = THREE.NearestFilter;
+					gradientMap.magFilter = THREE.NearestFilter;
+					gradientMap.generateMipmaps = false;
+                    let toonMainMtl = new THREE.MeshToonMaterial({color:0xff5500,
+                        gradientMap:gradientMap
+                    });   
+                    let toonBlkMtl = new THREE.MeshToonMaterial({color:0x333333,
+                        gradientMap:gradientMap
+                    });
+
         const loader = new THREE.FBXLoader();
         loader.load('../assets/3d/robotic_arm/axis.fbx', axisModel => {
             loader.load("../assets/3d/robotic_arm/robotic_arm_4_joints.fbx", model => {
@@ -72,6 +84,7 @@ class RoboticArm {
                             this.baseJoint = new Joint(JointType.Revolute, this.armBase, this.groundLevel, 0);
                         } else if (child.name == 'endEffector') {
                             this.endEffector = child;
+                            this.endEffector.children[1].material=toonBlkMtl;// Material was missing in original model.
                             let _axis = axisModel.clone();
                             this.endEffector.add(_axis);
                             this.joint1 = new Joint(JointType.Revolute, this.endEffector, this.endEffectorLen, 0);
@@ -95,6 +108,11 @@ class RoboticArm {
                         if (child.name == 'plane') {
                             child.visible = false;
                         } else {
+                            // console.log(child.material.name);
+                            if(child.material.name=='OrangeMetal')
+                            child.material=toonMainMtl;
+                            else if(child.material.name=='BlackMtl')
+                            child.material=toonBlkMtl;
                             child.castShadow = true;
                         }
                     }
@@ -200,7 +218,6 @@ class RoboticArm {
             fontFamily: '../assets/fonts/Roboto-msdf.json',
             fontTexture: '../assets/img/Roboto-msdf.png'
         });
-        console.log(container);
         container.position.y =1;// position.y;
         container.position.x =-6;// position.x;
         container.position.z =0;// position.z;

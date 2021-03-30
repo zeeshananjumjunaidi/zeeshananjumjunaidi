@@ -58,7 +58,7 @@ $(document).ready(() => {
     document.body.appendChild(renderer.domElement);
     // ORBIT CONTROLS
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    console.log(controls);
+    
     targetPosition = new THREE.Vector3();
 
     // LIGHTING
