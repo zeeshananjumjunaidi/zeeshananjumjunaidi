@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -8,6 +8,11 @@
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
+
+    <!--Katex-->
+    <link rel="stylesheet" href="../js/vendors/katex/katex.min.css" />
+    <script src="../js/vendors/katex/katex.min.js" crossorigin="anonymous"></script>
+    <!-- <script src="../js/vendors/katex/auto-render.min.js" onload="renderMathInElement(document.body);" crossorigin="anonymous"></script> -->
 
     <link href="../style/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="../style/default.css" />
@@ -42,6 +47,12 @@
        orbital control will not work as expected. so for now we have replaced the <b>Y</b> with <b>Z</b>.
    </article>
 
+   <p id="IdentificatorForElement"></p>
+   <script>
+    katex.render("f(x)^2  = \\sqrt{y}", document.getElementById('IdentificatorForElement'), {
+        throwOnError: false
+    });
+    </script>
 
     <h3>DH Table</h3>
     <table>
