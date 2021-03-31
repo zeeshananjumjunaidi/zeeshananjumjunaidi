@@ -12,7 +12,7 @@
     <!--Katex-->
     <link rel="stylesheet" href="../js/vendors/katex/katex.min.css" />
     <script src="../js/vendors/katex/katex.min.js" crossorigin="anonymous"></script>
-    <!-- <script src="../js/vendors/katex/auto-render.min.js" onload="renderMathInElement(document.body);" crossorigin="anonymous"></script> -->
+    <script src="../js/vendors/katex/auto-render.min.js" onload="renderMathInElement(document.body);" crossorigin="anonymous"></script>
 
     <link href="../style/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="../style/default.css" />
@@ -47,11 +47,12 @@
        orbital control will not work as expected. so for now we have replaced the <b>Y</b> with <b>Z</b>.
    </article>
 
-   <p id="IdentificatorForElement"></p>
+   <p class="math" id="rotationMatrix" >X=\begin{bmatrix} M_1 \\ \vdots \\ M_n \end{bmatrix}</p>
    <script>
-    katex.render("f(x)^2  = \\sqrt{y}", document.getElementById('IdentificatorForElement'), {
+       function renderMathInElement(q){
+    katex.render("fx(x^3)\Alpha", document.getElementById('rotationMatrix'), {
         throwOnError: false
-    });
+    });}renderMathInElement(2);
     </script>
 
     <h3>DH Table</h3>
