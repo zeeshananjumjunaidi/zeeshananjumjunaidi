@@ -190,7 +190,7 @@ class RoboticArm {
             /*
             Pi = Pi-1 + rotate(Di,Pi-1,SumOf(Ak, where k=0 to i-1))
             */
-
+            if(this.poses)
            for(let i=0;i<this.poses.length;i++){
             let p = this.poses[i];
             break;
