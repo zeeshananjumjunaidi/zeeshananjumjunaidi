@@ -12,6 +12,9 @@
     <link href="../style/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="../style/default.css" />
     <style>
+        body{
+            background-color: #2e3d49;
+        }
         table{
             vertical-align: middle;
         }
@@ -27,6 +30,19 @@
 </head>
 
 <body>
+    <h3>Joints Type</h3>
+    <img src="../assets/img/reference_images/l01-03-l-joint-types-and-degrees-of-freedom-01.png" alt="Udacity's Robotic Software Engineering Course" style="width:60%;"/>
+    <i><a href="https://www.udacity.com/course/robotics-software-engineer--nd209">Udacity's Robotic Software Engineering</a></i>
+   <br/>
+   <hr/>
+
+   <article>
+       Normally we have Z axis pointing upward in kinematic problems.
+       But in ThreeJS Y is the default up axis, we can achieve Z as up axis by setting camera up axis to Z, but 
+       orbital control will not work as expected. so for now we have replaced the <b>Y</b> with <b>Z</b>.
+   </article>
+
+
     <h3>DH Table</h3>
     <table>
         <thead>
