@@ -3,6 +3,7 @@
 var height = window.innerHeight;
 var width = window.innerWidth;
 
+var root;
 function setup(){
     
     width = window.innerWidth;
@@ -12,28 +13,37 @@ function setup(){
     rectMode(CENTER);
     imageMode(CENTER);
     angleMode(DEGREES);
-    let current = Segment.createRootInstance(width/2,height/2,0,150);
+    let segmentSize = 50;
+    let current = Segment.createRootInstance(width/2,height/2,0,segmentSize,1);
     this.segments=[current];
-    for(let i=0;i<3;i++){
-        let st = Segment.createSegment(current,0,150);
-        this.segments.push(st);
+    for(let i=0;i<4;i++){
+        let st = Segment.createSegment(current,0,segmentSize,2+i);
+        current.child = st;
+        
         current= st;
     }
+    root=current;
 }
-// let segments =[];
-// let seg1 = Segment.createRootInstance(width/2,height/2,0,150);
-// let seg2 = Segment.createSegment(seg1,45,150);
+
+target = new p5.Vector(10,10);
 function draw(){
-    // translate(width/2,height/3);
+    
     background(0x2e3d49);
-    // seg1.angle+=deltaTime*0.0008;
-    segments[0].follow(mouseX,mouseY);
-    let n=0;
-    for(let i=0;i<segments.length;i++){
-        let s = segments[i];
-        s.follow()
-        s.update();
-        s.show();
-        n=i;
-    }
+    
+    //let next = root;
+   root.follow(mouseX,mouseY);
+//     root.follow(target.x,target.y);
+//  //   print(dist(root.b.x,root.b.y,target.x,target.y));
+//     if(dist(root.b.x,root.b.y,target.x,target.y)<5){
+//         target = new p5.Vector(random(0,1000),random(0,1000));
+//     }
+    root.update();
+    root.show();
+    let next=root.parent;
+    while(next!=null){
+        next.followChild();
+        next.update();
+        next.show();
+        next=next.parent;
+    }    
 }
