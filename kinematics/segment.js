@@ -47,11 +47,17 @@ class Segment {
         fill(0);
         // let size = 4*this.index/100;
         // size = size>200?200:size;
-        let size =5;
+        let size = 5;
         strokeWeight(size);
         line(this.a.x, this.a.y, this.b.x, this.b.y);
+        fill(255,0,0);
+        strokeWeight(1);
+        circle(this.a.x, this.a.y, 10);
+        if (this.child == null) {
+      
+            circle(this.b.x, this.b.y, 10);
 
-         circle(this.a.x, this.a.y, 3);
+        }
     }
 
 }
