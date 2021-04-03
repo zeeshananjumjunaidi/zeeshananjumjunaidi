@@ -38,6 +38,9 @@ class Segment {
     calculateB() {
         this.b.x = this.a.x + (this.len * Math.cos(this.angle));
         this.b.y = this.a.y + (this.len * Math.sin(this.angle));
+
+        // If Gravity
+        // this.a.y+=9.8;
     }
     update() {
         this.calculateB();
@@ -48,14 +51,15 @@ class Segment {
         // let size = 4*this.index/100;
         // size = size>200?200:size;
         let size = 5;
+         size = 4*this.index/100;
         strokeWeight(size);
         line(this.a.x, this.a.y, this.b.x, this.b.y);
         fill(255,0,0);
         strokeWeight(1);
-        circle(this.a.x, this.a.y, 10);
+        //circle(this.a.x, this.a.y, 10);
         if (this.child == null) {
       
-            circle(this.b.x, this.b.y, 10);
+         //   circle(this.b.x, this.b.y, 10);
 
         }
     }
