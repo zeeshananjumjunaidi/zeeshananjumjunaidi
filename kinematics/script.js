@@ -106,35 +106,40 @@ function armBaseChange(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.armBase) {
-        roboticArm.armBase.rotation.y = e.target.value;
+        roboticArm.armBase.rotation.y = parseFloat(e.target.value);
+        console.log(parseFloat(e.target.value));
     }
 }
 function arm1Change(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.endEffector) {
-        roboticArm.endEffector.rotation.x = e.target.value;
+        roboticArm.endEffector.rotation.x =parseFloat(e.target.value);
+        console.log(parseFloat(e.target.value));
     }
 }
 function arm2Change(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.arm2) {
-        roboticArm.arm2.rotation.x = e.target.value;
+        roboticArm.arm2.rotation.x =parseFloat(e.target.value);
+        console.log(parseFloat(e.target.value));
     }
 }
 function arm3Change(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.arm3) {
-        roboticArm.arm3.rotation.x = e.target.value;
+        roboticArm.arm3.rotation.x =parseFloat(e.target.value);
+        console.log(parseFloat(e.target.value));
     }
 }
 function arm4Change(e) {
     e.stopPropagation();
     e.preventDefault();
     if (roboticArm.arm4) {
-        roboticArm.arm4.rotation.x = e.target.value;
+        roboticArm.arm4.rotation.x =parseFloat(e.target.value);
+        console.log(parseFloat(e.target.value));
     }
 }
 
@@ -150,15 +155,15 @@ function onMouseDown(event) {
     clicked = true;
 }
 function moveTargetX(e){
-    roboticArm.target.position.x=e.target.value;
+    roboticArm.target.position.x=parseFloat(e.target.value);
 }
 
 function moveTargetY(e){
-    roboticArm.target.position.y=63.2899999+parseFloat(e.target.value);
+    roboticArm.target.position.y=parseFloat(e.target.value);
 }
 
 function moveTargetZ(e){
-     roboticArm.target.position.z=e.target.value;
+     roboticArm.target.position.z=parseFloat(e.target.value);
 }
 const array = [[2, 0], [-1, 3]]               // Array
 const matrix = math.matrix([[7, 1], [-2, 3]]) // Matrix
