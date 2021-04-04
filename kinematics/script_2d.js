@@ -2,7 +2,7 @@
 
 var height = window.innerHeight;
 var width = window.innerWidth;
-var obj1;
+var agents =[];
 function setup(){    
     width = window.innerWidth;
     height = window.innerHeight;
@@ -11,14 +11,22 @@ function setup(){
     rectMode(CENTER);
     imageMode(CENTER);
     angleMode(DEGREES);
-    obj1 =new Kinematic2DObject(5,20);
+    for(let i=0;i<100;i++){
+        let agent =new Kinematic2DObject(random(0,width),random(0,height),agents,i,5,5);
+        agents.push(agent);
+    } 
 }
 
 
 function draw(){
     
     background(0x2e3d49);
-    obj1.follow(mouseX,mouseY);
-    obj1.update();
-  
+    push();
+    for(let i=0;i<agents.length;i++){
+        let agent = agents[i];
+        agent.autoFollow();
+        // agent.follow(mouseX,mouseY);
+        agent.update();  
+    }
+    pop();
 }

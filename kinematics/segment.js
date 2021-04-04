@@ -24,10 +24,13 @@ class Segment {
     followChild() {
         let tX = this.child.a.x;
         let tY = this.child.a.y;
+        
         this.follow(tX, tY);
     }
     follow(fx, fy) {
 
+       //noise(5,21);// map(noise(this.a.x , this.a.y), 0, 1, 0, 20) ;
+        // print(noiseScale)
         let target = new p5.Vector(fx, fy);
         let dir = p5.Vector.sub(target, this.a);
         
@@ -40,7 +43,6 @@ class Segment {
     calculateB() {  
         this.b.x = this.a.x + (this.len * Math.cos(this.angle));
         this.b.y = this.a.y + (this.len * Math.sin(this.angle));
-
         // If Gravity
         // this.a.y+=9.8;
     }
@@ -48,23 +50,14 @@ class Segment {
         this.calculateB();
     }
     show() {
-        stroke(0);
-        fill(0);
-        // let size = 4*this.index/100;
-        // size = size>200?200:size;
-        let size = 5;
-        
-         size = 4*this.index/100;
-        strokeWeight(size);
-        line(this.a.x, this.a.y, this.b.x, this.b.y);
-        fill(255,0,0);
-        strokeWeight(1);
-        //circle(this.a.x, this.a.y, 10);
-        if (this.child == null) {
       
+        line(this.a.x, this.a.y, this.b.x, this.b.y);
+     //   fill(255,0,0);
+       // strokeWeight(1);
+     //   circle(this.a.x, this.a.y, 10);
+       // if (this.child == null) {      
          //   circle(this.b.x, this.b.y, 10);
-
-        }
+     //   }
     }
 
 }
