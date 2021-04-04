@@ -30,12 +30,14 @@ class Segment {
 
         let target = new p5.Vector(fx, fy);
         let dir = p5.Vector.sub(target, this.a);
+        
         this.angle = dir.heading();
         dir.setMag(this.len);
         dir.mult(-1);
         this.a = p5.Vector.add(target, dir);
     }
-    calculateB() {
+
+    calculateB() {  
         this.b.x = this.a.x + (this.len * Math.cos(this.angle));
         this.b.y = this.a.y + (this.len * Math.sin(this.angle));
 
@@ -51,6 +53,7 @@ class Segment {
         // let size = 4*this.index/100;
         // size = size>200?200:size;
         let size = 5;
+        
          size = 4*this.index/100;
         strokeWeight(size);
         line(this.a.x, this.a.y, this.b.x, this.b.y);
