@@ -1,11 +1,12 @@
 
 class Kinematic2DObject {
-    constructor(x, y, objects, index, segmentSize = 5, segmentCount = 20, speed = 10) {
+    constructor(x, y, objects, index, segmentSize = 5, segmentCount = 20, speed = 10, isPredator = false) {
         this.segmentSize = segmentSize;
         this.segmentCount = segmentCount;
         this.index = index;
         this.objects = objects;
         this.speed = 2;// Math.random()*speed;
+        this.isPredator = isPredator;
         let current = Segment.createRootInstance(width / 2, height / 2, 0, segmentSize, 1);
 
         for (let i = 0; i < segmentCount; i++) {
@@ -19,7 +20,9 @@ class Kinematic2DObject {
         this.target = new p5.Vector(random(0, width), random(0, height));
         this.food = 1;
         this.age = 0;//random(255, 500);
-        this.maxAge=round(random(200, 255));
+        this.maxAge = round(random(200, 255));
+        this.deathRate = random(0.006, 0.06);
+        this.colorType = random() > 0.5 ? 1 : random() > 0.4 ? 2 : 0;
     }
     autoFollow() {
         if (dist(this.target.x, this.target.y, this.root.a.x, this.root.a.y) < 1) {
@@ -56,29 +59,35 @@ class Kinematic2DObject {
             this.age = 0; // resetting age if feeded
         }
         // death equation, death rate = 0.006
-        this.age += deltaTime * 0.06;
+        this.age += deltaTime * this.deathRate;
         if (this.age < 300 && this.age > 100 && Math.random() >= 0.9999) {
             // reproduction // Asexual for now.
-           // console.log("Birth at age of "+this.age);
-            this.objects.push(new Kinematic2DObject(this.x,this.y,this.objects,this.objects.length,
-                this.segmentSize,this.segmentCount,this.speed));
+            // console.log("Birth at age of "+this.age);
+            this.objects.push(new Kinematic2DObject(this.x, this.y, this.objects, this.objects.length,
+                this.segmentSize, this.segmentCount, this.speed));
         }
         // this.root.follow(this.target.x,this.target.y);
-
-        stroke(round(this.maxAge- this.age),0,0,round(this.maxAge- this.age));
+        let predSize = this.isPredator ? 5 : 1;
+        if (this.colorType == 1) {
+            stroke(round(this.maxAge - this.age), 255, 0, round(this.maxAge - this.age));
+        } else if (this.colorType == 2) {
+            stroke(0, 0, round(this.maxAge - this.age), round(this.maxAge - this.age));
+        } else {
+            stroke(0, round(this.maxAge - this.age), 0, round(this.maxAge - this.age));
+        }
         this.root.update();
         this.root.show();
         let next = this.root.parent;
         let size = 5;
         while (next != null) {
             size = 30 * next.index / 100;
-            strokeWeight(size);
+            strokeWeight(size * predSize);
             next.followChild();
             next.update();
             next.show();
             next = next.parent;
         }
-        if (this.age >=this.maxAge) {
+        if (this.age >= this.maxAge) {
             //dead
             if (this.objects) {
                 this.objects.splice(this.objects.indexOf(a => a.index == this.index), 1);
