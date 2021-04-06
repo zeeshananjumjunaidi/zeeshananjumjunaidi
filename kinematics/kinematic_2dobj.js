@@ -60,7 +60,7 @@ class Kinematic2DObject {
         }
         // death equation, death rate = 0.006
         this.age += deltaTime * this.deathRate;
-        if (this.age < 300 && this.age > 100 && Math.random() >= 0.9999) {
+        if (this.age < 300 && this.age > 100 && Math.random() >= 0.999) {
             // reproduction // Asexual for now.
             // console.log("Birth at age of "+this.age);
             this.objects.push(new Kinematic2DObject(this.x, this.y, this.objects, this.objects.length,
