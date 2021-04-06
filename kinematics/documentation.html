@@ -10,6 +10,7 @@
     <!-- Font Awesome icons (free version)-->
     <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
     <script src="../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="../js/vendors/html2canvas.min.js" crossorigin="anonymous"></script>
 
     <!--Katex-->
     <link rel="stylesheet" href="../js/vendors/katex/katex.min.css" />
@@ -18,14 +19,6 @@
     <script src="../js/vendors/katex/auto-render.min.js"
     crossorigin="anonymous"></script>
     <script defer src="../js/vendors/katex/katex.min.js" crossorigin="anonymous"></script>
-    <style>
-        .rotationMatrix{
-            border: 1px solid white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px;
-        }
-        </style>
     <script type="text/javascript">
         $(document).ready(() => {
                  let rotationAroundX = `R_x(\\theta) = \\begin{bmatrix*}[r] 
@@ -51,14 +44,22 @@
             ${rotationAroundZ}`
       var slideshow = katex.render(data,document.getElementById('rotationMatrix'));
 
-//             function renderEq(q) {
-//                 katex.render(q, document.getElementById('rotationMatrix'), {
-//                     throwOnError: false
-//                 });
-//             }
-
-//             renderEq(eq1);
+      
         });
+        function copy(id) {
+            var c = document.getElementById(id);
+            html2canvas(c).then(canvas => {
+                document.body.appendChild(canvas);
+                
+                var image = new Image();
+                image.id = "zeeshan-anjum";
+                image.src = canvas.toDataURL();
+
+                image.height = canvas.clientHeight;
+                image.width = canvas.clientWidth;
+                window.open(image.src, 'zeeshan-anjum');
+            });
+        }
     </script>
 
     <link href="../style/styles.css" rel="stylesheet" />
@@ -86,6 +87,14 @@
         a {
             display: block;
         }
+        .math{
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px; width:90%;
+            background: #eee;
+            color: #333;
+        }
     </style>
 </head>
 
@@ -101,10 +110,10 @@
     <article>
         Normally we have Z axis pointing upward in kinematic problems.
         But in ThreeJS Y is the default up axis, we can achieve Z as up axis by setting camera up axis to Z, but
-        orbital control will not work as expected. so for now we have replaced the <b>Y</b> with <b>Z</b>.
+        orbital control will not work as expected. so for now we are using <b>Y</b> as up axis instead of <b>Z</b>.
     </article>
 
-    <p class="math" id="rotationMatrix">X=\begin{bmatrix} M_1 \\ \vdots \\ M_n \end{bmatrix}</p>
+    <p class="math" id="rotationMatrix" onclick="copy('rotationMatrix')">Loading...</p>
 
 
     <h3>DH Table</h3>
