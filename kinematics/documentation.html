@@ -36,10 +36,31 @@
                  sin(\\theta) & cos(\\theta) & 0\\newline
                  0 & 0 & 1
                  \\end{bmatrix*}`;
+            let configuration = `
+            Configuration \\newline
+            x = target's  x \\newline
+            y = target's  y \\newline \\newline
+            q_1 = atan2(\\dfrac{y}{x}) \\newline
+            \\sqrt{x^2 + y^2 + (z - L1 - b)^2} \\newline          	
+
+
+            q_2 = \\alpha - \\beta \\newline
+
+            \\alpha = atan2(\\frac{z-L1-b}{\\sqrt{x^2+y^2}}) \\newline
+            \\beta = atan2(\\frac{s_3L3}{L2+c_3L3}) \\newline
+            finally  \\newline
+      
+            \\color{#0000FF}\\bold  q_2 = atan2(\\frac{z-L1-b}{\\sqrt{x^2+y^2}})  - atan2(\\frac{s_3L3}{L2+c_3L3}) \\newline
+
+            \\bold  q_3 = \\pm cos^{-1} (\\dfrac{x^2+y^2+(z-L1-b)^2 - L2^2 - L3^2}{2L2L3})  \\newline
+
+
+            `;
             let data = ` Rotation Matrix \\newline
             ${rotationAroundX} \\newline
             ${rotationAroundY} \\newline
-            ${rotationAroundZ}`
+            ${rotationAroundZ} \\newline
+            ${configuration}   \\newline`
             var slideshow = katex.render(data, document.getElementById('rotationMatrix'));
         });
 
@@ -106,6 +127,7 @@
 
     <article>
         Reference:
+        <a href="https://www.rosroboticslearning.com/inverse-kinematics">Inverse Kinematics</a>
         <a href="https://automaticaddison.com/how-to-find-denavit-hartenberg-parameter-tables/">How to find Denavit
             Hartenberg Parameter Tables</a>
         <a
