@@ -10,30 +10,28 @@
     <!-- Font Awesome icons (free version)-->
     <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
     <script src="../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="../js/vendors/html2canvas.min.js" crossorigin="anonymous"></script>
 
     <!--Katex-->
     <link rel="stylesheet" href="../js/vendors/katex/katex.min.css" />
-    
+
     <!-- <script defer src="../js/vendors/katex/remark-latest.min.js" crossorigin="anonymous"></script> -->
-    <script src="../js/vendors/katex/auto-render.min.js"
-    crossorigin="anonymous"></script>
+    <script src="../js/vendors/katex/auto-render.min.js" crossorigin="anonymous"></script>
     <script defer src="../js/vendors/katex/katex.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $(document).ready(() => {
-                 let rotationAroundX = `R_x(\\theta) = \\begin{bmatrix*}[r] 
+            let rotationAroundX = `R_x(\\theta) = \\begin{bmatrix*}[r] 
                  1 & 0 & 0 \\newline
                  0 & cis(\\theta) & -sin(\\theta)\\newline
                  0 & sin(\\theta) & cos(\\theta)
                  \\end{bmatrix*}`;
-                 
-                 let rotationAroundY = `R_y(\\theta) = \\begin{bmatrix*}[r] 
+
+            let rotationAroundY = `R_y(\\theta) = \\begin{bmatrix*}[r] 
                  cos(\\theta) & 0 & sin(\\theta) \\newline
                  0 & 1 & 0\\newline
                  -sin(\\theta) & 0 & cos(\\theta)
                  \\end{bmatrix*}`;
-                 
-                 let rotationAroundZ = `R_z(\\theta) = \\begin{bmatrix*}[r] 
+
+            let rotationAroundZ = `R_z(\\theta) = \\begin{bmatrix*}[r] 
                  cos(\\theta) & -sin(\\theta) & 0 \\newline
                  sin(\\theta) & cos(\\theta) & 0\\newline
                  0 & 0 & 1
@@ -42,24 +40,9 @@
             ${rotationAroundX} \\newline
             ${rotationAroundY} \\newline
             ${rotationAroundZ}`
-      var slideshow = katex.render(data,document.getElementById('rotationMatrix'));
-
-      
+            var slideshow = katex.render(data, document.getElementById('rotationMatrix'));
         });
-        function copy(id) {
-            var c = document.getElementById(id);
-            html2canvas(c).then(canvas => {
-                document.body.appendChild(canvas);
-                
-                var image = new Image();
-                image.id = "zeeshan-anjum";
-                image.src = canvas.toDataURL();
 
-                image.height = canvas.clientHeight;
-                image.width = canvas.clientWidth;
-                window.open(image.src, 'zeeshan-anjum');
-            });
-        }
     </script>
 
     <link href="../style/styles.css" rel="stylesheet" />
@@ -87,11 +70,13 @@
         a {
             display: block;
         }
-        .math{
+
+        .math {
             border: 1px solid #333;
             padding: 20px;
             border-radius: 10px;
-            margin: 20px; width:90%;
+            margin: 20px;
+            width: 90%;
             background: #eee;
             color: #333;
         }
@@ -113,7 +98,7 @@
         orbital control will not work as expected. so for now we are using <b>Y</b> as up axis instead of <b>Z</b>.
     </article>
 
-    <p class="math" id="rotationMatrix" onclick="copy('rotationMatrix')">Loading...</p>
+    <p class="math" id="rotationMatrix">Loading...</p>
 
 
     <h3>DH Table</h3>
