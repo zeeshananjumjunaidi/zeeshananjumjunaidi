@@ -11,7 +11,7 @@ function setup(){
     rectMode(CENTER);
     imageMode(CENTER);
     angleMode(DEGREES);
-    roboticHand= new Kinematic2DObject(random(0,width),random(0,height),null,1,5,5);
+    roboticHand= new Kinematic2DObject(random(0,width),random(0,height),1,200,3);
     
 }
 
@@ -22,7 +22,7 @@ function draw(){
     background('#EEEEEE');
     // background(0)
     push();
-    roboticHand.follow();
+    // roboticHand.follow();
     roboticHand.update();
     // for(let i=0;i<agents.length;i++){
     //     let agent = agents[i];
