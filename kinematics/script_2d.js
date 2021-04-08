@@ -13,7 +13,7 @@ function setup(){
     imageMode(CENTER);
     angleMode(DEGREES);
 
-    roboticHand= new Kinematic2DObject(random(0,width),random(0,height),1,100,4);
+    roboticHand= new Kinematic2DObject(random(0,width),random(0,height),1,150,3);
     
 }
 

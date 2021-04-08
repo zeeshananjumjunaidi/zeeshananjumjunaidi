@@ -35,8 +35,7 @@ class Segment {
     follow(fx, fy) {
 
         let target = new p5.Vector(fx, fy);
-        let dir = p5.Vector.sub(target, this.a);
-        
+        let dir = p5.Vector.sub(target, this.a);        
         this.angle = dir.heading();
         dir.setMag(this.len);
         dir.mult(-1);
