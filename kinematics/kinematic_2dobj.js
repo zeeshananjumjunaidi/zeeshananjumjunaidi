@@ -10,6 +10,7 @@ class Kinematic2DObject {
         this.segments.push(Segment.createRootInstance(300,300,Math.PI/2,segmentSize,-1));
         for(let i=1;i<segmentCount;i++){
             this.segments.push(Segment.createSegment(Math.PI,segmentSize,i));
+
         }
         this.target = new p5.Vector();
     }

@@ -12,6 +12,11 @@ class Segment {
     }
     constructor(x, y, _angle, len_, index) {
       //  this.parent = null;
+      
+        this.link_img = loadImage('link_2d.png');
+        this.joint_img = loadImage('joint_2d.png');
+        
+        this.link_img.resize(len_/2, len_);
         this.a = new p5.Vector(x, y);
         this.angle = _angle;
         this.len = len_;
@@ -54,6 +59,25 @@ class Segment {
         strokeWeight(1)
         circle(this.a.x,this.a.y,20);
         line(this.a.x, this.a.y, this.b.x, this.b.y);
+       // let angle = Math.atan2(this.b.y-this.a.y,this.b.x-this.a.x);
+        let angle = Math.atan2(this.b.y-this.a.y,this.b.x-this.a.x);
+        // find center point of a & b
+        let cx = (this.a.x+this.b.x)/2;
+        let cy = (this.a.y+this.b.y)/2;
+        push();      
+        translate(cx,cy);
+        scale(0.5);
+        rotate(angle*180/Math.PI-90);  
+        image(this.link_img,0,0,this.len/3,2*this.len);
+        pop();
+        translate(this.a.x,this.a.y);
+        scale(0.5);
+        rotate(angle*180/Math.PI-90);  
+        image(this.joint_img,0,0);
+        pop();
+        push();
+
+     
         this.showDebug();
     }
     showDebug(){

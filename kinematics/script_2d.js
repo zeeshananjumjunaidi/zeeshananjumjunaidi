@@ -6,12 +6,14 @@ var roboticHand;
 function setup(){    
     width = window.innerWidth;
     height = window.innerHeight;
-    createCanvas(width,height);
     
+    createCanvas(width,height);
+        
     rectMode(CENTER);
     imageMode(CENTER);
     angleMode(DEGREES);
-    roboticHand= new Kinematic2DObject(random(0,width),random(0,height),1,200,3);
+
+    roboticHand= new Kinematic2DObject(random(0,width),random(0,height),1,100,4);
     
 }
 
