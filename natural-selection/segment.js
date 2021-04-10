@@ -22,10 +22,11 @@ class Segment {
     }
 
     followChild() {
+        if(this.child){
         let tX = this.child.a.x;
         let tY = this.child.a.y;
         
-        this.follow(tX, tY);
+        this.follow(tX, tY);}
     }
     follow(fx, fy) {
 
@@ -50,8 +51,10 @@ class Segment {
         this.calculateB();
     }
     show() {
-      if(this.a&&this.b)
+        
         line(this.a.x, this.a.y, this.b.x, this.b.y);
+        // if(!this.a.x){console.log(this.a)}
+        // if(!this.b.x){console.log(this.b)}
      //   fill(255,0,0);
        // strokeWeight(1);
      //   circle(this.a.x, this.a.y, 10);
