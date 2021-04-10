@@ -19,6 +19,7 @@ function setup(){
       for(let i=0;i<10;i++){
         let predator =new Kinematic2DObject(random(0,width),random(0,height),predators,i,5,5,5,true);
         predators.push(predator);
+        predators[i].addPrey(agents);
     } 
 
 }

@@ -50,7 +50,7 @@ class Segment {
         this.calculateB();
     }
     show() {
-      
+      if(this.a&&this.b)
         line(this.a.x, this.a.y, this.b.x, this.b.y);
      //   fill(255,0,0);
        // strokeWeight(1);

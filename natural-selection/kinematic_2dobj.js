@@ -14,22 +14,62 @@ class Kinematic2DObject {
             current.child = st;
             current = st;
         }
+        this.dying = false;
         this.root = current;
         this.root.a.x = x;
         this.root.a.y = y;
         this.target = new p5.Vector(random(0, width), random(0, height));
         this.food = 1;
         this.age = 0;//random(255, 500);
-        this.maxAge = round(random(200, 255));
+        this.maxAge = round(random(2100, 2155));
         this.deathRate = random(0.006, 0.06);
         this.colorType = random() > 0.5 ? 1 : random() > 0.4 ? 2 : 0;
+        this.preys = [];
     }
+    q = false;
     autoFollow() {
+        // find the nearest target
+        let nearestPrey = null;
+        if (this.preys.length > 0) {
+            nearestPrey = this.preys[0];
+            for (let i = 1; i < this.preys.length; i++) {
+                let p = this.preys[i];
+                if (this.q == false) {
+                    this.q = true;
+                    console.log(p);
+                }
+                if (dist(nearestPrey.root.a.x, nearestPrey.root.a.y, this.root.a.x, this.root.a.y) >
+                    dist(this.root.a.x, this.root.a.y, p.root.a.x, p.root.a.y)
+                ) {
+                    // eat prey       
+                    nearestPrey = p;
+                }
+            }
+            this.target = new p5.Vector(nearestPrey.root.a.x, nearestPrey.root.a.y);
+        }
+
+
+
         if (dist(this.target.x, this.target.y, this.root.a.x, this.root.a.y) < 1) {
+            if (nearestPrey) {
+                nearestPrey.kill();
+
+            }
             this.target.x = random(0, width);
             this.target.y = random(0, height);
 
         }
+    }
+    kill() {
+        if (this.dying == false) {
+            this.dying = true;
+            setTimeout(() => {
+                this.objects.splice(this.objects.indexOf(a => this.index == a.index), 1);
+            }, 2000);
+        }
+    }
+    addPrey(preys) {
+        this.preys = preys;
     }
     follow(x, y) {
         this.target.x = x;
@@ -41,7 +81,7 @@ class Kinematic2DObject {
             // this.target.x,this.target.y);
             // life goal
             fill(0);
-            circle(this.target.x, this.target.y, 3 * this.food);
+            //  circle(this.target.x, this.target.y, 3 * this.food);
 
             let r = atan2(this.root.a.y - this.target.y, this.root.a.x - this.target.x);
 
@@ -51,8 +91,10 @@ class Kinematic2DObject {
 
             this.root.follow(d.x, d.y);
         } else {
+            
+            if(!this.dying){
             this.target.x = random(0, width);
-            this.target.y = random(0, height);
+            this.target.y = random(0, height);}
             this.achieveLifeGoal = true;
             if (this.food < 3)
                 this.food += 1;
@@ -68,12 +110,16 @@ class Kinematic2DObject {
         }
         // this.root.follow(this.target.x,this.target.y);
         let predSize = this.isPredator ? 5 : 1;
-        if (this.colorType == 1) {
-            stroke(round(this.maxAge - this.age), 255, 0, round(this.maxAge - this.age));
-        } else if (this.colorType == 2) {
-            stroke(0, 0, round(this.maxAge - this.age), round(this.maxAge - this.age));
+        if (this.dying) {
+            stroke(255, 0, 0);
         } else {
-            stroke(0, round(this.maxAge - this.age), 0, round(this.maxAge - this.age));
+            if (this.colorType == 1) {
+                stroke(round(this.maxAge - this.age), 255, 0, round(this.maxAge - this.age));
+            } else if (this.colorType == 2) {
+                stroke(0, 0, round(this.maxAge - this.age), round(this.maxAge - this.age));
+            } else {
+                stroke(0, round(this.maxAge - this.age), 0, round(this.maxAge - this.age));
+            }
         }
         this.root.update();
         this.root.show();
