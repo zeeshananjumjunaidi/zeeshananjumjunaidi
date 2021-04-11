@@ -32,7 +32,7 @@ class Kinematic2DObject {
         if (this.preys.length > 0) {
             nearestPrey = this.preys[0];
             for (let i = 1; i < this.preys.length; i++) {
-                let p = this.preys[i];     
+                let p = this.preys[i];
                 if (dist(nearestPrey.root.a.x, nearestPrey.root.a.y, this.root.a.x, this.root.a.y) >
                     dist(this.root.a.x, this.root.a.y, p.root.a.x, p.root.a.y)
                 ) {
@@ -58,7 +58,7 @@ class Kinematic2DObject {
         if (this.dying == false) {
             this.dying = true;
             this.objects.splice(this.objects.indexOf(a => a.index == this.index), 1);
-            this.age=0;
+            this.age = 0;
             // setTimeout(async() => {
             //     console.log('dying',this.index);
             //     this.objects.splice(this.objects.indexOf(a => a.index == this.index), 1);
@@ -89,10 +89,11 @@ class Kinematic2DObject {
 
             this.root.follow(d.x, d.y);
         } else {
-            
-            if(!this.dying){
-            this.target.x = random(0, width);
-            this.target.y = random(0, height);}
+
+            if (!this.dying) {
+                this.target.x = random(0, width);
+                this.target.y = random(0, height);
+            }
             this.achieveLifeGoal = true;
             if (this.food < 3)
                 this.food += 1;
