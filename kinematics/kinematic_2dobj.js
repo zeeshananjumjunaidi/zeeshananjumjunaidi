@@ -25,12 +25,10 @@ class Kinematic2DObject {
         let end = this.segments[total-1];
         end.follow(mouseX,mouseY);
         end.update();
-       // end.show();
         for (let i=total-2;i>=0;i--){
             let next = this.segments[i];
             next.followChild(this.segments[i+1]);
             next.update();
-          //  next.show();
         }
         this.segments[0].setA(this.base);
         for(let i=1;i<this.segmentCount;i++){
@@ -53,10 +51,6 @@ class Kinematic2DObject {
             eeBx,height-50);
         line(0,this.segments[this.segmentCount-1].b.y,eeBx,
             eeBy);
-        // arc(width/2,height-50,vc.mag()*2,vc.mag()*2,-180,0);
-
         arc(width/2,height-50,vc.mag()*2,vc.mag()*2,-180,180+angle*180/Math.PI);
-
-
     }
 }

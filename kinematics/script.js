@@ -46,7 +46,6 @@ $(document).ready(() => {
     const circle = new THREE.Mesh(geometry, material);
     circle.receiveShadow = true;
     circle.rotation.x = -Math.PI / 2;
-    // circle.scale.set(4,4,4);
     scene.add(circle);
 
     camera.rotation.x = 0;
@@ -71,8 +70,7 @@ $(document).ready(() => {
     scene.add(light);
     var lightH = new THREE.HemisphereLight(0x404040, 0xffffff, 5.5);
     scene.add(lightH);
-    // addText(scene);
-
+    
     // Add robotic arm
     loadRoboticArm(scene);
     const animate = function (now) {
