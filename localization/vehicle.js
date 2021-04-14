@@ -3,7 +3,7 @@
  * @email [zeeshananjumjunaidi@gmail.com]
  * @create date 2020-11-02 05:24:30
  * @modify date 2020-11-28 11:41:19
- * @desc [Dubin vehicle class]
+ * @desc [vehicle class]
  */
 
 
@@ -34,6 +34,14 @@ class Vehicle {
         this.image = loadImage("car2.png");
 
         this.mCircleDistance = this.turningRadius * 2;
+
+        // GPS measurement uncertainty [x [m], y [m], theta [rad]]
+        this.sigma_pos=[0.3,0.3,0.01];
+        // Landmark measurement uncertainty [x [m], y [m]]
+        this.sigma_landmark =[0.3,0.3];
+        this.pf = new ParticleFilter(new p5.Vector(),0,50);
+
+    
     }
     setEnvironment(environment) {
         this.environment = environment;
@@ -63,6 +71,20 @@ class Vehicle {
         this.heading += (this.steerAngle * this.constantVelocity) / radius;
         this.position.x += this.constantVelocity * Math.cos(this.heading);
         this.position.y += this.constantVelocity * Math.sin(this.heading);
+    
+        if(!this.pf.initialized()){
+            // sense x,y
+            this.pf.init(this.position,this.heading,this.sigma_pos);
+        }else{
+            // Predict the vehicle's next state from previous (noiseless control) data.
+            let previous_velocity =this.constantVelocity;// new p5.Vector(0,0);//Velocity;
+            let previous_yawrate = 0.0 // Yaw Rate;
+
+            this.pf.prediction(deltaTime, sigma_pos, previous_velocity, previous_yawrate);
+        }
+        
+        // receive noisy observation data from the simulator
+        noisy_observations = 0;
     }
 
     // Drawing

@@ -15,6 +15,8 @@ var particleSamples = [];
 var weights = [];
 var NUMBER_OF_PARTICLES = 500;
 var EPS = 0.001;
+
+
 function setup() {
     canvasWidth = round(window.innerWidth);
     canvasHeight = round(window.innerHeight);

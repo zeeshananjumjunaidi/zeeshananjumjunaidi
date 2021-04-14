@@ -1,5 +1,6 @@
 
 /*
+Reference: https://github.com/zeeshananjumjunaidi/ParticleFilter/blob/master/src/main.cpp
 A particle filter is a non-parametric implementation of the Bayes filter
 and is often used to estimate the state of dynamical systems. 
 Estimation of non-Gaussian, nonlinear processes.
@@ -53,7 +54,6 @@ class ParticleFilter {
         this.no_of_particles = no_of_particles;
         this.weights = [];
         this.is_initialized = false;
-        this.step();
     }
     /**
      * init Initializes particle filter by initializing particles to Gaussian
