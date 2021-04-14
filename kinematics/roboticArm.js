@@ -201,21 +201,7 @@ class RoboticArm {
             this.endEffectorLen *Math.sin(this.arm2.rotation.x+this.arm3.rotation.x+this.arm4.rotation.x+this.endEffector.rotation.x);
             this.target.position.x=x;
             this.target.position.y=y;
-            // console.log(`${x},${y}`);
-        }
-            // console.log("reachable");
-            // Formula
-            /*
-            Pi = Pi-1 + rotate(Di,Pi-1,SumOf(Ak, where k=0 to i-1))
-            */
-            // if (this.poses)
-            //     for (let i = 0; i < this.poses.length; i++) {
-            //         let p = this.poses[i];
-            //         break;
-            //     }
-    //    } else {
-            // console.log("unreachable");
-  //      }
+        }        
     }
 
     distanceToTarget() {
