@@ -52,7 +52,12 @@ class ParticleFilter {
         this.position = position;
         this.orientation = orientation;
         this.no_of_particles = no_of_particles;
+
         this.weights = [];
+        
+        for(let i=0;i<this.no_of_particles;i++){
+            this.weights.push(random());
+        }
         this.is_initialized = false;
     }
     /**
@@ -133,4 +138,10 @@ class ParticleFilter {
     getAssociations(best) { }
     getSenseX(best) { }
     getSenseY(best) { }
+    draw(){
+        push();
+        for(let i=0;i<this.no_of_particles;i++){
+        }
+        pop();
+    }
 }
