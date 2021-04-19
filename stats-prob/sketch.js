@@ -3,7 +3,7 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
 let data = [];
-let classes = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let classes = [];
 let sum = 0;
 let mean = 0;
 let variance = 0;
@@ -15,15 +15,20 @@ function setup() {
     rectMode(CENTER);
     console.log("Stats");
     sum = 0;
+    for(let i=0;i<100;i++){
+        classes.push(i);
+    }
     for (let i = -round(width / 2); i < round(width / 2); i++) {
-        let v = classes[round(random() * (classes.length - 1))] * 10000;
+        let v = -classes[round(random() * (classes.length - 1))];
         data.push(v);
         sum += v;
     }
+    // sorting the data
+     data.sort((a,b)=>{return a-b;});
     mean = sum / data.length;
     variance = 0;
     for (let i = 0; i < data.length; i++) {
-        variance += Math.pow(data[i] - mean, 2) / data.length - 1;
+        variance += (Math.pow(data[i] - mean, 2) / (data.length - 1));
     }
     std = Math.sqrt(Math.abs(variance));
 }
@@ -41,14 +46,15 @@ function draw() {
     for (let i = -round(width / 2); i < round(width / 2); i++) {
         if (j >= data.length) break;
         j++;
-        let g = getGaussianValue(data[j]);
-        circle(i, g, 2);
+        let v = data[j];
+        let g = getGaussianValue(v);
+        circle(i, -g*10000, 2);
         // text(data[j],data[j]*10,0);
         // if(j>15)
         // break;
     }
     pop();
 }
-function getGaussianValue(v) {
-    return (1 / (std * sqrt2PI)) * Math.exp(-0.5 * (Math.pow((v - mean) / std, 2)));
+function getGaussianValue(x) {
+    return (1/ (std * sqrt2PI) * Math.exp(-Math.pow(x-mean,2)/ (2*variance) ) );
 }
