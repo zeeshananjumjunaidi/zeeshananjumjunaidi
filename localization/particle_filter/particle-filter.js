@@ -57,7 +57,8 @@ class ParticleFilter {
         
         for(let i=0;i<this.no_of_particles;i++){
             this.weights.push(random());
-            this.particles.push(new Particle(random()*window.innerWidth,random()*window.innerHeight,random()*Math.PI));
+            let xy=this.getRandomPosition();
+            this.particles.push(new Particle(xy.x,xy.y,random()*Math.PI));
         }
         this.map_landmarks=[];
         for(let i=0;i<15;i++){
