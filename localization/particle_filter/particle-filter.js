@@ -52,13 +52,24 @@ class ParticleFilter {
         this.position = position;
         this.orientation = orientation;
         this.no_of_particles = no_of_particles;
-
+        this.particles =[];//(0,0,0);
         this.weights = [];
         
         for(let i=0;i<this.no_of_particles;i++){
             this.weights.push(random());
+            this.particles.push(new Particle(random()*window.innerWidth,random()*window.innerHeight,random()*Math.PI));
         }
-        this.is_initialized = false;
+        this.map_landmarks=[];
+        for(let i=0;i<15;i++){
+            let xy = this.getRandomPosition();
+            this.map_landmarks.push(new Landmark(xy.x,xy.y,i));
+        }
+        this.is_initialized = true;
+    }
+    getRandomPosition(){
+        let x = random()>0.5?random()*-window.innerWidth/2:random()*window.innerWidth/2;
+        let y = random()>0.5?random()*-window.innerHeight/2:random()*window.innerHeight/2;
+        return new p5.Vector(x,y);
     }
     /**
      * init Initializes particle filter by initializing particles to Gaussian
@@ -139,8 +150,16 @@ class ParticleFilter {
     getSenseX(best) { }
     getSenseY(best) { }
     draw(){
+        fill(0)
+        // circle(130,110,50);
         push();
         for(let i=0;i<this.no_of_particles;i++){
+            let p =this.particles[i];
+            if(p&&p.pos)
+            circle(round(p.pos.x),round(p.pos.y),4);
+        }
+        for(let i=0;i<this.map_landmarks.length;i++){
+            this.map_landmarks[i].draw();
         }
         pop();
     }

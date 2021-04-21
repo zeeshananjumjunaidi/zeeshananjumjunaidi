@@ -80,7 +80,7 @@ class Vehicle {
             let previous_velocity =this.constantVelocity;// new p5.Vector(0,0);//Velocity;
             let previous_yawrate = 0.0 // Yaw Rate;
 
-            this.pf.prediction(deltaTime, sigma_pos, previous_velocity, previous_yawrate);
+            this.pf.prediction(deltaTime, this.sigma_pos, previous_velocity, previous_yawrate);
             this.pf.draw();
         }
         
