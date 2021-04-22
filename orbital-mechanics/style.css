@@ -1,0 +1,8 @@
+#orbital-controller{
+    background: #0000006b;
+    position: absolute;
+    width:40vw;
+    height:20vh;
+    color:lime;
+    border:0.5px solid gray;
+}

@@ -63,29 +63,8 @@ $(document).ready(() => {
     light.shadow.mapSize.height = 512; // default
     light.shadow.camera.near = 0.5; // default
     light.shadow.camera.far = 500; // default
-    // light.shadow.camera.rotation.x=90;
-    // light.shadow.camera.rotation.y=90;
-    // light.shadow.camera.rotation.z=180;
-    // let earthText = new THREE.TextSprite({
-    //     alignment: 'left',
-    //     color: '#fff',
-    //     fontFamily: '"Times New Roman", Times, serif',
-    //     fontSize: 0.7,
-    //     fontStyle: 'italic',
-    //     text: 'Earth'
-    // });
-    // scene.add(earthText);
-    // let moonText = new THREE.TextSprite({
-    //     alignment: 'left',
-    //     color: '#fff',
-    //     fontFamily: '"Times New Roman", Times, serif',
-    //     fontSize: 0.3,
-    //     fontStyle: 'italic',
-    //     text: 'Moon'
-    // });
-    // moonText.text = "Moon";
-    // scene.add(moonText);
-
+  
+    addOrbit(scene);
     const geometry = new THREE.SphereGeometry(1, 32, 16);
 
     const earthDayTexture = loader.load("../assets/img/earth-day.jpg");
@@ -235,4 +214,26 @@ function latlonToSphericalProjection(lat,lon,alt){
     let y = Math.sin(lat) * Math.sin(lon) * alt ;//* 180/Math.PI;
     let z = Math.cos(lat) * alt ;//* 180/Math.PI;// z is 'up'
     return new THREE.Vector3(x,y,z);
+}
+
+const knockData = {
+    
+}
+// https://en.wikipedia.org/wiki/Orbit_equation
+function addOrbit(scene){
+    const curve = new THREE.EllipseCurve(
+        0,  0,            // ax, aY
+        4, 4,           // xRadius, yRadius
+        0,  2 * Math.PI,  // aStartAngle, aEndAngle
+        false,            // aClockwise
+        0                 // aRotation
+    );    
+    const points = curve.getPoints( 50 );
+    const geometry = new THREE.BufferGeometry().setFromPoints( points );
+    
+    const material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+    
+    // Create the final object to add to the scene
+    const ellipse = new THREE.Line( geometry, material );
+    scene.add(ellipse);
 }
