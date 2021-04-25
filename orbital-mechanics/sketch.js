@@ -64,7 +64,16 @@ $(document).ready(() => {
     light.shadow.camera.near = 0.5; // default
     light.shadow.camera.far = 500; // default
   
-    addOrbit(scene);
+    let orbitPointsGeom = addOrbit(scene);
+    let orbitPoints=orbitPointsGeom[0];
+    let geom=orbitPointsGeom[1];
+
+    for(let i=0;i<orbitPoints.length;i++){
+        orbitPoints[i].x=0;
+        orbitPoints[i].y=0;
+    }
+    geom.updateMatrix();
+    console.log(geom);
     const geometry = new THREE.SphereGeometry(1, 32, 16);
 
     const earthDayTexture = loader.load("../assets/img/earth-day.jpg");
@@ -230,10 +239,10 @@ function addOrbit(scene){
     );    
     const points = curve.getPoints( 50 );
     const geometry = new THREE.BufferGeometry().setFromPoints( points );
-    
     const material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
     
     // Create the final object to add to the scene
     const ellipse = new THREE.Line( geometry, material );
     scene.add(ellipse);
+    return [points,ellipse];
 }
