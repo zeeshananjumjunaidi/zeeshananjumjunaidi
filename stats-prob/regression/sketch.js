@@ -10,6 +10,9 @@ class Line{
         this.x1=a;this.y1=b;
         this.x2=c;this.y2=d;
     }
+    udpateRegressionCoeff(){
+        // yi =f(x,B) + ei
+    }
 }
 let width2 = width / 2;
 let height2 = height / 2;
