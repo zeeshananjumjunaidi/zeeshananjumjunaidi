@@ -31,8 +31,10 @@ function setup() {
         }
     }
     regressionLine = new Line(-width2,-height2,width2,height2);
-    console.log(calculateLR());
-}
+    LRModel = calculateLR();
+    console.log(LRModel);
+
+}var LRModel;
 function draw() {
     background(255);
     strokeWeight(1);
@@ -45,6 +47,15 @@ function draw() {
     }
     drawRegressionLine();
     drawError();
+    if(LRModel){
+        // y = (x * LRModel.slope) + LRModel.intercept
+        let x = 1
+        let y=  (x * LRModel.slope) + LRModel.intercept;
+        let x1 = 200
+        let y1=  (x1 * LRModel.slope) + LRModel.intercept;
+        circle(x,y,15);
+        circle(x1,y1,15);
+    }
 }
 function calculateLR(){
         var model = {};
