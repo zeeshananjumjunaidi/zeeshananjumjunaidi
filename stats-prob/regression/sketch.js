@@ -49,14 +49,16 @@ function draw() {
     drawError();
     if(LRModel){
         // y = (x * LRModel.slope) + LRModel.intercept
-        let x = 1
+        let x = 1;
         let y=  (x * LRModel.slope) + LRModel.intercept;
-        let x1 = 200
+        let x1 = 200;
         let y1=  (x1 * LRModel.slope) + LRModel.intercept;
         circle(x,y,15);
         circle(x1,y1,15);
     }
 }
+
+// Reference: https://dracoblue.net/dev/linear-least-squares-in-javascript/
 function calculateLR(){
         var model = {};
         var n = data.length;
