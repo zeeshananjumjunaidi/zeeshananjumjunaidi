@@ -3,7 +3,7 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
 const divider = 40;
-const PARTICLE_COUNT = 200;
+const PARTICLE_COUNT = 2;
 let data = [];
 class Line{
     constructor(a,b,c,d){
@@ -31,6 +31,7 @@ function setup() {
         }
     }
     regressionLine = new Line(-width2,-height2,width2,height2);
+    console.log(calculateLR());
 }
 function draw() {
     background(255);
@@ -44,9 +45,32 @@ function draw() {
     }
     drawRegressionLine();
     drawError();
-    calculateSE
 }
+function calculateLR(){
+        var model = {};
+        var n = data.length;
+        var sumX = 0;
+        var sumY = 0;
+        var sumXy = 0;
+        var sumXx = 0;
+        var sumYy = 0;
 
+        for (let i = 0; i < n; i++) {
+            let x = data[i][0];
+            let y = data[i][1];
+            sumX += x;
+            sumY += y;
+            sumXy += (x*y);
+            sumXx += (x*x);
+            sumYy += (y*y);
+        } 
+
+        model['slope'] = (n * sumXy - sumX * sumY) / (n*sumXx - sumX * sumX);
+        model['intercept'] = (sumY - model.slope * sumX)/n;
+        model['r2'] = Math.pow((n*sumXy - sumX*sumY)/Math.sqrt((n*sumXx-sumX*sumX)*(n*sumYy-sumY*sumY)),2);
+
+        return model;
+}
 function drawRegressionLine(){
     stroke(255,0,0);
     line(regressionLine.x1,regressionLine.y1,regressionLine.x2,regressionLine.y2);
