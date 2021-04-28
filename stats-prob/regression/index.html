@@ -9,11 +9,28 @@
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <!-- Font Awesome icons (free version)-->
     <script src="../../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
-    
+
     <script src="../../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
     <script src="../../js/vendors/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="../../js/vendors/p5.js" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="../../js/vendors/katex/katex.min.css" />
+    <script defer src="../../js/vendors/katex/katex.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            let regressionEq = `Y_i = f(X_i,\\beta)+e_i \\newline
+           \\bold Y_i = dependent\\ variable \\newline
+           \\bold f = function\\ newline
+           \\bold  X_i = independent\\ variable \\newline
+           \\bold \\beta  = unknown\\ parameter \\newline
+            \\bold  e_i = error\\ term \\newline
+            `;
 
+            let data = ` Linear Equation \\newline ${regressionEq} \\newline`;
+
+            var slideshow = katex.render(data, document.getElementById('regressionUI'));
+        });
+    </script>
     <script src="sketch.js"></script>
 
     <link href="../../style/styles.css" rel="stylesheet" />
@@ -24,13 +41,22 @@
             outline: none;
             color: #2e3d49;
         }
+        #regressionUI{
+            position: absolute;
+            left:10%;
+            top:10px;
+        }
+        #regressionUI * {
+            background-color: none;
+            color: #333;
+        }
     </style>
     <title>Regression</title>
 
 </head>
 
 <body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
-
+    <div id="regressionUI"></div>
 </body>
 
 </html>

@@ -3,7 +3,7 @@
 const width = window.innerWidth;
 const height = window.innerHeight;
 const divider = 40;
-const PARTICLE_COUNT = 5;
+const PARTICLE_COUNT = 1;
 let data = [];
 class Line{
     constructor(a,b,c,d){
@@ -58,9 +58,11 @@ function draw() {
         let y1=LRModel[1][0];
         let x2=LRModel[0][endIndex];
         let y2=LRModel[1][endIndex];
-        let dFactor = Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
-        let dx = (x2-x1)/dFactor;
-        let dy = (y2-y1)/dFactor;
+
+        let m2 = (y2-y1)/(x2-x1);
+      //  let dFactor = Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
+        let dx = (x2-x1);///dFactor;
+        let dy = (y2-y1);//dFactor;
         let xn1 = -dx*width/2;
         let yn1 = -dy*height/2;
         let xn2 = dx*width/2;
@@ -72,7 +74,7 @@ function draw() {
         // regressionLine.y2=yn2;
         stroke(255,0,255);
         strokeWeight(3)
-        line(xn1,yn1,xn2,yn2);
+        line(x1+xn1,y1+yn1,x2+xn2,y2+yn2);
     
     }
 }
