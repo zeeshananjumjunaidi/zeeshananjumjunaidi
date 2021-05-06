@@ -26,9 +26,9 @@ class Vehicle {
         this.tPosition = createVector(tx, ty);
         this.tHeading = th;
         //Constant
-        this.carWidth = 40;
-        this.carHeight = 30;
-        this.turningRadius = 100;
+        this.carWidth = 80;
+        this.carHeight = 60;
+        this.turningRadius = 200;
         this.turningRadiusRadian = radians(this.turningRadius) * Math.PI * 2;
 
         this.image = loadImage("car2.png");
@@ -39,7 +39,7 @@ class Vehicle {
         this.sigma_pos=[0.3,0.3,0.01];
         // Landmark measurement uncertainty [x [m], y [m]]
         this.sigma_landmark =[0.3,0.3];
-        this.pf = new ParticleFilter(new p5.Vector(),0,50);
+       // this.pf = new ParticleFilter(new p5.Vector(),0,50);
 
     
     }
@@ -72,17 +72,17 @@ class Vehicle {
         this.position.x += this.constantVelocity * Math.cos(this.heading);
         this.position.y += this.constantVelocity * Math.sin(this.heading);
     
-        if(!this.pf.initialized()){
-            // sense x,y
-            this.pf.init(this.position,this.heading,this.sigma_pos);
-        }else{
-            // Predict the vehicle's next state from previous (noiseless control) data.
-            let previous_velocity =this.constantVelocity;// new p5.Vector(0,0);//Velocity;
-            let previous_yawrate = 0.0 // Yaw Rate;
+        // if(!this.pf.initialized()){
+        //     // sense x,y
+        //     this.pf.init(this.position,this.heading,this.sigma_pos);
+        // }else{
+        //     // Predict the vehicle's next state from previous (noiseless control) data.
+        //     let previous_velocity =this.constantVelocity;// new p5.Vector(0,0);//Velocity;
+        //     let previous_yawrate = 0.0 // Yaw Rate;
 
-            this.pf.prediction(deltaTime, this.sigma_pos, previous_velocity, previous_yawrate);
-            this.pf.draw();
-        }
+        //     this.pf.prediction(deltaTime, this.sigma_pos, previous_velocity, previous_yawrate);
+        //     this.pf.draw();
+        // }
         
         // receive noisy observation data from the simulator
        // noisy_observations = 0;
