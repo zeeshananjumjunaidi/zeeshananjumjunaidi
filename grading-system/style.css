@@ -1,0 +1,14 @@
+body{
+    background-color: #aaa;
+}
+table{
+    color: #eeeeee;
+//    background-color: #333;
+    /* border:1px solid gray; */
+}
+tr,th{
+    border-bottom: 1px solid gray;
+}
+tfoot, thead, tbody{
+    border-bottom: 3px solid gray;
+}
