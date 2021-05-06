@@ -73,7 +73,7 @@ function setup() {
 }
 function draw() {
     translate(width / 2, height / 2);
-    background(24);
+    background(244);
     color(255);
     drawBackground(canvasHalfWidth, canvasHalfHeight);
 

@@ -36,7 +36,7 @@ class VehicleDebugger {
     debugInfo() {
 
         noStroke();
-        fill(0, 255, 200, 150); // Draw Vehicle Properties
+        fill(0, 30, 50, 150); // Draw Vehicle Properties
         textSize(12);
         let drivingMode = this.vehicle.autoPilot ? 'Auto' : 'Manual';
         let dmTxt = `Driving Mode: ${drivingMode}`;
@@ -45,23 +45,23 @@ class VehicleDebugger {
 
         text('Vehicle 🚗', this.nextX, this.nextY - 5);
         textSize(9);
-        fill(255, 150);
+        fill(0, 150);
         text(`Position: ${this.vehicle.position.x.toFixed(2)}, ${this.vehicle.position.y.toFixed(2)}`, this.nextX, this.nextY + 10);
         text(`Heading: ${this.vehicle.heading.toFixed(2)}`, this.nextX, this.nextY + 20);
 
-        fill(255, 50, 50, 150);
+        fill(0, 50, 50, 150);
         textSize(12);
         let rightOffset = 150;
         text('Target 🚗', this.nextX + width - rightOffset, this.nextY - 5);
         textSize(9);
-        fill(255, 150);
+        fill(0, 150);
         text(`Position: ${this.vehicle.tPosition.x.toFixed(2)}, ${this.vehicle.tPosition.y.toFixed(2)}`, this.nextX + width - rightOffset, this.nextY + 10);
         text(`Heading: ${this.vehicle.tHeading.toFixed(2)}`, this.nextX + width - rightOffset, this.nextY + 20);
     }
 
     drawLRCircles(isLeft, isTarget) {
         noFill();
-        stroke(255, 50);
+        stroke(0, 50);
         drawCircle(this.vehicle.tLCircle, this.vehicle.turningRadius, undefined, true);
         drawCircle(this.vehicle.tRCircle, this.vehicle.turningRadius, undefined, true);
         drawCircle(this.vehicle.vLCircle, this.vehicle.turningRadius, undefined, true);
@@ -125,7 +125,7 @@ class VehicleDebugger {
             for (let i = 0; i < this.vehicle.pathDataList.length; i++) {
                 if (i == 0) { fill(255, 0, 0); }
                 else {
-                    fill(255, 150);
+                    fill(0, 150);
                 }
                 let path = this.vehicle.pathDataList[i];
                 let msg = '';
@@ -141,7 +141,7 @@ class VehicleDebugger {
     }
     drawDrivingPath() {
         if (this.vehicle.drivingPathCoordinates.length > 0) {
-            strokeWeight(1);
+            strokeWeight(2);
             noFill();
             let heading = 10;
             let pos = this.vehicle.position;
@@ -149,11 +149,11 @@ class VehicleDebugger {
             for (let i = 0; i < this.vehicle.drivingPathCoordinates.length; i++) {
                 let p = this.vehicle.drivingPathCoordinates[i];
                 if (p.segmentIndex == 1) {
-                    stroke(0, 255, 0, 50);
+                    stroke(0, 100, 0, 50);
                 } else if (p.segmentIndex == 2) {
-                    stroke(0, 255, 255, 50);
+                    stroke(0, 100, 100, 50);
                 } else {
-                    stroke(255, 255, 0, 50);
+                    stroke(100, 100, 0, 50);
                 }
                 if (i % 10 == 0 || i == this.vehicle.drivingPathCoordinates.length - 1 || i == 0) {
                     if (i == 0 && (!this.vehicle.alwaysSolve || this.vehicle.autoPilot)) { continue; }
