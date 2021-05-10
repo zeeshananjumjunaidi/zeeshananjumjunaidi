@@ -6,33 +6,33 @@ var width = 10;
 var height = 10;
 
 var vehicle;
-var leftVehicle,rightVehicle;
+var leftVehicle, rightVehicle;
 var parking;
-function setup(){
+function setup() {
     width = window.innerWidth;
     height = window.innerHeight;
-    createCanvas(width,height);
+    createCanvas(width, height);
     rectMode(CENTER);
     imageMode(CENTER);
     init();
 }
-function init(){
-    vehicle =new Vehicle(width/2,height/2,0,0,0,0);
+function init() {
+    vehicle = new Vehicle(width / 2 - 100, height / 2 - 100, 0, 0, 0, 0);
 
-    leftVehicle =new Vehicle(width/2-100,height/2,0,0,0,0);
-    rightVehicle =new Vehicle(width/2+100,height/2,0,0,0,0);
+    leftVehicle = new Vehicle(width / 2 - 100, height / 2, 0, 0, 0, 0);
+    rightVehicle = new Vehicle(width / 2 + 100, height / 2, 0, 0, 0, 0);
 
-    parking = new Parking(leftVehicle,rightVehicle,undefined,vehicle);
+    parking = new Parking(leftVehicle, rightVehicle, undefined, vehicle);
 }
 
 
-function draw(){
+function draw() {
     background(200);
-    if(vehicle){
-    vehicle.draw();
-    leftVehicle.draw();
-    rightVehicle.draw();
-    inputController();
+    if (vehicle) {
+        vehicle.draw();
+        leftVehicle.draw();
+        rightVehicle.draw();
+        inputController();
     }
     parking.draw();
 }
