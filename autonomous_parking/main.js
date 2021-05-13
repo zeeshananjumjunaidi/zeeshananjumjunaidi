@@ -28,13 +28,13 @@ function init() {
 
 function draw() {
     background(200);
+    parking.draw();
     if (vehicle) {
         vehicle.draw();
         leftVehicle.draw();
         rightVehicle.draw();
         inputController();
     }
-    parking.draw();
 }
 
 function inputController() {

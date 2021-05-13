@@ -5,10 +5,23 @@ class Parking {
         this.rVehicle = rVehicle;
         this.vehicle = vehicle;
         this.sideLine = sideLine;
+        this.centerPos = vehicle.position.copy();
     }
 
 
     draw() {
+        
+        fill(77);
+        rect(0, this.centerPos.y, width * 2, 300);
+        fill(33);
+        rect(0, this.centerPos.y, width * 2, 100);
+        // fill(200,200,20);
+        fill(200,200,200);
+        for(let i=0;i<width;i+=100){
+        rect(i, this.centerPos.y, 50, 10);
+
+        }
+
         // This points would be computed using 
         // computer vision, and sensor fusion.
         fill(255, 0, 0);
@@ -33,8 +46,11 @@ class Parking {
         noFill();
         circle(vP.x, vP.y, vehicle.turningRadius / 2);
         circle(vP.x, vP.y, vehicle.turningRadius / 1.8);
+        // line(0,this.centerPos.y-50,width,this.centerPos.y-50);
+        // line(0,this.centerPos.y+50,width,this.centerPos.y+50);
 
     }
+
     displayBoundingBox(points) {
         line(points[0].x, points[0].y, points[1].x, points[1].y);
         line(points[2].x, points[2].y, points[3].x, points[3].y);
@@ -42,6 +58,7 @@ class Parking {
         line(points[0].x, points[0].y, points[2].x, points[2].y);
         line(points[1].x, points[1].y, points[3].x, points[3].y);
     }
+
     boundingPoints(heading, vP, scaleFactor = 50) {
         let PI0_3 = Math.PI * 0.2;
         let points = [];
