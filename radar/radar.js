@@ -15,7 +15,9 @@ function setup(){
     createCanvas(width,height);
     mainColor = color(40,250,10);
     sector_radius=width*0.1;
-    targets.push(new Target(0,0,Math.PI/4,2));
+    for(let i=0;i<5;i++){
+    targets.push(new Target(i,random()*width,random()*height,random() * (Math.PI*2),2));
+    }
     detector = new Detector(this.targets,10);
 }
 
@@ -37,6 +39,7 @@ function draw(){
 function drawDetection(){
     noStroke();
     fill(50,0,255,100);
+    stroke(255)
     detector.detect();    
 }
 function drawTargets(){

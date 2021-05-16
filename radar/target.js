@@ -1,6 +1,7 @@
 
 class Target{
-    constructor(x,y,heading,speed=1,size=10){
+    constructor(id,x,y,heading,speed=1,size=10){
+        this.id=id;
         this._x=x;
         this._y=y;
         this.x=x;
