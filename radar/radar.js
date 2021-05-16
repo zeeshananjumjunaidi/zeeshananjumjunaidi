@@ -8,7 +8,7 @@ var radar={
     range:400
 }
 var targets=[];
-
+var detector;
 function setup(){
     width = window.innerWidth;
     height=window.innerHeight;
@@ -16,6 +16,7 @@ function setup(){
     mainColor = color(40,250,10);
     sector_radius=width*0.1;
     targets.push(new Target(0,0,Math.PI/4,2));
+    detector = new Detector(this.targets,10);
 }
 
 function draw(){
@@ -30,7 +31,13 @@ function draw(){
     drawScanner();
     pop();
     drawTargets();
+    drawDetection();
     if(radar.angle>2*Math.PI){radar.angle=0;}else{radar.angle+=0.001*deltaTime;}
+}
+function drawDetection(){
+    noStroke();
+    fill(50,0,255,100);
+    detector.detect();    
 }
 function drawTargets(){
     noStroke();
