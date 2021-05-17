@@ -4,7 +4,6 @@ class Detector{
         this.frame_window_in_sec=frame_window_in_sec;
         this.targets=targets;
         this.prior={};
-        console.log('1')
     }
 
     detect(){
@@ -21,9 +20,6 @@ class Detector{
             else{
                 this.prior[t.id] = [x,y];
             }
-         
-            
-            // o=t.heading; // what if we don't have orientation?
         }
         let o=0;
         let x=0;
@@ -37,8 +33,6 @@ class Detector{
                 o=Math.atan2(numerator,denumerator);
                 x=pr[0];
                 y=pr[1];
-                // let denom =  this.prior[p][j][0]!=0? this.prior[p][j][0]:1;
-                // o =Math.atan2(this.prior[p][j][1]/denom);
             }
             line(x,y,x+Math.cos(o)*10,y+Math.sin(o)*10);
         }
