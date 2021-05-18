@@ -4,6 +4,16 @@ class Detector{
         this.frame_window_in_sec=frame_window_in_sec;
         this.targets=targets;
         this.prior={};
+        this.Pd = 1; // probability of detection.
+        // A target-present decision when no target (only noise) is present is called a “false alarm.”
+        this.Pfa = 0; // Probability of false alarm.
+        // Maximize Pd and minimze Pfa
+        this.SNR = 0;// Signal to Noise ratio
+        /*Two approaches to increasing SNR are to use higher-energy (i.e., larger amplitude or longer duration) waveforms or to add (or “integrate”) multiple return
+        pulses, either coherently (in-phase) or non-coherently (summing magnitudes or
+        without phase coherence). 
+        Ref: Phased-Array Radar Design: Application of Radar Fundamentals by Tom Jeffrey
+        */
     }
 
     detect(){
