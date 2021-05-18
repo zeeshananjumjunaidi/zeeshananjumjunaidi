@@ -16,7 +16,7 @@ function setup() {
     mainColor = color(40, 250, 10);
     sector_radius = width * 0.1;
     for (let i = 0; i < 5; i++) {
-        targets.push(new Target(i, random() * width, random() * height, random() * (Math.PI * 2), 2, 2000 + random() * 10000));
+        targets.push(new Target(i, random() * width, random() * height, random() * (Math.PI * 2), random()+0.1, 2000 + random() * 10000));
     }
     detector = new Detector(this.targets, 10);
 }
