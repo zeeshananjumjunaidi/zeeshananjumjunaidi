@@ -44,7 +44,8 @@ class Detector{
                 x=pr[0];
                 y=pr[1];
             }
-            line(x,y,x+Math.cos(o)*10,y+Math.sin(o)*10);
+            let mag = 20;
+            line(x,y,x+Math.cos(o)*mag,y+Math.sin(o)*mag);
         }
     }
 }
