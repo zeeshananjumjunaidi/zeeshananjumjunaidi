@@ -39,6 +39,12 @@ function draw() {
     drawGrid();
     showBuildings();
     stroke(mainColor);
+    for (let i = 0; i < width; i += 20) {
+        for (let j = 0; j < height; j += 20) {
+            if(random()>0.8)
+            point(random()*width,random()*height);
+        }
+    }
     line(0, height / 2, width, height / 2);
     line(width / 2, 0, width / 2, height);
     push();
