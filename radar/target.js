@@ -9,6 +9,9 @@ class Target {
         this.heading = heading;
         this.speed = speed;
         this.size = size;
+        this.radarBeamAngle=0;
+        this.radarBeamOrigin=new p5.Vector(width/2,height/2);
+        this.currentAngleWithRadar=0;
         //altitude in feet
         this.altitude = altitude;
         this.selected = false;
@@ -36,8 +39,11 @@ class Target {
             this.imageAngle = Math.PI / 2;
             this.image = this.airplane_3;
         }
+        print(this.planeColor)
     }
     draw() {
+        this.currentAngleWithRadar = Math.atan2(this.radarBeamOrigin.y-this.y,this.radarBeamOrigin.x-this.x);
+
         let maxDist = (width / 2) + (height / 2);
         let distC = dist(this.x, this.y, width / 2, height / 2);
         if (this.hover) {
@@ -71,8 +77,11 @@ class Target {
             text(`##### ID:${this.id}\n${this.x.toFixed(2)},${this.y.toFixed(2)}\n${this.altitude.toFixed(2)}
         `, this.x, this.y + 10);
         } else {
+         //   let beamDistance = abs(this.currentAngleWithRadar-this.radarBeamAngle);
+          //  this.planeColor.levels[3]=255-beamDistance/Math.PI*255;
             fill(0, 255, 0);
-            text((distC / maxDist).toFixed(2), this.x, this.y);
+             text((distC / maxDist).toFixed(2), this.x, this.y);
+           /// text((beamDistance).toFixed(2), this.x, this.y);
         }
 
     }

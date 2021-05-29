@@ -18,7 +18,7 @@ function setup() {
     createCanvas(width, height);
     mainColor = color(40, 250, 10);
     sector_radius = width * 0.1;
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 5; i++) {
         targets.push(new Target(i, random() * width, random() * height, random() * (Math.PI * 2), random() + 0.1, 2000 + random() * 10000));
     }
     detector = new Detector(this.targets, 10);
@@ -39,13 +39,13 @@ function draw() {
     drawGrid();
     showBuildings();
     stroke(mainColor);
-    for (let i = 0; i < width; i += 20) {
-        for (let j = 0; j < height; j += 20) {
-            if (random() > 0.8) {
-                point(random() * width, random() * height);
-            }
-        }
-    }
+    // for (let i = 0; i < width; i += 20) {
+    //     for (let j = 0; j < height; j += 20) {
+    //         if (random() > 0.8) {
+    //         //    point(random() * width, random() * height);
+    //         }
+    //     }
+    // }
     line(0, height / 2, width, height / 2);
     line(width / 2, 0, width / 2, height);
     push();
@@ -98,7 +98,7 @@ function drawTargets() {
             }
         }
         targets[i].hover = (abs(mouseX - targets[i].x) < 20 && abs(mouseY - targets[i].y) < 20);
-
+        targets[i].radarBeamAngle=radar.angle;
     }
 }
 clicked = false;
@@ -122,7 +122,7 @@ function drawScanner() {
         let dist = i * 0.01;
         line(0, 0, Math.cos(radar.angle + dist) * radar.range, Math.sin(radar.angle + dist) * radar.range);
     }
-
+    text(`${(radar.angle*180/Math.PI).toFixed(2)}`,10,-10)
 
 }
 
