@@ -10,6 +10,7 @@ var radar = {
 var buildings = new Set();
 var targets = [];
 var detector;
+var airport;
 function setup() {
     imageMode(CENTER);
     textAlign(CENTER);
@@ -22,6 +23,7 @@ function setup() {
         targets.push(new Target(i, random() * width, random() * height, random() * (Math.PI * 2), random() + 0.1, 2000 + random() * 10000));
     }
     detector = new Detector(this.targets, 10);
+    airport = new Airport(width/2,height/2,123);
     for (let i = 0; i < width; i += 20) {
         for (let j = 0; j < height; j += 20) {
             let _x = i;// ((Math.floor(random()*20)/20)%20)*width;
@@ -57,6 +59,8 @@ function draw() {
     drawDetection();
     if (radar.angle > 2 * Math.PI) { radar.angle = 0; } else { radar.angle += 0.001 * deltaTime; }
     clicked = false;
+    
+    airport.draw();
 }
 function drawGrid() {
     stroke(40, 250, 10, 80);
