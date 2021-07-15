@@ -2,6 +2,8 @@
 
 <title>GATZ TLV Decoder</title>
 <link href="style.css" rel="stylesheet" />
+<script src="knockout-3.5.1.js"></script>
+<script src="jsQR.js"></script>
 <script src="script.js"></script>
 </head>
 
@@ -9,23 +11,63 @@
 
     <div class="main">
         <div class="wrapper">
-            <img src="250725.svg" width="200"/>
-            <br/>
-            <br/>
-            <label>Enter QR code value here:</label><br/>
-            <input id="qr_data" placeholder="Enter QR Data Here (in Base64 format)"
-                value="ARZNYXlhciBJbm5vdmF0aW9uIFcuTC5MAg8zMDEzNjY2ODgyMDAwMDMDEDIwMjEtMDctMTUgMTE6MDcEBTMwLjY4BQM0LjA=" />
-
-            <button onclick="GetOutput()">Get Output</button>
-            <div id="output"></div>
-            <div class="padding">
-            <i class="padding">
-                <b>1</b> = Company Name |
-                <b>2</b> = VAT Number |
-                <b>3</b> = Date Time |
-                <b>4</b> = Total Amount with VAT |
-                <b>5</b> = VAT Amount
-            </i></div>
+            <img src="250725.svg" width="200" />
+            <br />
+            <br />
+            <ul class="ui-tab" role="tablist">
+                <li role="tab">
+                    <a href="#tab1"
+                        data-bind="click: showBlock, css: { 'active': selected() == 'tab1' || init() == 1 }">Input
+                        Value</a>
+                </li>
+                <li role="tab">
+                    <a href="#tab2" data-bind="click: showBlock, css: { 'active': selected() == 'tab2' }">Use Camera</a>
+                </li>
+                <li role="tab">
+                    <a href="#tab3" data-bind="click: showBlock, css: { 'active': selected() == 'tab3' }">Use QR
+                        Image File</a>
+                </li>
+            </ul>
+            <div id="tabInput" class="ui-tabpanel" role="tabpanel"
+                data-bind="visible: selected() == 'tab1' || init() == 1">
+                <label>Enter QR code value here:</label><br />
+                <input id="qr_data" placeholder="Enter QR Data Here (in Base64 format)"
+                    value="" />
+                    
+                <p><strong>Sample Data:<br/></strong> ARZNYXlhciBJbm5vdmF0aW9uIFcuTC5MAg8zMDEzNjY2ODgyMDAwMDMDEDIwMjEtMDctMTUgMTE6MDcEBTMwLjY4BQM0LjA=</p>
+                <button onclick="GetOutput()">Get Output</button>
+            </div>
+            <div id="tabCamera" class="ui-tabpanel" role="tabpane2"
+                data-bind="visible: selected() == 'tab2'">
+                <div id="loadingMessage" hidden>🎥 Unable to access video stream (please make sure you have a webcam
+                    enabled)
+                </div>
+                <canvas id="canvas" width="640" height="480"></canvas>
+                <div id="outputMessage">No QR Data Found!</div>
+                <br/>
+                <button id="scanButton" onclick="scanQR()">Scan QR</button>
+                <button id="stopCameraButton" hidden >Stop Camera</button>
+            </div>
+            <div id="tabFile" class="ui-tabpanel" role="tabpane3"
+                data-bind="visible: selected() == 'tab3'">
+                <div style="max-height:480px; overflow:scroll">
+                <img id="image-preview" class="image-preview"/></div>
+                <div id="imageOutputMessage">No QR Data Found!</div>
+                <input type="file" onclick="this.value = null" onchange="scanUploadFile(this)" class="gazt-file-input"/>
+            </div>
+            <div id="result">
+                <div id="output"></div>
+                <button id="clearOutputButton" hidden onclick="clearOutput()">Clear Output</button>
+                <div class="padding">
+                    <i class="padding">
+                        <b>1</b> = Company Name |
+                        <b>2</b> = VAT Number |
+                        <b>3</b> = Date Time |
+                        <b>4</b> = Total Amount with VAT |
+                        <b>5</b> = VAT Amount
+                    </i>
+                </div>
+            </div>
         </div>
     </div>
 </body>

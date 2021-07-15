@@ -19,9 +19,10 @@ html, body {
 .wrapper {
     display: table-cell;
     height: 100%;
-    vertical-align: middle;
+    vertical-align: top;
+    padding-top: 50px;
 }
-button,input{
+button,input,a{
     padding: 10px 20px;
     border:1px solid #c2962e;
     border-radius:2px;
@@ -29,7 +30,7 @@ button,input{
     color:#04574d;
 }
 button{width:150px;}
-button:hover{
+button:hover,a:hover{
     cursor: pointer;
     font-weight: bolder;
     background:rgb(231, 231, 231);
@@ -57,3 +58,65 @@ tr td{
     padding: 5px;
     margin-top:12px;
 }
+.ui-tab{
+    list-style: none;
+	text-align: center;
+}
+.ui-tab li {
+	display: inline-block;
+	width: 230px;
+	text-align: center;
+
+}
+
+.ui-tab li a {
+	text-decoration: none;
+	display: block;
+    background-color: #c2962e3f;
+	color: #04574d;
+	padding: 6px 10px 5px;
+    border: 1px solid #c2962e;
+    font-weight: bolder;
+}
+.ui-tabpanel{
+    padding:5px;
+    border: 1px solid #c2962e;;
+}
+.active{
+    color: #c2962e!important;
+    background-color: #04574d!important;
+}
+#outputMessage,#imageOutputMessage{
+    color: #eee;
+    background-color: #c2962e;
+    padding: 5px;
+}
+canvas,.image-preview{
+    background:#c2962e;
+    min-width: 640px;
+    min-height: 480px;
+}
+.gazt-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .gazt-file-input::before {
+    content: 'Select some files';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  .gazt-file-input:hover::before {
+    border-color: black;
+  }
+  .gazt-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
