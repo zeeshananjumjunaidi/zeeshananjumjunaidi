@@ -1,6 +1,6 @@
-console.log("%c If you are looking for code for this program, Please refer to my github link:", 'background: #333; font-size:large; padding:2px; color: #c2962e');
+console.log("%c If you are looking for the code of this program, Please visit my github link:", 'background: #333; font-size:large; padding:2px; color: #c2962e');
 console.info("%c https://github.com/zeeshananjumjunaidi/zeeshananjumjunaidi", "color:#04574d; font-weight:bolder;");
-console.info("%c This program is by no means represent any Govt. This is designed for testing Saudi Arab GAZT E-Invoice QR TLV Output.", "color:#04574d");
+
 if (window.addEventListener) {
     window.addEventListener('load', InitApp);
 } else if (window.attachEvent) {
