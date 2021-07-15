@@ -5,6 +5,12 @@ html, body {
     background-color: #eee;
     color: #333;
 }
+@keyframes background-anim
+ {
+    0%{background:#eee;}
+
+    100%{background-color: #ccc;}
+}
 .main {
     height: 100%;
     width: 100%;
@@ -17,8 +23,16 @@ html, body {
 }
 button,input{
     padding: 10px 20px;
-    border:1px solid gray;
-    border-radius:5px;
+    border:1px solid #c2962e;
+    border-radius:2px;
+    margin:5px;
+    color:#04574d;
+}
+button{width:150px;}
+button:hover{
+    cursor: pointer;
+    font-weight: bolder;
+    background:rgb(231, 231, 231);
 }
 table{
     width:100%;
@@ -29,13 +43,14 @@ td{
     padding: 5px;
 }
 tr th{
-    background-color: gray;
+    background-color: #c2962e;
     color:white;
     font-size: large;
+    padding:10px 5px;
 }
 tr td{
     background-color: #ccc;
-    color:#333;
+    color:#04574d;
     font-size: large;
 }
 .padding{
