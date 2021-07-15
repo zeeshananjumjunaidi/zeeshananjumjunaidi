@@ -1,0 +1,44 @@
+html, body {
+    height: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    background-color: #eee;
+    color: #333;
+}
+.main {
+    height: 100%;
+    width: 100%;
+    display: table;
+}
+.wrapper {
+    display: table-cell;
+    height: 100%;
+    vertical-align: middle;
+}
+button,input{
+    padding: 10px 20px;
+    border:1px solid gray;
+    border-radius:5px;
+}
+table{
+    width:100%;
+    margin-top: 20px;
+    text-align: center;
+}
+td{
+    padding: 5px;
+}
+tr th{
+    background-color: gray;
+    color:white;
+    font-size: large;
+}
+tr td{
+    background-color: #ccc;
+    color:#333;
+    font-size: large;
+}
+.padding{
+    padding: 5px;
+    margin-top:12px;
+}

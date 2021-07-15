@@ -1,0 +1,33 @@
+<html>
+
+<title>GATZ TLV Decoder</title>
+<link href="style.css" rel="stylesheet" />
+<script src="script.js"></script>
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="wrapper">
+            <img src="250725.svg" width="200"/>
+            <br/>
+            <br/>
+            <label>Enter QR code value here:</label><br/>
+            <input id="qr_data" placeholder="Enter QR Data Here (in Base64 format)"
+                value="ARZNYXlhciBJbm5vdmF0aW9uIFcuTC5MAg8zMDEzNjY2ODgyMDAwMDMDEDIwMjEtMDctMTUgMTE6MDcEBTMwLjY4BQM0LjA=" />
+
+            <button onclick="GetOutput()">Get Output</button>
+            <div id="output"></div>
+            <div class="padding">
+            <i class="padding">
+                <b>1</b> = Company Name,
+                <b>2</b> = VAT Number,
+                <b>3</b> = Date Time
+                <b>4</b> = Total Amount with VAT
+                <b>5</b> = VAT Amount
+            </i></div>
+        </div>
+    </div>
+</body>
+
+</html>
