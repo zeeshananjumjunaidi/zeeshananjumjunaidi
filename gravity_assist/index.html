@@ -15,6 +15,7 @@
     <script src="../js/vendors/p5.js" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="../style/default.css" />
+    <script src="orbital-math.js"></script>
     <script src="gravity-source.js"></script>
     <script src="spacecraft.js"></script>
     <script src="script.js"></script>
@@ -27,6 +28,7 @@
 <body style="height: 100%; text-align: center; margin: 30; user-select:none;">
 
     <div style="position: fixed; left:50%; bottom:0; transform:translateX(-50%)">
+        <p id="stats" style="color:#777;">loading...</p>
         <button id="playBtn"><i class="fas fa-pause"></i></button>
     </div>
 </body>

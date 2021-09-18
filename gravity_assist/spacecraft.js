@@ -8,9 +8,12 @@ class Spacecraft {
         this.w = window.innerWidth / 2;
         this.h = window.innerHeight / 2;
         this.vel = new p5.Vector(vx, vy);
+        this.destroyed = false;
     }
     draw() {
-        fill(0, 0, 255);
+        if (this.destroyed) { fill(255, 0, 0); } else {
+            fill(0, 0, 255);
+        }
         circle(this.x, this.y, this.sizeInRadius);
         this.keepInbound();
     }
@@ -18,7 +21,9 @@ class Spacecraft {
     gs: Gravity Source (i.e. Planet or any cellestial body)
     */
     simulate(gs) {
+        if (this.destroyed) return;
         let d = dist(this.x, this.y, gs.x, gs.y);
+        if (d < gs.radius / 2) { this.destroyed = true; return; }
         let g = 6.67 * (this.mass + gs.mass) / d ** 2;
         this.vel.add(g * (gs.x - this.x) / d / this.mass, g * (gs.y - this.y) / d / this.mass);
         this.x += this.vel.x;
@@ -26,12 +31,13 @@ class Spacecraft {
         this.drawSimulationPath(gs);
     }
     drawSimulationPath(gs) {
+        if (this.destroyed) return;
         let _x = this.x;
         let _y = this.y;
         let _vel = this.vel.copy();
         push();
         stroke(0)
-        for (let i = 0; i < 10000; i += 1) {
+        for (let i = 0; i < 100000; i += 1) {
             if (i % 100 == 0) {
                 let d = dist(_x, _y, gs.x, gs.y);
                 let g = 6.67 * (this.mass + gs.mass) / d ** 2;
