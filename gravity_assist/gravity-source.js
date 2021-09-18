@@ -9,7 +9,7 @@ class GravitySource{
     }
 
     draw(){
-        fill(255, 0, 0);
+        fill(50, 0, 0);
         circle(this.x,this.y,this.radius);
     }
 }

@@ -13,9 +13,9 @@ function setup() {
     height = window.innerHeight;
     createCanvas(width, height);
     rectMode(CENTER)
-
-    gravitySource = new GravitySource(0, 0, 11000, 100);
-    spacecraft = new Spacecraft(-width / 2.5, 0, 100, 20);
+    frameRate(60);
+    gravitySource = new GravitySource(width*0.25, 0, 110000, 100);
+    spacecraft = new Spacecraft(-width / 2.5, 0, 100, 20,0, 1.1);
     $('#playBtn').click(()=> {
         console.log(this.isPause)
         this.isPause = !this.isPause;
@@ -34,5 +34,7 @@ function draw() {
     spacecraft.draw();
     if(!isPause){
         spacecraft.simulate(gravitySource);
+    }else{
+        spacecraft.drawSimulationPath(gravitySource);
     }
 }

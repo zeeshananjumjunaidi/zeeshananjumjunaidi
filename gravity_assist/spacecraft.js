@@ -21,8 +21,8 @@ class Spacecraft {
         let d = dist(this.x, this.y, gs.x, gs.y);
         let g = 6.67 * (this.mass + gs.mass) / d ** 2;
         this.vel.add(g * (gs.x - this.x) / d / this.mass, g * (gs.y - this.y) / d / this.mass);
-        this.x += deltaTime * this.vel.x;
-        this.y += deltaTime * this.vel.y;
+        this.x += this.vel.x;
+        this.y += this.vel.y;
         this.drawSimulationPath(gs);
     }
     drawSimulationPath(gs) {
@@ -31,13 +31,15 @@ class Spacecraft {
         let _vel = this.vel.copy();
         push();
         stroke(0)
-        for (let i = 0; i < 200; i++) {
-            let d = dist(_x, _y, gs.x, gs.y);
-            let g = 6.67 * (this.mass + gs.mass) / d ** 2;
-            _vel.add(g * (gs.x - _x) / d / this.mass, g * (gs.y - _y) / d / this.mass);
-            _x += deltaTime * _vel.x;
-            _y += deltaTime * _vel.y;
-            point(_x,_y);
+        for (let i = 0; i < 10000; i += 1) {
+            if (i % 100 == 0) {
+                let d = dist(_x, _y, gs.x, gs.y);
+                let g = 6.67 * (this.mass + gs.mass) / d ** 2;
+                _vel.add(g * (gs.x - _x) / d / this.mass, g * (gs.y - _y) / d / this.mass);
+                _x += _vel.x;
+                _y += _vel.y;
+                point(_x, _y);
+            }
         }
         pop();
     }
