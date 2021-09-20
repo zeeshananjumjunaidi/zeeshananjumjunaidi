@@ -32,15 +32,18 @@ function setup() {
 let currentSpaceCraft;
 function mouseReleased() {
     if (currentSpaceCraft) {
-        print('mouse released')
+        currentSpaceCraft.vel.x = (mouseX - width / 2) / width/2;
+        currentSpaceCraft.vel.y = (mouseY - height / 2) / height/2;
+        console.log(currentSpaceCraft.vel);
+        currentSpaceCraft.editingVelocity = false;
         spacecrafts.push(currentSpaceCraft);
         currentSpaceCraft = undefined;
     }
 }
 
 function mousePressed() {
-    print('mouse pressed')
-    currentSpaceCraft = new Spacecraft(mouseX, mouseY, 100, 20, 0, 1.1);
+    currentSpaceCraft = new Spacecraft(mouseX - width / 2, mouseY - height / 2, 100, 20, 0, 1.1);
+    currentSpaceCraft.editingVelocity = true;
 }
 function draw() {
     translate(width / 2, height / 2);
@@ -49,20 +52,30 @@ function draw() {
     fill(0);
     gravitySource.draw();
     spacecraft.draw();
-    if (currentSpaceCraft) { currentSpaceCraft.draw();
-        currentSpaceCraft.x = mouseX - width / 2; currentSpaceCraft.y = mouseY - height / 2 }
+    if (currentSpaceCraft) {
+        currentSpaceCraft.draw();
+        currentSpaceCraft.vel.x = mouseX - width / 2;
+        currentSpaceCraft.vel.y = mouseY - height / 2;
+        stroke(1);
+        line(currentSpaceCraft.x, currentSpaceCraft.y, currentSpaceCraft.vel.x, currentSpaceCraft.vel.y);
+
+    }
     if (spacecrafts != null && spacecrafts.length > 0) {
         for (let i = 0; i < spacecrafts.length; i++) {
-            spacecrafts[i].draw();
+            let s = spacecrafts[i];
+            s.draw();
+            if (!isPause) {
+                s.simulate(gravitySource);
+            } else {
+                s.drawSimulationPath(gravitySource);
+            }
         }
     }
     // sc2.draw();
     if (!isPause) {
         spacecraft.simulate(gravitySource);
-        // sc2.simulate(gravitySource);
     } else {
         spacecraft.drawSimulationPath(gravitySource);
-        // sc2.drawSimulationPath(gravitySource);
     }
     // if(statsElement){
     //     statsElement.text(`VELOCITY: ${sc2.vel.x.toFixed(2)},${sc2.vel.y.toFixed(2)}`)

@@ -9,6 +9,7 @@ class Spacecraft {
         this.h = window.innerHeight / 2;
         this.vel = new p5.Vector(vx, vy);
         this.destroyed = false;
+        this.editingVelocity=false;
     }
     draw() {
         if (this.destroyed) { fill(255, 0, 0); } else {
@@ -17,6 +18,7 @@ class Spacecraft {
         circle(this.x, this.y, this.sizeInRadius);
         this.keepInbound();
     }
+
     /*
     gs: Gravity Source (i.e. Planet or any cellestial body)
     */
