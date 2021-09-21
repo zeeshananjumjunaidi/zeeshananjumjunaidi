@@ -32,9 +32,8 @@ function setup() {
 let currentSpaceCraft;
 function mouseReleased() {
     if (currentSpaceCraft) {
-        currentSpaceCraft.vel.x = (mouseX - width / 2) / width/2;
-        currentSpaceCraft.vel.y = (mouseY - height / 2) / height/2;
-        console.log(currentSpaceCraft.vel);
+        currentSpaceCraft.vel.x = (mouseX - width / 2) / (width * 0.1);
+        currentSpaceCraft.vel.y = (mouseY - height / 2) / (height * 0.1);
         currentSpaceCraft.editingVelocity = false;
         spacecrafts.push(currentSpaceCraft);
         currentSpaceCraft = undefined;
@@ -42,7 +41,7 @@ function mouseReleased() {
 }
 
 function mousePressed() {
-    currentSpaceCraft = new Spacecraft(mouseX - width / 2, mouseY - height / 2, 100, 20, 0, 1.1);
+    currentSpaceCraft = new Spacecraft(mouseX - width / 2, mouseY - height / 2, 100, 20, 0, 0);
     currentSpaceCraft.editingVelocity = true;
 }
 function draw() {
@@ -54,10 +53,17 @@ function draw() {
     spacecraft.draw();
     if (currentSpaceCraft) {
         currentSpaceCraft.draw();
-        currentSpaceCraft.vel.x = mouseX - width / 2;
-        currentSpaceCraft.vel.y = mouseY - height / 2;
+        currentSpaceCraft.vel.x = (mouseX - width / 2) / (width * 0.1);
+        currentSpaceCraft.vel.y = (mouseY - height / 2) / (height * 0.1);
+        text(`${currentSpaceCraft.vel.x.toFixed(2)},${currentSpaceCraft.vel.y.toFixed(2)}`,
+            currentSpaceCraft.x+10, currentSpaceCraft.y);
+        strokeWeight(3);
         stroke(1);
-        line(currentSpaceCraft.x, currentSpaceCraft.y, currentSpaceCraft.vel.x, currentSpaceCraft.vel.y);
+        line(currentSpaceCraft.x, currentSpaceCraft.y,(mouseX - width / 2),(mouseY - height / 2));
+
+        // currentSpaceCraft.simulate(gravitySource);
+        currentSpaceCraft.drawSimulationPath(gravitySource);
+
 
     }
     if (spacecrafts != null && spacecrafts.length > 0) {
@@ -74,6 +80,7 @@ function draw() {
     // sc2.draw();
     if (!isPause) {
         spacecraft.simulate(gravitySource);
+
     } else {
         spacecraft.drawSimulationPath(gravitySource);
     }

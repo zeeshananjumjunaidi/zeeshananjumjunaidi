@@ -9,7 +9,7 @@ class Spacecraft {
         this.h = window.innerHeight / 2;
         this.vel = new p5.Vector(vx, vy);
         this.destroyed = false;
-        this.editingVelocity=false;
+        this.editingVelocity = false;
     }
     draw() {
         if (this.destroyed) { fill(255, 0, 0); } else {
@@ -39,14 +39,17 @@ class Spacecraft {
         let _vel = this.vel.copy();
         push();
         stroke(0)
-        for (let i = 0; i < 100000; i += 1) {
-            if (i % 100 == 0) {
+        let cX = _x;
+        let cY = _y;
+        for (let i = 0; i < 360; i += 1) {
+            if (i % 1 == 0) {
                 let d = dist(_x, _y, gs.x, gs.y);
                 let g = 6.67 * (this.mass + gs.mass) / d ** 2;
                 _vel.add(g * (gs.x - _x) / d / this.mass, g * (gs.y - _y) / d / this.mass);
                 _x += _vel.x;
                 _y += _vel.y;
-                point(_x, _y);
+                line(cX,cY,_x, _y);
+                cX=_x; cY=_y;
             }
         }
         pop();
