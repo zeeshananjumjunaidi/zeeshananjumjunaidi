@@ -56,10 +56,9 @@ function draw() {
         currentSpaceCraft.vel.x = (mouseX - width / 2) / (width * 0.1);
         currentSpaceCraft.vel.y = (mouseY - height / 2) / (height * 0.1);
         text(`${currentSpaceCraft.vel.x.toFixed(2)},${currentSpaceCraft.vel.y.toFixed(2)}`,
-            currentSpaceCraft.x+10, currentSpaceCraft.y);
-        strokeWeight(3);
+            currentSpaceCraft.x + 10, currentSpaceCraft.y);
         stroke(1);
-        line(currentSpaceCraft.x, currentSpaceCraft.y,(mouseX - width / 2),(mouseY - height / 2));
+        line(currentSpaceCraft.x, currentSpaceCraft.y, (mouseX - width / 2), (mouseY - height / 2));
 
         // currentSpaceCraft.simulate(gravitySource);
         currentSpaceCraft.drawSimulationPath(gravitySource);

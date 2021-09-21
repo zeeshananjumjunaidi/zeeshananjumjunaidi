@@ -12,11 +12,24 @@ class Spacecraft {
         this.editingVelocity = false;
     }
     draw() {
-        if (this.destroyed) { fill(255, 0, 0); } else {
-            fill(0, 0, 255);
+
+        push();
+
+        translate(this.x, this.y);
+        stroke(1)
+        let rotation = Math.atan2(this.vel.y - this.y, this.vel.x - this.x);
+        rotate(rotation);
+        fill(0, 0, 255);
+        rect(0, 0, 10, 50);
+        if (this.destroyed) {
+            fill(255, 0, 0);
         }
-        circle(this.x, this.y, this.sizeInRadius);
+        else {
+            fill(255, 255, 0);
+        }
+        circle(0, 0, this.sizeInRadius);
         this.keepInbound();
+        pop();
     }
 
     /*
@@ -38,18 +51,18 @@ class Spacecraft {
         let _y = this.y;
         let _vel = this.vel.copy();
         push();
-        stroke(0)
         let cX = _x;
         let cY = _y;
         for (let i = 0; i < 360; i += 1) {
+            stroke(0, 255 - 255 * (i / 360));
             if (i % 1 == 0) {
                 let d = dist(_x, _y, gs.x, gs.y);
                 let g = 6.67 * (this.mass + gs.mass) / d ** 2;
                 _vel.add(g * (gs.x - _x) / d / this.mass, g * (gs.y - _y) / d / this.mass);
                 _x += _vel.x;
                 _y += _vel.y;
-                line(cX,cY,_x, _y);
-                cX=_x; cY=_y;
+                line(cX, cY, _x, _y);
+                cX = _x; cY = _y;
             }
         }
         pop();
