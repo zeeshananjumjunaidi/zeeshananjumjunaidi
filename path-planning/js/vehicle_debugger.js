@@ -39,7 +39,7 @@ class VehicleDebugger {
         fill(0, 30, 50, 150); // Draw Vehicle Properties
         textSize(12);
         let drivingMode = this.vehicle.autoPilot ? 'Auto' : 'Manual';
-        let dmTxt = `Driving Mode: ${drivingMode}`;
+        let dmTxt = `Driving Mode: ${drivingMode} (press H for help)`;
         let dmTxtSize = textWidth(dmTxt);
         text(dmTxt, -dmTxtSize / 2, -height / 2 + 20);
 
@@ -77,6 +77,8 @@ class VehicleDebugger {
         this.drawTicksAndLabel('R', this.vehicle.heading - Math.PI / 2, this.vehicle.vRCircle);
     }
     drawTicksAndLabel(name, centerAngle, origin) {
+        fill(0);
+        noStroke();
         text(name, origin.x, origin.y);
         // for (let i = 0; i < Math.PI * 2; i += 0.4) {
         //     let x = Math.cos(centerAngle + i) * 50;
@@ -166,7 +168,6 @@ class VehicleDebugger {
                 }
                 heading = Math.atan2(p.y - pos.y, p.x - pos.x);
                 pos = createVector(p.x, p.y);
-                // point(p.x,p.y);
             }
         }
     }

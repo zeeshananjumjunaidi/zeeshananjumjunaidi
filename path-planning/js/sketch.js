@@ -4,7 +4,6 @@
  * @email [zeeshananjumjunaidi@gmail.com]
  * @create date 2020-11-02 05:24:30
  * @modify date 2020-11-28 11:41:19
- * @desc [Main p5 JS sketch file]
  */
 
 var vehicle;
@@ -23,7 +22,6 @@ function setup() {
     canvasHalfWidth = canvasWidth / 2;
     rectMode(CENTER);
     imageMode(CENTER);
-    // angleMode(DEGREES);
     frameRate(100);
     textSize(9);
     vehicle = new Vehicle(250, 0, 0);
@@ -48,7 +46,6 @@ function setup() {
     environment.addWall(-50, 30, 50, 30);
 
     environment.addWall(-50, -30, -50, 30);
-    // environment.addWall(50, -30, 50, 30);
 
     // Hybrid A* Map
     hybridMap = new HybridAStarMap(width, height, 50);

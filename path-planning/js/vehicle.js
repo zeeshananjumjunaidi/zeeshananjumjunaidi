@@ -11,7 +11,7 @@ class Vehicle {
     colorConfig = {
         innerTangentColor: color(255, 0, 0, 100),
         outerTangentColor: color(0, 255, 0, 100),
-        middleCircleTangentColor: color(255, 255, 0, 100),
+        middleCircleTangentColor: color(255, 20, 0, 100),
     }
     constructor(x, y, heading, tx = 0, ty = 0, th = 0) {
         this.position = createVector(x, y);

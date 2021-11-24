@@ -57,9 +57,9 @@ class Lidar {
                 // ray.update();
             }
             if(closestPoint){
-                fill(255,0,0);
+                fill(255,0,0,250);
                 drawCircle(closestPoint,5);
-                stroke(2550,0,0,50);
+                stroke(250,0,0,30);
                 ray.pos = this.position;
                 line(ray.pos.x,ray.pos.y,closestPoint.x,closestPoint.y);
                 noFill();
