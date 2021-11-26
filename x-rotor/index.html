@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X-Rotor</title>
     <link href="style.css" rel="stylesheet">
+    <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
     <script src="../js/vendors/threejs/three.min.js"></script>
     <script src="../js/vendors/threejs/OrbitControls.js"></script>
     <script src="../js/vendors/threejs/three.text-texture.js"></script>
@@ -14,10 +16,43 @@
     <script src="../js/vendors/cannon.min.js"></script>
     <script src="./pid.js"></script>
     <script src="./helper.js"></script>
-    
+
 </head>
+
 <body>
-    
+    <div class="control-panel">
+        <div class="left"> 09:30PM</div>
+        <div class="center">
+            <div>
+                <button class="btn" id="playpauseBtn">Pause
+                    <i class="fas fa-pause"></i>
+                </button>
+                <button class="btn" id="resetBtn">Reset
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="btn" id="engineBtn">Turn Off
+                    <i class="fas fa-power-off"></i>
+                </button>
+
+            </div>
+            <button class="btn help" id="playpauseBtn">Help
+                <i class="fas fa-question-circle"></i>
+            </button>
+        </div>
+        <div class="right">
+            <div id="battery">
+                77%<i class="fas fa-battery-three-quarters fa-rotate-270"></i>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="mailto://zeeshananjumjunaidi@gmail.com"> <i class="fas fa-envelope"></i>
+            zeeshananjumjunaidi@gmail.com</a>
+    </div>
+    <div id="pauseScreen" class="disabled">
+        <p>Use <strong>W A S D</strong>/ <strong>Arrow keys</strong> to control the target position.</p>
+    </div>
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -1,12 +1,110 @@
 body {
     margin: 0;
     overflow: hidden;
-    box-sizing: border-box;
+    box-sizing: content-box;
     /* background:#e66e27; */
     background: #f2825b;
-background: -moz-linear-gradient(top,  #f2825b 0%, #e55b2b 50%, #f07146 100%);
-background: -webkit-linear-gradient(top,  #f2825b 0%,#e55b2b 50%,#f07146 100%);
-background: linear-gradient(to bottom,  #f2825b 0%,#e55b2b 50%,#f07146 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2825b', endColorstr='#f07146',GradientType=0 );
+    background: -moz-linear-gradient(top, #f2825b 0%, #e55b2b 50%, #f07146 100%);
+    background: -webkit-linear-gradient(top, #f2825b 0%, #e55b2b 50%, #f07146 100%);
+    background: linear-gradient(to bottom, #f2825b 0%, #e55b2b 50%, #f07146 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2825b', endColorstr='#f07146', GradientType=0);
+    font-family: 'Courier New', Courier, monospace;
+}
 
+
+.control-panel {
+    position: absolute;
+    box-sizing: border-box;
+    /* margin-top: 10px; */
+    /* margin-left: 10px; */
+    margin-right: auto;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background-color: rgba(51, 51, 51, 0.1);
+    padding: 5px;
+}
+
+.left, .right, .center {
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.center {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    margin-right: 15px;
+}
+
+
+.stats, button {
+    color: #eee;
+    display: inline;
+    position: relative;
+    padding: 3px 15px;
+}
+
+button {
+    margin:2px;
+    background: none;
+    border: 1px solid #ddd;
+    color: #eee;
+    width: 100px;
+}
+
+button:hover {
+    border: 1px solid #aaa;
+    color: #fff;
+}
+.help{
+}
+.disabled {
+    opacity: 1 !important;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+#pauseScreen {
+    width: 100%;
+    height: 100%;
+    top: 35px;
+    background: radial-gradient(rgba(51, 51, 51, 0.137) 0%, rgb(0, 0, 0) 100%);
+    display: inline-block;
+    position: absolute;
+    pointer-events: none;
+    /* display: none; */
+    opacity: 0;
+    transition: all 1s linear;
+    cursor: pointer;
+    color: #eee;
+    padding: 5px;
+    text-align: center;
+}
+
+.footer {
+    position: absolute;
+    width: 100%;
+    background-color: rgba(51, 51, 51, 0.1);
+    color: #eee;
+    height: 35px;
+    bottom: 0;
+    text-align: center;
+    pad: 5px;
+}
+a{
+    text-decoration: none;
+    color:#eee;
 }
