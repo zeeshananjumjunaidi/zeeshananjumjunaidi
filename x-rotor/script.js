@@ -47,6 +47,8 @@
             robot = model;
             robot.position.y = 1.5;
             model.scale.set(1, 1, 1);
+            // robot.add(camera);
+            camera.lookAt(robot.position)
             // Add rigidbody
             const robotShape = new CANNON.Box(new CANNON.Vec3(1.5, 1.5, 1.5));
             robotBody.addShape(robotShape);
@@ -93,11 +95,12 @@
             sceneRef.add(model);
         });
     }
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(-15, 15, 7);
     // camera.position.set(15, 0, 10);
-    camera.lookAt(scene.position);
+    // camera.lookAt(scene.position);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor("#e66e27", 1);
@@ -112,6 +115,7 @@
     //controls.minPolarAngle = 0; // radians
     // controls.maxPolarAngle = Math.PI; // radians
     //controls.maxPolarAngle = Math.PI / 2;
+
     // LIGHTING
     const light = new THREE.DirectionalLight(0xffffff, 10, 1);
     light.position.set(5, 4, 0);
@@ -125,6 +129,9 @@
     const lighthelper = new THREE.DirectionalLightHelper(light, 15);
     scene.add(lighthelper);
 
+    const circle = createCircle();
+    circle.rotation.x=Math.PI/2;
+    scene.add(circle);
 
     const planeGeom = new THREE.PlaneGeometry(50, 50);
     planeGeom.receiveShadow = true;
@@ -170,34 +177,27 @@
         // console.log(time);
         if (rotors.length > 0) {
             for (let i = 0; i < rotors.length; i++) {
-                rotors[i].rotation.z += delta * 10 * vel.length();
+                rotors[i].rotation.z += delta * 50 * vel.length();
             }
         }
         if (robot && robotBody) {
-            // console.log(robotBody.position)
+            
             robot.position.set(robotBody.position.x, robotBody.position.y, robotBody.position.z);
-            // robot.position.set(cube)
+            
             robotBody.velocity.x = vel.x;
             PID_pitch.setTime(delta);
             let PID_pitch_gains_adapted = throttle > 100 ? PID_pitch_gains * 2 : PID_pitch_gains;
             let pitchError = getPitchError(robotBody.position, currentHeight);
             //Get the output from the PID controllers
             let PID_pitch_output = PID_pitch.GetFactorFromPIDController(PID_pitch_gains_adapted, pitchError);
-            // console.log(PID_pitch_gains_adapted,pitchError)
-            robotBody.velocity.y += PID_pitch_output;
-            if (robotBody.position.y < currentHeight.y) {
-                // set setpoint
-                // pid.setPoint =  currentHeight.y;
-                // robotBody.position.y = current value
-                //  pid.update(robotBody.position.y , t += 0.1);
+          //  console.log(pitchError,PID_pitch_output);
 
-                // currentValue += pid.output;
-                // console.log(PID_pitch_output)
-                // robotBody.velocity.y += PID_pitch_output;// vel.y;
-            }
-            robotBody.velocity.z = vel.z;
+            robotBody.velocity.y += PID_pitch_output*9.8*10;
+            
 
-            camera.lookAt(robot.position);
+            circle.position.set(currentHeight.x,currentHeight.y,currentHeight.z);
+
+            camera.lookAt(robot.position);          
         }
         controls.update();
         renderer.render(scene, camera);
