@@ -1,30 +1,36 @@
 (function () {
     var vel = new CANNON.Vec3(0, 1, 0);
-    var currentHeight = new CANNON.Vec3();
+    var targetPosition = new CANNON.Vec3(0, 5, 0);
 
 
     // var pid = new PID(0.01, 0.00001, 0.0001, t);
 
     var PID_pitch = new PIDController();
-    var PID_pitch_gains = new CANNON.Vec3(0.001,0.0001,0.001); //(2, 3, 2)
+    var PID_pitch_gains = new CANNON.Vec3(0.001, 0.0001, 0.001); //(2, 3, 2)
+
+
+    var PID_forward = new PIDController();
+    var PID_forward_gains = new CANNON.Vec3(0.001, 0.0001, 0.0005); //(2, 3, 2)
+
     // var PID_pitch_gains = new CANNON.Vec3(0.01, 0.00001, 0.0001); //(2, 3, 2)
     var throttle = 0;
+    var forward = 0;
     document.addEventListener('keydown', function (ev) {
         const up = ['ArrowUp', 'w'];
         const down = ['ArrowDown', 's'];
         const left = ['ArrowLeft', 'a'];
         const right = ['ArrowRight', 'd'];
         if (up.includes(ev.key)) {
-            currentHeight.y += delta*100;
+            targetPosition.y += delta * 100;
             // vel.y += 0.1;
         } else if (down.includes(ev.key)) {
-            currentHeight.y -= delta*100;
+            targetPosition.y -= delta * 100;
             // vel.y -= 0.1;
         } else if (left.includes(ev.key)) {
-
+            targetPosition.x += delta * 100;
         } else if (right.includes(ev.key)) {
+            targetPosition.x -= delta * 100;
         }
-        // console.log(vel,robotBody.velocity);
     });
 
 
@@ -32,7 +38,7 @@
     world.gravity.set(0, -9.82, 0);
 
     var robot;
-    const robotBody = new CANNON.Body({ mass: 1 });
+    const robotBody = new CANNON.Body({ mass: 10 });
     var rotors = [];
     function loadQuadCopter(sceneRef) {
         const loader = new THREE.FBXLoader();
@@ -42,12 +48,14 @@
         let primary = textureLoader.load('./models/primary.jpg');
         let secondary = textureLoader.load('./models/secondary.jpg');
         let rubber = textureLoader.load('./models/rubber.jpg');
+
+
         loader.load("./models/rotor-model.fbx", model => {
-            console.log(model);
             robot = model;
             robot.position.y = 1.5;
             model.scale.set(1, 1, 1);
             // robot.add(camera);
+            //robot.add(light);
             camera.lookAt(robot.position)
             // Add rigidbody
             const robotShape = new CANNON.Box(new CANNON.Vec3(1.5, 1.5, 1.5));
@@ -57,23 +65,36 @@
             robotBody.position.z = model.position.z;
             world.addBody(robotBody);
 
-            const pointLight = new THREE.PointLight(0xff0000, 4, 100);
-            pointLight.position.set(5, 0, 0.5);
-            robot.add(pointLight);
-            const sphereSize = 1;
-            const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
-            sceneRef.add(pointLightHelper);
-
+            // const pointLight = new THREE.PointLight(0xff0000, 4, 100);
+            // pointLight.position.set(5, 0, 0.5);
+            // robot.add(pointLight);
+            //const sphereSize = 1;
+            // const pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+            // sceneRef.add(pointLightHelper);
+            //const rotorMtl = new THREE.MeshPhongMaterial({ color: 0xeeeeee, side: THREE.DoubleSide });
             model.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
                     child.castShadow = true; //default is false
                     // child.receiveShadow = true; //default
-                    let m = child.material;
-                    if (m.name == 'MetalMtl') { m.map = metal; }
-                    else if (m.name == 'primaryMtl') { m.map = primary; }
-                    else if (m.name == 'secondaryMtl') { m.map = secondary; }
-                    else if (m.name == 'LensMtl') { m.map = lens; }
-                    else if (m.name == 'RubberMtl') { m.map = rubber }
+                    let m = child.material;// = new THREE.MeshPhongMaterial({ color: 0xeeeeee, side: THREE.DoubleSide });;
+                    // m.color='0xeeeeee';
+                    // m.flatShading=true;
+                    // m.side = 2;
+                    if (m.name == 'MetalMtl') {
+                        m.map = metal;
+                    }
+                    else if (m.name == 'primaryMtl') {
+                        m.map = primary;
+                    }
+                    else if (m.name == 'secondaryMtl') {
+                        m.map = secondary;
+                    }
+                    else if (m.name == 'LensMtl') {
+                        m.map = lens;
+                    }
+                    else if (m.name == 'RubberMtl') {
+                        m.map = rubber;
+                    }
 
                 }
 
@@ -83,7 +104,6 @@
 
                             part.children.forEach(rotor => {
                                 if (rotor.name.indexOf("_rotor") > -1) {
-                                    console.log(rotor.name);
                                     rotors.push(rotor);
                                 }
                             });
@@ -95,20 +115,24 @@
             sceneRef.add(model);
         });
     }
-
+    // -------------- Scene ----------------------
     const scene = new THREE.Scene();
+    // -------------- Camera ---------------------
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(-15, 15, 7);
-    // camera.position.set(15, 0, 10);
-    // camera.lookAt(scene.position);
-    const renderer = new THREE.WebGLRenderer();
+    // var cameraHelper = new THREE.CameraHelper(light.shadow.camera);
+    // scene.add(cameraHelper);
+    // -------------- Renderer -------------------
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor("#e66e27", 1);
+    // renderer.setClearColor("#e66e27", 1);
+    renderer.setClearColor(0xffffff, 0);
+    window.renderer = renderer;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;//.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    // ORBIT CONTROLS
+    // -------------- Orbital Control ------------
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.minDistance = 5;
     // controls.maxDistance = 20;
@@ -116,96 +140,105 @@
     // controls.maxPolarAngle = Math.PI; // radians
     //controls.maxPolarAngle = Math.PI / 2;
 
-    // LIGHTING
-    const light = new THREE.DirectionalLight(0xffffff, 10, 1);
-    light.position.set(5, 4, 0);
-    light.castShadow = true; // default false    
+    // -------------- Light ----------------------
+    const light = new THREE.DirectionalLight(0xffffff, 1.0);
+    light.position.set(0, 100, 0);
+    light.target.position.set(111, 10, 50);
+    light.castShadow = true; 
+
+    // -------------- Light Shadow ---------------
     //Set up shadow properties for the light
-    light.shadow.mapSize.width = 1512; // default
-    light.shadow.mapSize.height = 1512; // default
-    light.shadow.camera.near = 0.5; // default
-    light.shadow.camera.far = 5000; // default
+    light.shadow.camera.near = 0.1;
+    light.shadow.camera.far = 500;
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
+    const shadowScale = 30;
+    light.shadow.camera.left = -shadowScale;
+    light.shadow.camera.right = shadowScale;
+    light.shadow.camera.top = shadowScale;
+    light.shadow.camera.bottom = -shadowScale;
+
     scene.add(light);
-    const lighthelper = new THREE.DirectionalLightHelper(light, 15);
-    scene.add(lighthelper);
+    scene.add(light.target);//Important for moving shadow.
+    // const lighthelper = new THREE.DirectionalLightHelper(light, 15);
+    // scene.add(lighthelper);
 
-    const circle = createCircle();
-    circle.rotation.x=Math.PI/2;
-    scene.add(circle);
 
+
+
+    // -------------- Target Circle --------------
+    const targetCircle = createCircle();
+    targetCircle.rotation.x = Math.PI / 2;
+    scene.add(targetCircle);
+
+    // -------------- Ground Plane ---------------
     const planeGeom = new THREE.PlaneGeometry(50, 50);
-    planeGeom.receiveShadow = true;
-    // #e66e27
-    const groundMtl = new THREE.MeshBasicMaterial({ color: 0xeeeeee, side: THREE.DoubleSide });
+    // const groundMtl = new THREE.MeshPhongMaterial({ color: 0xf2825b,specular:new THREE.Vector3(0,0,0) });    
+    groundMtl = new THREE.ShadowMaterial({ opacity: 0.1 });
+    groundMtl.opacity = 0.5;
     const planeObject = new THREE.Mesh(planeGeom, groundMtl);
-    planeObject.rotation.set(Math.PI / 2, 0, 0);
+    planeObject.rotation.set(-Math.PI / 2, 0, 0);
+    planeObject.receiveShadow = true;
     scene.add(planeObject);
 
-    const planeShape = new CANNON.Plane()
+    // -------------- Ground Plane Collider ------
+    const planeShape = new CANNON.Plane();
     const planeBody = new CANNON.Body({ mass: 0 })
     planeBody.addShape(planeShape)
     planeBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2)
     world.addBody(planeBody)
 
-
-    // --------------------- Load Quadcopter --------------//
+    
+    // -------------- Load Quadcopter ------------
     loadQuadCopter(scene);
-    // --------------------- Target Height ---------------//
-    const dir = new THREE.Vector3(1, 2, 0);
 
-    //normalize the direction vector (convert to vector of length 1)
-    dir.normalize();
-
-    const origin = new THREE.Vector3(0, 0, 0);
-    const length = 1;
-    const hex = 0xffff00;
-
-    const arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex);
-    scene.add(arrowHelper);
-
-
-    // --------------------- Animate ----------------------//
-
+    // -------------- Animation ------------------
     const clock = new THREE.Clock()
     let delta;
-    const animate = function (time) {
-        // let deltaTime = time * 0.0001;
+    const animate = function () {        
         delta = Math.min(clock.getDelta(), 0.1)
         world.step(delta)
 
         requestAnimationFrame(animate);
-        // console.log(time);
         if (rotors.length > 0) {
             for (let i = 0; i < rotors.length; i++) {
                 rotors[i].rotation.z += delta * 50 * vel.length();
             }
         }
         if (robot && robotBody) {
-            
             robot.position.set(robotBody.position.x, robotBody.position.y, robotBody.position.z);
-            
+            planeObject.position.set(robot.position.x, 0, robot.position.z);
             robotBody.velocity.x = vel.x;
+
             PID_pitch.setTime(delta);
             let PID_pitch_gains_adapted = throttle > 100 ? PID_pitch_gains * 2 : PID_pitch_gains;
-            let pitchError = getPitchError(robotBody.position, currentHeight);
-            //Get the output from the PID controllers
+            let pitchError = getPitchError(robotBody.position, targetPosition);
             let PID_pitch_output = PID_pitch.GetFactorFromPIDController(PID_pitch_gains_adapted, pitchError);
-          //  console.log(pitchError,PID_pitch_output);
 
-            robotBody.velocity.y += PID_pitch_output*9.8*10;
-            
 
-            circle.position.set(currentHeight.x,currentHeight.y,currentHeight.z);
+            PID_forward.setTime(delta);
+            let PID_forward_gains_adapted = forward > 100 ? PID_forward_gains * 2 : PID_forward_gains;
+            let forwardError = getForwardError(robotBody.position, targetPosition);
+            let PID_forward_output = PID_forward.GetFactorFromPIDController(PID_forward_gains_adapted, forwardError);
 
-            camera.lookAt(robot.position);          
+
+            robotBody.velocity.y += PID_pitch_output * 9.8 * 10;
+            robotBody.velocity.x += PID_forward_output * 9.8 * 110;
+
+            targetCircle.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
+            light.position.set(robot.position.x, light.position.y, robot.position.z);
+            light.target.position.set(robot.position.x, light.target.position.y, robot.position.z);
+
         }
         controls.update();
         renderer.render(scene, camera);
-
     };
+    
     function getPitchError(current, target) {
-        //        let yAngle = current.y;
         return target.y - current.y;
+    }
+    function getForwardError(current, target) {
+        return target.x - current.x;
     }
 
     animate();
