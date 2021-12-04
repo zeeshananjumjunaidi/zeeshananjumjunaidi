@@ -26,6 +26,8 @@ body {
     justify-content: space-between;
     background-color: rgba(51, 51, 51, 0.1);
     padding: 5px;
+    user-select: none;
+    
 }
 
 .left, .right, .center {
@@ -58,19 +60,20 @@ body {
 }
 
 button {
-    margin:2px;
+    margin: 2px;
     background: none;
     border: 1px solid #ddd;
     color: #eee;
-    width: 100px;
+    width: 120px;
 }
 
 button:hover {
     border: 1px solid #aaa;
     color: #fff;
 }
-.help{
-}
+
+.help {}
+
 .disabled {
     opacity: 1 !important;
     pointer-events: all;
@@ -80,7 +83,7 @@ button:hover {
 #pauseScreen {
     width: 100%;
     height: 100%;
-    top: 35px;
+    top: 65px;
     background: radial-gradient(rgba(51, 51, 51, 0.137) 0%, rgb(0, 0, 0) 100%);
     display: inline-block;
     position: absolute;
@@ -92,6 +95,16 @@ button:hover {
     color: #eee;
     padding: 5px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+kbd {
+    font-weight: bolder;
+    background: linear-gradient(to bottom, #f2825b 0%, #e55b2b 50%, #f07146 100%);
+    padding: 2px 5px;
+    border-radius: 5px;
 }
 
 .footer {
@@ -104,7 +117,8 @@ button:hover {
     text-align: center;
     pad: 5px;
 }
-a{
+
+a {
     text-decoration: none;
-    color:#eee;
+    color: #eee;
 }

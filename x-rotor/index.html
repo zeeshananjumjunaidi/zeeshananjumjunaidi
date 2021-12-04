@@ -21,7 +21,7 @@
 
 <body>
     <div class="control-panel">
-        <div class="left"> 09:30PM</div>
+        <div class="left"><div id="stats" class="stats"></div></div>
         <div class="center">
             <div>
                 <button class="btn" id="playpauseBtn">Pause
@@ -41,7 +41,8 @@
         </div>
         <div class="right">
             <div id="battery">
-                77%<i class="fas fa-battery-three-quarters fa-rotate-270"></i>
+                <span id="battery-value">100%</span>
+                <!-- <span id="battery-image" class="fas fa-battery-full fa-rotate-270"></span> -->
             </div>
         </div>
     </div>
@@ -49,8 +50,12 @@
         <a href="mailto://zeeshananjumjunaidi@gmail.com"> <i class="fas fa-envelope"></i>
             zeeshananjumjunaidi@gmail.com</a>
     </div>
-    <div id="pauseScreen" class="disabled">
-        <p>Use <strong>W A S D</strong>/ <strong>Arrow keys</strong> to control the target position.</p>
+    <div id="pauseScreen" class="">
+        <p>Use <strong> <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd></strong> / <kbd>Arrow</kbd> keys to control the movement position.</p>
+        <p>Press <kbd>Ctrl</kbd> to lower the altitude. </p>
+        <p>Press <kbd>Space</kbd> to increase the altitude. </p>
+        <p>Press <kbd>P</kbd> to toggle pause.</p>
+        <p>Use <kbd>Mouse</kbd> to control camera.</p>
     </div>
     <script src="script.js"></script>
 </body>

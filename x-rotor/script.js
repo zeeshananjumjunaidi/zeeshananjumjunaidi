@@ -33,29 +33,62 @@ class Quadcopter {
 
 
     var PID_forward = new PIDController();
-    var PID_forward_gains = new CANNON.Vec3(0.001, 0.0001, 0.0005); //(2, 3, 2)
+    var PID_forward_gains = new CANNON.Vec3(0.0051, 0.00001, 0.0001); //(2, 3, 2)
+
+    var PID_sideway = new PIDController();
+    var PID_sideway_gains = new CANNON.Vec3(0.0001, 0.00001, 0.0001); //(2, 3, 2)
 
     // var PID_pitch_gains = new CANNON.Vec3(0.01, 0.00001, 0.0001); //(2, 3, 2)
     var throttle = 0;
     var forward = 0;
+    var sideway = 0;
     let engineBtn = document.querySelector('#engineBtn');
     let playpauseBtn = document.querySelector('#playpauseBtn');
     let resetBtn = document.querySelector('#resetBtn');
     let pauseScreen = document.querySelector('#pauseScreen');
+    let stats = document.querySelector('#stats');
+    let batteyStats = document.querySelector('#battery-value');
+   // var batteryImage = document.querySelector('#battery-image');
+    // batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
+    let batteryInterval = -1;
+    let batteryValue = 100;
+    batteryInterval = setInterval(function () {
+        batteyStats.innerHTML = `${batteryValue}%`;
+        batteryValue -= 1;
+        if (batteryValue >= 97) {
+       //     batteryImage.className = 'fas fa-battery-full fa-rotate-270';
+        } else if (batteryValue >= 50) {
+            // batteryImage.classList.remove('fa-battery-full');
+            // batteryImage.classList.add('fa-battery-three-quarters');
+        //    batteryImage.className = 'fas fa-battery-three-quarters fa-rotate-270';
+        } else if (batteryValue >= 10) {
+       //     batteryImage.className = 'fas fa-battery-quarter fa-rotate-270';
+        } else if (batteryValue > 0) {
+         //   batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
+        } else {
+            console.log('Engine Stopped');
+            clearInterval(batteryInterval);
+            quadcopter.isEngineStart = false;
+        }
+        //console.log(batteryValue, batteryImage,batteryImage.className);
+    }, 1000);
     resetBtn.addEventListener('click', () => {
         location.reload();
     });
     playpauseBtn.addEventListener('click', () => {
+        togglePause();
+    });
+    function togglePause() {
         isPlaying = !isPlaying;
         if (isPlaying) {
             animate();
-             pauseScreen.classList.remove('disabled');
+            pauseScreen.classList.remove('disabled');
             playpauseBtn.innerHTML = `Pause <i class="fas fa-pause"></i>`;
         } else {
             pauseScreen.classList.add('disabled');
             playpauseBtn.innerHTML = `Play <i class="fas fa-play"></i>`;
         }
-    });
+    }
     engineBtn.addEventListener('click', () => {
         quadcopter.toggleEngine();
         if (quadcopter.isEngineStart) {
@@ -64,26 +97,37 @@ class Quadcopter {
             engineBtn.innerHTML = 'Turn On <i class="fas fa-power-off"></i>';
         }
     });
-
+    document.addEventListener('contextmenu', function () {
+        console.log('right click');
+    });
     document.addEventListener('keydown', function (ev) {
         const up = ['ArrowUp', 'w'];
         const down = ['ArrowDown', 's'];
         const left = ['ArrowLeft', 'a'];
         const right = ['ArrowRight', 'd'];
+        if (left.includes(ev.key)) {
+            targetPosition.z += delta * 100;
+
+        } else if (right.includes(ev.key)) {
+            targetPosition.z -= delta * 100;
+        }
         if (up.includes(ev.key)) {
+            targetPosition.x += delta * 100;
+        } else if (down.includes(ev.key)) {
+            targetPosition.x -= delta * 100;
+        }
+        if (ev.key == 'e') {
+            quadcopter.isEngineStart = !quadcopter.isEngineStart;
+        }
+        if (ev.key == 'p') {
+            togglePause();
+        }
+        if (ev.key == ' ') {
             targetPosition.y += delta * 100;
             targetPosition.y = Math.min(targetPosition.y, 100);
-            // vel.y += 0.1;
-        } else if (down.includes(ev.key)) {
+        } else if (ev.key == 'Control') {
             targetPosition.y -= delta * 100;
             targetPosition.y = Math.max(targetPosition.y, 0);
-            // vel.y -= 0.1;
-        } else if (left.includes(ev.key)) {
-            targetPosition.x += delta * 100;
-        } else if (right.includes(ev.key)) {
-            targetPosition.x -= delta * 100;
-        } else if (ev.key == 'e') {
-            quadcopter.isEngineStart = !quadcopter.isEngineStart;
         }
     });
 
@@ -93,6 +137,7 @@ class Quadcopter {
 
     var robot;
     const robotBody = new CANNON.Body({ mass: 10 });
+    robotBody.angularDamping = 1;
     console.log(robotBody)
     window.robotBody = robotBody;
     var rotors = [];
@@ -235,7 +280,7 @@ class Quadcopter {
 
 
     // -------------- Target Circle --------------
-    const targetCircle = createCircle();
+    const targetCircle = createTarget();
     targetCircle.rotation.x = Math.PI / 2;
     scene.add(targetCircle);
 
@@ -263,7 +308,15 @@ class Quadcopter {
     // -------------- Animation ------------------
     const clock = new THREE.Clock()
     let delta;
+    const getTime = () => {
+        const d = new Date();
+        const dd = [d.getHours(), d.getMinutes(), d.getSeconds()].map((a) => (a < 10 ? '0' + a : a));
+        return dd.join(':');
+    };
     const animate = function () {
+        let textData = `${getTime()}<br/>POS: ${robotBody.position.x.toFixed(2)},
+        ${robotBody.position.y.toFixed(2)},${robotBody.position.z.toFixed(2)}`;
+        stats.innerHTML = textData;
         delta = Math.min(clock.getDelta(), 0.1)
         world.step(delta)
         if (isPlaying)
@@ -292,9 +345,17 @@ class Quadcopter {
             let forwardError = getForwardError(robotBody.position, targetPosition);
             let PID_forward_output = PID_forward.GetFactorFromPIDController(PID_forward_gains_adapted, forwardError);
 
+
+
+            PID_sideway.setTime(delta);
+            let PID_sideway_gains_adapted = sideway > 100 ? PID_sideway_gains * 2 : PID_sideway_gains;
+            let sidewayError = getsidewayError(robotBody.position, targetPosition);
+            let PID_sideway_output = PID_sideway.GetFactorFromPIDController(PID_sideway_gains_adapted, sidewayError);
+
             if (quadcopter.isEngineStart) {
-                robotBody.velocity.y += PID_pitch_output * 9.8 * 10;
                 robotBody.velocity.x += PID_forward_output * 9.8 * 110;
+                robotBody.velocity.y += PID_pitch_output * 9.8 * 10;
+                robotBody.velocity.z += PID_sideway_output * 9.8 * 110;
             }
             targetCircle.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
             light.position.set(robot.position.x, light.position.y, robot.position.z);
@@ -311,7 +372,9 @@ class Quadcopter {
     function getForwardError(current, target) {
         return target.x - current.x;
     }
-
+    function getsidewayError(current, target) {
+        return target.z - current.z;
+    }
     animate();
 
 })();
