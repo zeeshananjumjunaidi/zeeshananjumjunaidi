@@ -19,15 +19,19 @@ class Spacecraft {
         stroke(1)
         let rotation = Math.atan2(this.vel.y - this.y, this.vel.x - this.x);
         rotate(rotation);
-        fill(0, 0, 255);
-        rect(0, 0, 10, 50);
+        stroke(255,255,255);
+        strokeWeight(2)
+        fill(0, 0, 0);
+        rect(0, 0, 10, 70);
         if (this.destroyed) {
             fill(255, 0, 0);
         }
         else {
-            fill(255, 255, 0);
+            fill(0, 0, 0);
         }
-        circle(0, 0, this.sizeInRadius);
+        // circle(0, 0, this.sizeInRadius);
+        rect(10,0,20,15)
+        rect(0,0,20,20)
         this.keepInbound();
         pop();
     }

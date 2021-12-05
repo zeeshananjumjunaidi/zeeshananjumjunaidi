@@ -55,12 +55,11 @@ function draw() {
         currentSpaceCraft.draw();
         currentSpaceCraft.vel.x = (mouseX - width / 2) / (width * 0.1);
         currentSpaceCraft.vel.y = (mouseY - height / 2) / (height * 0.1);
-        text(`${currentSpaceCraft.vel.x.toFixed(2)},${currentSpaceCraft.vel.y.toFixed(2)}`,
+        text(`${currentSpaceCraft.vel.x.toFixed(2)}, ${currentSpaceCraft.vel.y.toFixed(2)}`,
             currentSpaceCraft.x + 10, currentSpaceCraft.y);
         stroke(1);
         line(currentSpaceCraft.x, currentSpaceCraft.y, (mouseX - width / 2), (mouseY - height / 2));
 
-        // currentSpaceCraft.simulate(gravitySource);
         currentSpaceCraft.drawSimulationPath(gravitySource);
 
 
@@ -83,13 +82,4 @@ function draw() {
     } else {
         spacecraft.drawSimulationPath(gravitySource);
     }
-    // if(statsElement){
-    //     statsElement.text(`VELOCITY: ${sc2.vel.x.toFixed(2)},${sc2.vel.y.toFixed(2)}`)
-    // }    
-    // let vOPG = getEscapeVelocity(dist(sc2.x,sc2.y,gravitySource.x,gravitySource.y),gravitySource.mass);
-    // We have to introduce some constant to balance the overall simulation because the ratio of 
-    // mass b/w spacecraft and planet is not accurate.
-    // sc2.vel.x+=vOPG;
-    // sc2.vel.y+=vOPG;
-    // text(vOPG.toFixed(2),0,100);
 }

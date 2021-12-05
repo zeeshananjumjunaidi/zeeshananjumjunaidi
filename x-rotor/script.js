@@ -48,7 +48,7 @@ class Quadcopter {
     let pauseScreen = document.querySelector('#pauseScreen');
     let stats = document.querySelector('#stats');
     let batteyStats = document.querySelector('#battery-value');
-   // var batteryImage = document.querySelector('#battery-image');
+    // var batteryImage = document.querySelector('#battery-image');
     // batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
     let batteryInterval = -1;
     let batteryValue = 100;
@@ -56,22 +56,22 @@ class Quadcopter {
         batteyStats.innerHTML = `${batteryValue}%`;
         batteryValue -= 1;
         if (batteryValue >= 97) {
-       //     batteryImage.className = 'fas fa-battery-full fa-rotate-270';
+            //     batteryImage.className = 'fas fa-battery-full fa-rotate-270';
         } else if (batteryValue >= 50) {
             // batteryImage.classList.remove('fa-battery-full');
             // batteryImage.classList.add('fa-battery-three-quarters');
-        //    batteryImage.className = 'fas fa-battery-three-quarters fa-rotate-270';
+            //    batteryImage.className = 'fas fa-battery-three-quarters fa-rotate-270';
         } else if (batteryValue >= 10) {
-       //     batteryImage.className = 'fas fa-battery-quarter fa-rotate-270';
+            //     batteryImage.className = 'fas fa-battery-quarter fa-rotate-270';
         } else if (batteryValue > 0) {
-         //   batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
+            //   batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
         } else {
             console.log('Engine Stopped');
             clearInterval(batteryInterval);
             quadcopter.isEngineStart = false;
         }
         //console.log(batteryValue, batteryImage,batteryImage.className);
-    }, 1000);
+    }, 5000);
     resetBtn.addEventListener('click', () => {
         location.reload();
     });
@@ -315,7 +315,7 @@ class Quadcopter {
     };
     const animate = function () {
         let textData = `${getTime()}<br/>POS: ${robotBody.position.x.toFixed(2)},
-        ${robotBody.position.y.toFixed(2)},${robotBody.position.z.toFixed(2)}`;
+        ${robotBody.position.y.toFixed(2)}, ${robotBody.position.z.toFixed(2)}`;
         stats.innerHTML = textData;
         delta = Math.min(clock.getDelta(), 0.1)
         world.step(delta)
@@ -339,13 +339,10 @@ class Quadcopter {
             let pitchError = getPitchError(robotBody.position, targetPosition);
             let PID_pitch_output = PID_pitch.GetFactorFromPIDController(PID_pitch_gains_adapted, pitchError);
 
-
             PID_forward.setTime(delta);
             let PID_forward_gains_adapted = forward > 100 ? PID_forward_gains * 2 : PID_forward_gains;
             let forwardError = getForwardError(robotBody.position, targetPosition);
             let PID_forward_output = PID_forward.GetFactorFromPIDController(PID_forward_gains_adapted, forwardError);
-
-
 
             PID_sideway.setTime(delta);
             let PID_sideway_gains_adapted = sideway > 100 ? PID_sideway_gains * 2 : PID_sideway_gains;
