@@ -10,7 +10,7 @@ class ThridPersonCamera {
         console.log(this._camera);
     }
     _CalculateIdealOffset() {
-        const idealOffset = new THREE.Vector3(-5, 5, 50);
+        const idealOffset = new THREE.Vector3(-35, 0, 10);
         idealOffset.applyQuaternion(this._params.target.quaternion);
         idealOffset.add(this._params.target.position);
         return idealOffset;
@@ -26,7 +26,9 @@ class ThridPersonCamera {
             const idealOffset = this._CalculateIdealOffset();
             const idealLookAt = this._CalculateIdealLookAt();
 
-            const t = 0.05;
+            // const t = 0.15 ;
+            // const t = 4.0 * timeDelta;
+            const t = 1.0 - Math.pow(0.001,timeDelta);
 
             this._currentPosition.lerp(idealOffset,t);
             this._currentLookAt.lerp(idealLookAt,t);

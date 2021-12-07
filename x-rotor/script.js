@@ -106,16 +106,17 @@ class Quadcopter {
         const down = ['ArrowDown', 's'];
         const left = ['ArrowLeft', 'a'];
         const right = ['ArrowRight', 'd'];
+        const keyTimeConstant = (1.0 - Math.pow(0.101, delta));
         if (left.includes(ev.key)) {
-            targetPosition.z += delta * 100;
+            targetPosition.z -= keyTimeConstant * 100;
 
         } else if (right.includes(ev.key)) {
-            targetPosition.z -= delta * 100;
+            targetPosition.z += keyTimeConstant * 100;
         }
         if (up.includes(ev.key)) {
-            targetPosition.x += delta * 100;
+            targetPosition.x += keyTimeConstant * 100;
         } else if (down.includes(ev.key)) {
-            targetPosition.x -= delta * 100;
+            targetPosition.x -= keyTimeConstant * 100;
         }
         if (ev.key == 'e') {
             quadcopter.isEngineStart = !quadcopter.isEngineStart;
@@ -124,10 +125,10 @@ class Quadcopter {
             togglePause();
         }
         if (ev.key == ' ') {
-            targetPosition.y += delta * 100;
+            targetPosition.y += keyTimeConstant * 100;
             targetPosition.y = Math.min(targetPosition.y, 100);
         } else if (ev.key == 'Control') {
-            targetPosition.y -= delta * 100;
+            targetPosition.y -= keyTimeConstant * 100;
             targetPosition.y = Math.max(targetPosition.y, 0);
         }
 
