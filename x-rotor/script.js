@@ -50,6 +50,7 @@ class Quadcopter {
     let batteyStats = document.querySelector('#battery-value');
     // var batteryImage = document.querySelector('#battery-image');
     // batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
+    var cameraInitPosition = new THREE.Vector3();
     let batteryInterval = -1;
     let batteryValue = 100;
     batteryInterval = setInterval(function () {
@@ -129,6 +130,7 @@ class Quadcopter {
             targetPosition.y -= delta * 100;
             targetPosition.y = Math.max(targetPosition.y, 0);
         }
+
     });
 
 
@@ -153,11 +155,13 @@ class Quadcopter {
 
         loader.load("./models/rotor-model.fbx", model => {
             robot = model;
+            thirdPersonCamera = new ThridPersonCamera({ camera: camera, target: robot });
             robot.position.y = 5;
             model.scale.set(1, 1, 1);
             // robot.add(camera);
             //robot.add(light);
-            camera.lookAt(robot.position)
+            camera.lookAt(robot.position);
+            cameraInitPosition.set(camera.position.x, camera.position.y, camera.position.z);
             // Add rigidbody
             const robotShape = new CANNON.Box(new CANNON.Vec3(1.5, 1.5, 1.5));
             robotBody.addShape(robotShape);
@@ -247,11 +251,14 @@ class Quadcopter {
 
     // -------------- Orbital Control ------------
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 5;
+    // controls.minDistance = 5;
     // controls.maxDistance = 20;
     //controls.minPolarAngle = 0; // radians
     // controls.maxPolarAngle = Math.PI; // radians
     //controls.maxPolarAngle = Math.PI / 2;
+
+    // -------------Third Person Camera ----------
+    var thirdPersonCamera;
 
     // -------------- Light ----------------------
     const light = new THREE.DirectionalLight(0xffffff, 1.0);
@@ -357,9 +364,14 @@ class Quadcopter {
             targetCircle.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
             light.position.set(robot.position.x, light.position.y, robot.position.z);
             light.target.position.set(robot.position.x, light.target.position.y, robot.position.z);
+            camera.lookAt(robot.position)
+
 
         }
-        controls.update();
+        if (thirdPersonCamera) {
+            thirdPersonCamera.update(delta);
+        }
+        // controls.update();
         renderer.render(scene, camera);
     };
 
