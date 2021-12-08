@@ -18,6 +18,12 @@ class Quadcopter {
 
 (function () {
 
+    
+    const up = ['ArrowUp', 'w'];
+    const down = ['ArrowDown', 's'];
+    const left = ['ArrowLeft', 'a'];
+    const right = ['ArrowRight', 'd'];
+
     //  --------------- System State -------------
     var isPlaying = true;
 
@@ -101,35 +107,50 @@ class Quadcopter {
     document.addEventListener('contextmenu', function () {
         console.log('right click');
     });
+
+
+    var keyMap = {};
+
+    document.addEventListener('keyup', function (ev) {
+        keyMap[ev.key] = false;
+    });
     document.addEventListener('keydown', function (ev) {
-        const up = ['ArrowUp', 'w'];
-        const down = ['ArrowDown', 's'];
-        const left = ['ArrowLeft', 'a'];
-        const right = ['ArrowRight', 'd'];
+        // const up = ['ArrowUp', 'w'];
+        // const down = ['ArrowDown', 's'];
+        // const left = ['ArrowLeft', 'a'];
+        // const right = ['ArrowRight', 'd'];
         const keyTimeConstant = (1.0 - Math.pow(0.101, delta));
         if (left.includes(ev.key)) {
-            targetPosition.z -= keyTimeConstant * 100;
+            keyMap[ev.key] = true;
+        //    targetPosition.z -= keyTimeConstant * 100;
 
         } else if (right.includes(ev.key)) {
-            targetPosition.z += keyTimeConstant * 100;
+            keyMap[ev.key] = true;
+          //  targetPosition.z += keyTimeConstant * 100;
         }
         if (up.includes(ev.key)) {
-            targetPosition.x += keyTimeConstant * 100;
+            keyMap[ev.key] = true;
+         //   targetPosition.x += keyTimeConstant * 100;
         } else if (down.includes(ev.key)) {
-            targetPosition.x -= keyTimeConstant * 100;
+            keyMap[ev.key] = true;
+         //   targetPosition.x -= keyTimeConstant * 100;
         }
         if (ev.key == 'e') {
-            quadcopter.isEngineStart = !quadcopter.isEngineStart;
+            keyMap[ev.key] = true;
+          //  quadcopter.isEngineStart = !quadcopter.isEngineStart;
         }
         if (ev.key == 'p') {
-            togglePause();
+            keyMap[ev.key] = true;
+        //    togglePause();
         }
         if (ev.key == ' ') {
-            targetPosition.y += keyTimeConstant * 100;
-            targetPosition.y = Math.min(targetPosition.y, 100);
+            keyMap[ev.key] = true;
+         //   targetPosition.y += keyTimeConstant * 100;
+          //  targetPosition.y = Math.min(targetPosition.y, 100);
         } else if (ev.key == 'Control') {
-            targetPosition.y -= keyTimeConstant * 100;
-            targetPosition.y = Math.max(targetPosition.y, 0);
+            keyMap[ev.key] = true;
+         //   targetPosition.y -= keyTimeConstant * 100;
+          //  targetPosition.y = Math.max(targetPosition.y, 0);
         }
 
     });
@@ -164,7 +185,7 @@ class Quadcopter {
             camera.lookAt(robot.position);
             cameraInitPosition.set(camera.position.x, camera.position.y, camera.position.z);
             // Add rigidbody
-            const robotShape = new CANNON.Box(new CANNON.Vec3(1.5, 1.5, 1.5));
+            const robotShape = new CANNON.Box(new CANNON.Vec3(5, 5, 1.5));
             robotBody.addShape(robotShape);
             robotBody.position.x = model.position.x;
             robotBody.position.y = model.position.y;
@@ -302,6 +323,36 @@ class Quadcopter {
     planeObject.receiveShadow = true;
     scene.add(planeObject);
 
+    const cubeMtl = new THREE.MeshPhongMaterial({ color: 0xf2825b, specular: new THREE.Vector3(0, 0, 0) });
+    let boxes = [];
+    for (let i = 0; i < 10; i++) {
+        const cannonBody = new CANNON.Body({ mass: 5 });
+        cannonBody.angularDamping = 0.2;
+        cannonBody.linearDamping = 0.2;
+        const cannonBox = new CANNON.Box(new CANNON.Vec3(3, 3, 3));
+        cannonBody.addShape(cannonBox);
+
+        let c = createCube(cubeMtl);
+        c.position.x += (i * 10)
+        c.position.z = 101 * Math.random();
+        c.position.y = 15;
+        cannonBody.position.set(c.position.x, c.position.y, c.position.z);
+
+        boxes.push([c, cannonBody]);
+        world.addBody(cannonBody);
+        c.receiveShadow = true;
+        c.castShadow = true;
+        scene.add(c);
+    }
+    // for (let i = 0; i < 10; i++) {
+    //     let c = createCube(cubeMtl);
+    //     c.position.x += (i * 10)
+    //     c.position.z = -100 * Math.random();
+    //     c.castShadow = true;
+    //     c.receiveShadow = true;
+    //     scene.add(c);
+    // }
+
     // -------------- Ground Plane Collider ------
     const planeShape = new CANNON.Plane();
     const planeBody = new CANNON.Body({ mass: 0 })
@@ -372,7 +423,14 @@ class Quadcopter {
         if (thirdPersonCamera) {
             thirdPersonCamera.update(delta);
         }
+        if (boxes.length > 0) {
+            for (let i = 0; i < boxes.length; i++) {
+                boxes[i][0].position.set(boxes[i][1].position.x, boxes[i][1].position.y, boxes[i][1].position.z);
+            }
+        }
         // controls.update();
+
+        updateInputController();
         renderer.render(scene, camera);
     };
 
@@ -386,5 +444,39 @@ class Quadcopter {
         return target.z - current.z;
     }
     animate();
+    var movementSpeed=10;
+    function updateInputController() {
 
+        const keyTimeConstant = (1.0 - Math.pow(0.101, delta));
+        if (keyMap[left[0]] || keyMap[left[1]]) {
+
+            targetPosition.z -= keyTimeConstant * movementSpeed;
+
+        } else if (keyMap[right[0]] || keyMap[right[1]]) {
+
+            targetPosition.z += keyTimeConstant * movementSpeed;
+        }
+        if (keyMap[up[0]] || keyMap[up[1]]) {
+            targetPosition.x += keyTimeConstant * movementSpeed;
+        } else if (keyMap[down[0]] || keyMap[down[1]]) {
+            targetPosition.x -= keyTimeConstant * movementSpeed;
+        }
+        if (keyMap['e']) {
+            // keyMap[ev.key] = true;
+            quadcopter.isEngineStart = !quadcopter.isEngineStart;
+        }
+        if (keyMap['p']) {
+            // keyMap[ev.key] = true;
+            togglePause();
+        }
+        if (keyMap[' ']) {
+            // keyMap[ev.key] = true;
+            targetPosition.y += keyTimeConstant * movementSpeed;
+            targetPosition.y = Math.min(targetPosition.y, 100);
+        } else if (keyMap['Control']) {
+            // keyMap[ev.key] = true;
+            targetPosition.y -= keyTimeConstant * movementSpeed;
+            targetPosition.y = Math.max(targetPosition.y, 0);
+        }
+    }
 })();

@@ -22,35 +22,35 @@ function createTarget() {
     geometry.vertices.shift();
 
     let group = new THREE.Group();
-    let circle =new THREE.LineLoop(geometry, material);
+    let circle = new THREE.LineLoop(geometry, material);
     group.add(circle);
-    
-    let circle1 =new THREE.LineLoop(geometry, material);
-    circle1.scale.set(0.3,0.3,0.3);
-    circle1.position.x=5;
-    circle1.position.z=2;
-    circle1.position.y=3.5;
+
+    let circle1 = new THREE.LineLoop(geometry, material);
+    circle1.scale.set(0.3, 0.3, 0.3);
+    circle1.position.x = 5;
+    circle1.position.z = 2;
+    circle1.position.y = 3.5;
     group.add(circle1);
-    
-    let circle2 =new THREE.LineLoop(geometry, material);
-    circle2.scale.set(0.3,0.3,0.3);
-    circle2.position.x=-3.5;
-    circle2.position.z=2;
-    circle2.position.y=3.5;
-    group.add(circle2);
-    
-    circle2 =new THREE.LineLoop(geometry, material);
-    circle2.scale.set(0.3,0.3,0.3);
-    circle2.position.x=-3.5;
-    circle2.position.z=2;
-    circle2.position.y=-3.5;
+
+    let circle2 = new THREE.LineLoop(geometry, material);
+    circle2.scale.set(0.3, 0.3, 0.3);
+    circle2.position.x = -3.5;
+    circle2.position.z = 2;
+    circle2.position.y = 3.5;
     group.add(circle2);
 
-    circle2 =new THREE.LineLoop(geometry, material);
-    circle2.scale.set(0.3,0.3,0.3);
-    circle2.position.x=5;
-    circle2.position.z=2;
-    circle2.position.y=-3.5;
+    circle2 = new THREE.LineLoop(geometry, material);
+    circle2.scale.set(0.3, 0.3, 0.3);
+    circle2.position.x = -3.5;
+    circle2.position.z = 2;
+    circle2.position.y = -3.5;
+    group.add(circle2);
+
+    circle2 = new THREE.LineLoop(geometry, material);
+    circle2.scale.set(0.3, 0.3, 0.3);
+    circle2.position.x = 5;
+    circle2.position.z = 2;
+    circle2.position.y = -3.5;
     group.add(circle2);
 
     // const points = [];
@@ -65,4 +65,11 @@ function createTarget() {
     // group.add(line);
     // group.add(line2);
     return group;
+}
+
+function createCube(mtl = undefined) {
+    // create the Cube
+    cube = new THREE.Mesh(new THREE.CubeGeometry(5, 5, 5), mtl ? mtl : new THREE.MeshNormalMaterial());
+    // cube.position.y = 150;
+    return cube;
 }
