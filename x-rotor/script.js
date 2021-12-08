@@ -115,42 +115,29 @@ class Quadcopter {
         keyMap[ev.key] = false;
     });
     document.addEventListener('keydown', function (ev) {
-        // const up = ['ArrowUp', 'w'];
-        // const down = ['ArrowDown', 's'];
-        // const left = ['ArrowLeft', 'a'];
-        // const right = ['ArrowRight', 'd'];
+
         const keyTimeConstant = (1.0 - Math.pow(0.101, delta));
         if (left.includes(ev.key)) {
             keyMap[ev.key] = true;
-        //    targetPosition.z -= keyTimeConstant * 100;
 
         } else if (right.includes(ev.key)) {
             keyMap[ev.key] = true;
-          //  targetPosition.z += keyTimeConstant * 100;
         }
         if (up.includes(ev.key)) {
             keyMap[ev.key] = true;
-         //   targetPosition.x += keyTimeConstant * 100;
         } else if (down.includes(ev.key)) {
             keyMap[ev.key] = true;
-         //   targetPosition.x -= keyTimeConstant * 100;
         }
         if (ev.key == 'e') {
             keyMap[ev.key] = true;
-          //  quadcopter.isEngineStart = !quadcopter.isEngineStart;
         }
         if (ev.key == 'p') {
             keyMap[ev.key] = true;
-        //    togglePause();
         }
         if (ev.key == ' ') {
             keyMap[ev.key] = true;
-         //   targetPosition.y += keyTimeConstant * 100;
-          //  targetPosition.y = Math.min(targetPosition.y, 100);
         } else if (ev.key == 'Control') {
             keyMap[ev.key] = true;
-         //   targetPosition.y -= keyTimeConstant * 100;
-          //  targetPosition.y = Math.max(targetPosition.y, 0);
         }
 
     });
@@ -462,19 +449,15 @@ class Quadcopter {
             targetPosition.x -= keyTimeConstant * movementSpeed;
         }
         if (keyMap['e']) {
-            // keyMap[ev.key] = true;
             quadcopter.isEngineStart = !quadcopter.isEngineStart;
         }
         if (keyMap['p']) {
-            // keyMap[ev.key] = true;
             togglePause();
         }
         if (keyMap[' ']) {
-            // keyMap[ev.key] = true;
             targetPosition.y += keyTimeConstant * movementSpeed;
             targetPosition.y = Math.min(targetPosition.y, 100);
         } else if (keyMap['Control']) {
-            // keyMap[ev.key] = true;
             targetPosition.y -= keyTimeConstant * movementSpeed;
             targetPosition.y = Math.max(targetPosition.y, 0);
         }
