@@ -18,7 +18,7 @@ class Quadcopter {
 
 (function () {
 
-    
+
     const up = ['ArrowUp', 'w'];
     const down = ['ArrowDown', 's'];
     const left = ['ArrowLeft', 'a'];
@@ -49,11 +49,13 @@ class Quadcopter {
     var forward = 0;
     var sideway = 0;
     let engineBtn = document.querySelector('#engineBtn');
+    let helpBtn = document.querySelector('#helpBtn');
     let playpauseBtn = document.querySelector('#playpauseBtn');
     let resetBtn = document.querySelector('#resetBtn');
     let pauseScreen = document.querySelector('#pauseScreen');
     let stats = document.querySelector('#stats');
     let batteyStats = document.querySelector('#battery-value');
+
     // var batteryImage = document.querySelector('#battery-image');
     // batteryImage.className = 'fas fa-battery-empty fa-rotate-270';
     var cameraInitPosition = new THREE.Vector3();
@@ -85,8 +87,12 @@ class Quadcopter {
     playpauseBtn.addEventListener('click', () => {
         togglePause();
     });
+    helpBtn.addEventListener('click', function () {
+        togglePause();
+    });
     function togglePause() {
         isPlaying = !isPlaying;
+        console.log('pause', isPlaying);
         if (isPlaying) {
             animate();
             pauseScreen.classList.remove('disabled');
@@ -97,12 +103,7 @@ class Quadcopter {
         }
     }
     engineBtn.addEventListener('click', () => {
-        quadcopter.toggleEngine();
-        if (quadcopter.isEngineStart) {
-            engineBtn.innerHTML = 'Turn Off <i class="fas fa-power-off"></i>';
-        } else {
-            engineBtn.innerHTML = 'Turn On <i class="fas fa-power-off"></i>';
-        }
+        toggleEngine();
     });
     document.addEventListener('contextmenu', function () {
         console.log('right click');
@@ -129,10 +130,12 @@ class Quadcopter {
             keyMap[ev.key] = true;
         }
         if (ev.key == 'e') {
-            keyMap[ev.key] = true;
+            // keyMap[ev.key] = true;
+            toggleEngine();
         }
-        if (ev.key == 'p') {
-            keyMap[ev.key] = true;
+        if (ev.key == 'p' || ev.key == 'h') {
+            // keyMap[ev.key] = true;
+            togglePause();
         }
         if (ev.key == ' ') {
             keyMap[ev.key] = true;
@@ -142,7 +145,14 @@ class Quadcopter {
 
     });
 
-
+    function toggleEngine() {
+        quadcopter.toggleEngine();
+        if (quadcopter.isEngineStart) {
+            engineBtn.innerHTML = 'Turn Off <i class="fas fa-power-off"></i>';
+        } else {
+            engineBtn.innerHTML = 'Turn On <i class="fas fa-power-off"></i>';
+        }
+    }
     const world = new CANNON.World()
     world.gravity.set(0, -9.82, 0);
 
@@ -301,7 +311,8 @@ class Quadcopter {
     scene.add(targetCircle);
 
     // -------------- Ground Plane ---------------
-    const planeGeom = new THREE.PlaneGeometry(50, 50);
+
+    const planeGeom = new THREE.CircleGeometry(51, 32);
     // const groundMtl = new THREE.MeshPhongMaterial({ color: 0xf2825b,specular:new THREE.Vector3(0,0,0) });    
     groundMtl = new THREE.ShadowMaterial({ opacity: 0.1 });
     groundMtl.opacity = 0.5;
@@ -310,13 +321,26 @@ class Quadcopter {
     planeObject.receiveShadow = true;
     scene.add(planeObject);
 
+
+    const planeObject1 = new THREE.Mesh(planeGeom, groundMtl);
+    // planeObject1.receiveShadow = true;
+    planeObject1.rotation.set(-Math.PI / 2, 0, 0);
+    planeObject1.scale.set(10, 10, 10);
+    scene.add(planeObject1);
+
+    fogColor = new THREE.Color('#f2825b');
+
+    scene.background = fogColor;
+    scene.fog = new THREE.FogExp2(fogColor, 0.02);// new THREE.Fog(fogColor, 5, 100);
+
+
     const cubeMtl = new THREE.MeshPhongMaterial({ color: 0xf2825b, specular: new THREE.Vector3(0, 0, 0) });
     let boxes = [];
     for (let i = 0; i < 10; i++) {
         const cannonBody = new CANNON.Body({ mass: 5 });
         cannonBody.angularDamping = 0.2;
         cannonBody.linearDamping = 0.2;
-        const cannonBox = new CANNON.Box(new CANNON.Vec3(3, 3, 3));
+        const cannonBox = new CANNON.Box(new CANNON.Vec3(3, 2, 3));
         cannonBody.addShape(cannonBox);
 
         let c = createCube(cubeMtl);
@@ -431,7 +455,7 @@ class Quadcopter {
         return target.z - current.z;
     }
     animate();
-    var movementSpeed=10;
+    var movementSpeed = 10;
     function updateInputController() {
 
         const keyTimeConstant = (1.0 - Math.pow(0.101, delta));
@@ -449,7 +473,6 @@ class Quadcopter {
             targetPosition.x -= keyTimeConstant * movementSpeed;
         }
         if (keyMap['e']) {
-            quadcopter.isEngineStart = !quadcopter.isEngineStart;
         }
         if (keyMap['p']) {
             togglePause();
