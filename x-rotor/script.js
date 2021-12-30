@@ -63,7 +63,9 @@ class Quadcopter {
     let batteryValue = 100;
     batteryInterval = setInterval(function () {
         batteyStats.innerHTML = `${batteryValue}%`;
-        batteryValue -= 1;
+        if (isPlaying && quadcopter.isEngineStart) {
+            batteryValue -= 1;
+        }
         if (batteryValue >= 97) {
             //     batteryImage.className = 'fas fa-battery-full fa-rotate-270';
         } else if (batteryValue >= 50) {
@@ -328,7 +330,7 @@ class Quadcopter {
     planeObject1.scale.set(10, 10, 10);
     scene.add(planeObject1);
 
-    fogColor = new THREE.Color('#f2825b');
+    fogColor = new THREE.Color('#f07146');
 
     scene.background = fogColor;
     scene.fog = new THREE.FogExp2(fogColor, 0.02);// new THREE.Fog(fogColor, 5, 100);
@@ -346,7 +348,7 @@ class Quadcopter {
         let c = createCube(cubeMtl);
         c.position.x += (i * 10)
         c.position.z = 101 * Math.random();
-        c.position.y = 15;
+        c.position.y = 3;
         cannonBody.position.set(c.position.x, c.position.y, c.position.z);
 
         boxes.push([c, cannonBody]);
