@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Portfolio" />
+    <meta name="author" content="Zeeshan Anjum Junaidi" />
+
+    <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
+    <script src="../js/vendors/p5.js"></script>
+
+    <script src="../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="../js/vendors/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="cell.js"></script>
+    <script src="board.js"></script>
+    <script src="knight.js"></script>
+    <script src="script.js"></script>
+    <link href="../style/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../style/default.css" />
+    <link rel="shortcut icon" href="data:" type="image/x-icon">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <title>Knight Unique Movement</title>
+
+</head>
+
+<body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
+    <div style="position:absolute; color:black; right:0; bottom:0; display:flex; flex-direction:column">
+       <label for="inputValue">Input</label>
+        <input type="number" value="10" id="inputValue" />
+        <div style="display: flex; justify-content: center;">
+            <button>-</button>
+            <button>+</button>
+        </div>
+        <strong style="background:#333; margin:5px; color:#eee; border-radius:5px;">RESULT</strong>
+        <button>Solve</button>
+        <button>Reset</button>
+    </div>
+</body>
+
+</html>
