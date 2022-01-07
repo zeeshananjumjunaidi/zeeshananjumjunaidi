@@ -15,27 +15,49 @@
     <script src="cell.js"></script>
     <script src="board.js"></script>
     <script src="knight.js"></script>
-    <script src="script.js"></script>
     <link href="../style/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="../style/default.css" />
+    <link rel="stylesheet" href="./style.css" />
     <link rel="shortcut icon" href="data:" type="image/x-icon">
     <!-- Core theme CSS (includes Bootstrap)-->
-    <title>Knight Unique Movement</title>
+    <title>♞ Knight Unique Movement</title>
 
 </head>
 
 <body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
+    <h1>Knight Distinct Movement ♞</h1>
     <div style="position:absolute; color:black; right:0; bottom:0; display:flex; flex-direction:column">
-       <label for="inputValue">Input</label>
+        <label for="inputValue" style="margin: 0;">Input</label>
         <input type="number" value="10" id="inputValue" />
         <div style="display: flex; justify-content: center;">
-            <button>-</button>
-            <button>+</button>
+            <button id="decrementBtn">-</button>
+            <button id="incrementBtn">+</button>
         </div>
-        <strong style="background:#333; margin:5px; color:#eee; border-radius:5px;">RESULT</strong>
-        <button>Solve</button>
-        <button>Reset</button>
+        <strong id="result" style="background:#333; margin:5px; color:#eee; border-radius:5px;">RESULT</strong>
+        <button id="solveBtn">Solve</button>
+        <button onclick="reset()">Reset</button>
+        <button onclick="toggleRules()">Rules</button>
     </div>
+    <div class="model hide" id="rules">
+        <div class="content">
+            <div class="title">Rules</div>
+            <ul>
+                <li>Only cells containing a character are considered valid.</li>
+                <li>You are allowed to place the knight valid cell initially and then you should perform n - 1
+                    jumps to build the string. The character of the cell you placed the knight in, is also part of the
+                    resulting string.</li>
+                <li>A valid knight jump is not allowed to start or end on an non valid cell.</li>
+                <li>All jumps should be valid knight jumps.</li>
+                <li>The characters/cells that the knight jumps over during a jump are not part of the string
+                    produced.</li>
+                <li>The resulting string cannot contain more than two vowels.</li>
+            </ul>
+            <button onclick="hide()">Hide</button>
+        </div>
+    </div>
+
+    
+    <script src="script.js"></script>
 </body>
 
 </html>

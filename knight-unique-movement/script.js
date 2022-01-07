@@ -4,8 +4,10 @@ var height = window.innerHeight;
 var knightImage;
 const PADDING = 5;
 const CELLSIZE = 100;
-
+var inputValue;
+var resultEle;
 /* Simulation variables */
+const VOWELS = ['A', 'E', 'I', 'O', 'U'];
 var board;
 var knight;
 
@@ -65,3 +67,60 @@ function keyTyped() {
     }
     return false;
 }
+
+function toggleRules() {
+    document.querySelector('#rules').classList.toggle('hide');
+}
+function hide() {
+    document.querySelector('#rules').classList.add('hide');
+}
+function reset() {
+    location.reload();
+}
+function solveKnightProblem() {
+    let _inputValue = +inputValue.value;
+    let answer = 0;
+    if (_inputValue == 1) {
+        answer = (5 * 5) - 4;
+    } else if (_inputValue > 1) {
+        // Let us place this knight over 0,0 index, value "A" on board
+        
+    }
+    let message = `Answer Knight(♞) (${answer})`;
+    resultEle.innerText = message;
+}
+(function () {
+    inputValue = document.querySelector('#inputValue');
+    const incrementBtn = document.querySelector('#incrementBtn');
+    const decrementBtn = document.querySelector('#decrementBtn');
+    resultEle = document.querySelector('#result');
+    const solveBtn = document.querySelector('#solveBtn');
+    incrementBtn.addEventListener('click', (e) => {
+        inputValue.value = +inputValue.value + 1;
+        console.log(inputValue)
+    });
+    decrementBtn.addEventListener('click', (e) => {
+        inputValue.value = +inputValue.value - 1;
+        if (+inputValue.value <= 0) {
+            inputValue.value = 1;
+        }
+        console.log(inputValue)
+    });
+    solveBtn.addEventListener('click', solveKnightProblem);
+
+
+    document.querySelector('#rules').addEventListener('click', function (e) {
+        if (e.target.classList.contains('model'))
+            hide();
+    });
+    let alternate = false;
+    setInterval(() => {
+        if (alternate) {
+            document.title = 'Knight'
+            alternate = false;
+        } else {
+            document.title = '♞';
+            alternate = true;
+        }
+    }, 1000);
+})();

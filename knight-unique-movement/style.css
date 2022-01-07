@@ -1,0 +1,31 @@
+button {
+    outline: none;
+    border: none;
+}
+
+.model {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #3338;
+}
+
+.model .content {
+    position: absolute;
+    display: block;
+    background: #333;
+    margin: 2em;
+    text-align: start;
+    color: #aaa;
+    box-shadow: 0 0 0.2em #111;
+}
+
+.model .title {
+    font-size: 2em;
+}
+
+.hide {
+    display: none;
+}
