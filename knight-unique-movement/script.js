@@ -2,7 +2,7 @@
 var width = window.innerWidth;
 var height = window.innerHeight;
 var knightImage;
-const PADDING = 5;
+const PADDING = 2;
 const CELLSIZE = 100;
 var inputValue;
 var resultEle;
@@ -10,6 +10,7 @@ var resultEle;
 const VOWELS = ['A', 'E', 'I', 'O', 'U'];
 var board;
 var knight;
+var paths = [];
 
 function setup() {
     width = window.innerWidth;
@@ -24,20 +25,40 @@ function preload() {
 }
 function initSimulation() {
     board = new Board([
-        ['A', 'B', 'C', ' ', 'E'],
-        [' ', 'G', 'H', 'I', 'J'],
-        ['K', 'L', 'M', 'N', 'O'],
-        ['P', 'Q', 'R', 'S', 'T'],
-        ['U', 'V', ' ', ' ', 'Y'],
+        ['A', ' ', 'K', 'P', 'U'],
+        ['B', 'G', 'L', 'Q', 'V'],
+        ['C', 'H', 'M', 'R', ' '],
+        [' ', 'I', 'N', 'S', ' '],
+        ['E', 'J', 'O', 'T', 'Y'],
+
     ], CELLSIZE, PADDING);
     knightImage.resize(CELLSIZE, CELLSIZE);
-    knight = new Knight(0, 0, board, knightImage, CELLSIZE, PADDING);
+    knight = new Knight(board, knightImage, CELLSIZE, PADDING);
+
+    // solveKnightProblem();
 }
 function draw() {
     background(200, 200, 150);
+    background('#e3b708');
     translate(CELLSIZE / 2, CELLSIZE / 2);
     board.draw();
     knight.draw();
+    if (paths.length > 0) {
+        push();
+        stroke(20);
+        strokeWeight(4)
+        var currentPath = paths[0];
+        for (let i = 1; i < paths.length; i++) {
+            const newPath = paths[i];
+            const d0x = currentPath.x * CELLSIZE + PADDING;
+            const d0y = currentPath.y * CELLSIZE + PADDING;
+            const d1x = newPath.x * CELLSIZE + PADDING;
+            const d1y = newPath.y * CELLSIZE + PADDING;
+            line(d0x, d0y, d1x, d1y);
+            currentPath = newPath;
+        }
+        pop();
+    }
 }
 function keyPressed() {
     if (keyCode === LEFT_ARROW) {
@@ -78,16 +99,51 @@ function reset() {
     location.reload();
 }
 function solveKnightProblem() {
-    let _inputValue = +inputValue.value;
-    let answer = 0;
-    if (_inputValue == 1) {
-        answer = (5 * 5) - 4;
-    } else if (_inputValue > 1) {
-        // Let us place this knight over 0,0 index, value "A" on board
-        
-    }
-    let message = `Answer Knight(♞) (${answer})`;
-    resultEle.innerText = message;
+    board.setAllCellsUnvisited();
+    let dfs = new DFS(board);
+    const numberOfSteps = +inputValue.value;
+    let moves = dfs.solve(numberOfSteps);
+    let listOfMovesELe = document.querySelector('#listOfMoves');
+    paths = [];
+    listOfMovesELe.replaceChildren();
+    moves.forEach(move => {
+        let button = document.createElement('button');
+        button.innerText = move;
+        button.dataset['value'] = move;
+        button.style.minWidth = '10em';
+        button.style.maxWidth = '10em';
+        button.addEventListener('click', e => {
+            board.setAllCellsUnvisited();
+            let currentStringSequence = e.target.innerText;
+            let firstVal = currentStringSequence[0];
+            currentStringSequence = currentStringSequence.slice(1);
+            let nextcell = board.linearCells.find(x => x.value == firstVal);
+            paths.push(nextcell);
+            knight.set(nextcell.x, nextcell.y);
+            if (currentStringSequence.length > 0) {
+                let tout = -1;
+                tout = setInterval(() => {
+                    firstVal = currentStringSequence[0];
+                    currentStringSequence = currentStringSequence.slice(1);
+                    nextcell = board.linearCells.find(x => x.value == firstVal);
+                    paths.push(nextcell);
+                    knight.set(nextcell.x, nextcell.y);
+                    if (currentStringSequence.length < 1) { clearInterval(tout) }
+                }, 1000);
+            }
+        });
+        listOfMovesELe.appendChild(button)
+    });
+    // let n = +inputValue.value;
+    // let answer = 0;
+    // if (n == 1) { // Base case
+    //     answer = (5 * 5) - 4; // as the board size is 5x5 and 4 cells are empty.
+    // } else if (n > 1) {
+    //     // we are using n - 1 because we already occupied the initial position.
+    //     knight.travel(n - 1);
+    // }
+    // let message = `Answer Knight(♞) (${answer})`;
+    // resultEle.innerText = message;
 }
 (function () {
     inputValue = document.querySelector('#inputValue');
@@ -113,14 +169,14 @@ function solveKnightProblem() {
         if (e.target.classList.contains('model'))
             hide();
     });
-    let alternate = false;
-    setInterval(() => {
-        if (alternate) {
-            document.title = 'Knight'
-            alternate = false;
-        } else {
-            document.title = '♞';
-            alternate = true;
-        }
-    }, 1000);
+    // let alternate = false;
+    // setInterval(() => {
+    //     if (alternate) {
+    //         document.title = 'Knight'
+    //         alternate = false;
+    //     } else {
+    //         document.title = '♞';
+    //         alternate = true;
+    //     }
+    // }, 1000);
 })();
