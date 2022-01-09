@@ -1,6 +1,9 @@
+const VOWELS = { 'A': 'A', 'E': 'E', 'I': 'I', 'O': 'O', 'U': 'U' }
+Object.freeze(VOWELS);
 
 class DFS {
-    constructor(board) {
+    constructor(board, isDebug = false) {
+        this.isDebug = isDebug;
         this.board = board;
         this.xMovement = [2, 2, -2, -2, 1, 1, -1, -1];
         this.yMovement = [1, -1, 1, -1, 2, -2, 2, -2];
@@ -16,47 +19,74 @@ class DFS {
     solve(numberOfMoves) {
         console.info(this.adjacencyList);
         // generate all paths for A
-        let allSequences = new Set()
+     //   let allSequences = new Set()
         for (let x in this.adjacencyList) {
             let startChar = x;
-            console.info(`starting sequence of ${startChar} with length ${numberOfMoves}`)
-            // creating tree for startChar as root with depth numberOfMoves
+            if (this.isDebug)
+                console.info(`starting sequence of ${startChar} with length ${numberOfMoves}`)
 
-            let root = new TreeNode(startChar);
-            root.word = startChar;
-            this.createTree(startChar, numberOfMoves, numberOfMoves - 1, root, startChar, { startChar }, allSequences);
-            // console.log(root, allSequences);
+            let closeSet = {};
+            closeSet[startChar] = true;      
         }
-        console.log(allSequences);
-        return allSequences;
+        let answers = [];
+        for (let x in this.adjacencyList) {
+            let character = x;//'A';
+            let word = `${character}`;
+            let wordSize = numberOfMoves;
+            let closedList = {}
+            closedList[character] = true;
+            let currentAnswers = [];
+            let newAnswers = this.recursionTest(character, wordSize, --wordSize, word, closedList, currentAnswers)
+            // answers = currentAnswers;
+            answers = [...answers, ...newAnswers]
+        }
+        
+        return answers;
     }
 
-    createTree(char, wordLen, clen, root, currentWord = '', closedSet = {}, allSequences) {
-        // closedSet[root.value] = true;
-        closedSet[char] = true;
-        for (let a of this.adjacencyList[char]) {
-            if (a in closedSet == false && clen > 0) {
-                let newNode = new TreeNode(a);
-                // if (root.word[root.word.length - 1] < a) {
-                //     newNode.word = root.word + a;
-                // }
-                // else {
-                //     newNode.word = a + root.word;
-                // }
-                newNode.word = root.word + a;
-                currentWord += a;
-
-                // root.children.push(newNode);
-                this.createTree(a, wordLen, clen - 1, newNode, currentWord, closedSet, allSequences);
-            } else {
-                if (currentWord.length == wordLen) {
-                    allSequences.add(currentWord)
-                }
-                // if (root.word.length == wordLen)
-                //     allSequences.add(root.word)
+    doesNVowelsCount(word, char, limit = 2) {
+        // we are checking on each iteration so
+        // we can't skip second vowels ever.
+        if (char in VOWELS) {
+            if (word.length>1){
+                if(VOWELS.A!=char && word.includes(VOWELS.A))
+                    return true;
+                    if(VOWELS.E!=char && word.includes(VOWELS.E))
+                        return true;
+                        if(VOWELS.I!=char && word.includes(VOWELS.I))
+                            return true;
+                            if(VOWELS.O!=char && word.includes(VOWELS.O))
+                                return true;
+                                if(VOWELS.U!=char && word.includes(VOWELS.U))
+                                    return true;
             }
         }
+        return false;
     }
+    recursionTest(char, wordSize = 3, count = 3, word, closedList, answers) {
+        let containsNVowels = this.doesNVowelsCount(word, char);
+        if(containsNVowels){return answers;}
+        if (word != char)
+            word += char;
+        count--;
+
+        
+        if (word.length == wordSize) {
+            if (char)
+                console.log(word);
+            answers.push(word);
+            return answers;
+        }
+        let neighbours = this.adjacencyList[char];
+        for (let i = 0; i < neighbours.length; i++) {
+            if (!(neighbours[i] in closedList)) {
+                closedList[neighbours[i]] = true;
+                this.recursionTest(neighbours[i], wordSize, count, word, closedList, answers);
+            }
+        }
+        return answers;
+    }
+
 
     isValid(x, y, considerCellVisited = true) {
         if (x >= 0 && x < this.board.colCount && y >= 0 && y < this.board.rowsCount) {
@@ -69,6 +99,7 @@ class DFS {
         }
         return false;
     }
+
     getNeighboursByKnightMovement(cell, closedList = []) {
         let targetNeighbours = []
         // there are 8 possible cells on grid

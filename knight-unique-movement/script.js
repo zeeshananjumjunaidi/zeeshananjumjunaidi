@@ -7,7 +7,6 @@ const CELLSIZE = 100;
 var inputValue;
 var resultEle;
 /* Simulation variables */
-const VOWELS = ['A', 'E', 'I', 'O', 'U'];
 var board;
 var knight;
 var paths = [];
@@ -103,9 +102,11 @@ function solveKnightProblem() {
     let dfs = new DFS(board);
     const numberOfSteps = +inputValue.value;
     let moves = dfs.solve(numberOfSteps);
+
     let listOfMovesELe = document.querySelector('#listOfMoves');
     paths = [];
     listOfMovesELe.replaceChildren();
+    resultEle.innerText=`${moves.length} ♞ moves!`;
     moves.forEach(move => {
         let button = document.createElement('button');
         button.innerText = move;
@@ -114,6 +115,10 @@ function solveKnightProblem() {
         button.style.maxWidth = '10em';
         button.addEventListener('click', e => {
             board.setAllCellsUnvisited();
+            paths = [];
+            let intr = button.dataset['interval'];
+            console.log(intr)
+            clearInterval(intr);
             let currentStringSequence = e.target.innerText;
             let firstVal = currentStringSequence[0];
             currentStringSequence = currentStringSequence.slice(1);
@@ -130,6 +135,7 @@ function solveKnightProblem() {
                     knight.set(nextcell.x, nextcell.y);
                     if (currentStringSequence.length < 1) { clearInterval(tout) }
                 }, 1000);
+                button.dataset['interval'] = tout;
             }
         });
         listOfMovesELe.appendChild(button)
