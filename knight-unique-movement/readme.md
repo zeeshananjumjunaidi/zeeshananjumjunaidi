@@ -2,7 +2,7 @@
 
 # DEMO
 
-> **[zeeshananjum.com/knight-unique-movement](https://zeeshananjum.com/knight-unique-movement/)**
+> **<a target="_blank" href="https://zeeshananjum.com/knight-unique-movement/">zeeshananjum.com/knight-unique-movement</a>**
 
 ****
 
