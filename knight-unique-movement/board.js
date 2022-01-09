@@ -1,4 +1,5 @@
 class Board {
+    
     constructor(grid, cellSize = 100, padding = 5) {
         this.rowsCount = grid.length;
         this.colCount = grid[0].length;
@@ -16,6 +17,7 @@ class Board {
         this.cellSize = cellSize;
         this.padding = padding;
     }
+
     setAllCellsUnvisited() {
         for (let r = 0; r < this.rowsCount; r++) {
             for (let c = 0; c < this.colCount; c++) {
@@ -24,6 +26,7 @@ class Board {
             }
         }
     }
+
     draw() {
         for (let r = 0; r < this.rowsCount; r++) {
             for (let c = 0; c < this.colCount; c++) {

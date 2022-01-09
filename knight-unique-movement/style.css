@@ -25,7 +25,47 @@ button {
 .model .title {
     font-size: 2em;
 }
-
+.model li{
+    user-select: all;
+}
 .hide {
     display: none;
+}
+fieldset{
+    background:#3335;
+    border-radius: 0.2em;
+    margin:0.2em;
+    padding:0.2em;
+}
+.panel {
+    position: absolute;
+    background: #3335;
+    height: 15em;
+    min-width: 15em;
+    color: #eee;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.3em;
+    padding: 1em;
+    margin: 0.5em;
+}
+
+#listOfMoves {
+    border-radius: 0.3em;
+    padding: 0.3em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: inset 0 0 0.5em #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+    padding-right: 1em;
+}
+#listOfMoves button{
+font-size: 0.7em;
+width: 100%;
+
 }

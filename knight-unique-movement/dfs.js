@@ -18,8 +18,7 @@ class DFS {
     }
     solve(numberOfMoves) {
         console.info(this.adjacencyList);
-        // generate all paths for A
-     //   let allSequences = new Set()
+        // generate adjacency list
         for (let x in this.adjacencyList) {
             let startChar = x;
             if (this.isDebug)
@@ -72,8 +71,6 @@ class DFS {
 
         
         if (word.length == wordSize) {
-            if (char)
-                console.log(word);
             answers.push(word);
             return answers;
         }

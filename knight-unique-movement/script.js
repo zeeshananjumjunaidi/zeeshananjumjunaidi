@@ -33,8 +33,6 @@ function initSimulation() {
     ], CELLSIZE, PADDING);
     knightImage.resize(CELLSIZE, CELLSIZE);
     knight = new Knight(board, knightImage, CELLSIZE, PADDING);
-
-    // solveKnightProblem();
 }
 function draw() {
     background(200, 200, 150);
@@ -59,34 +57,7 @@ function draw() {
         pop();
     }
 }
-function keyPressed() {
-    if (keyCode === LEFT_ARROW) {
-        knight.move(-1, 0);
-    } else if (keyCode === UP_ARROW) {
-        knight.move(0, -1);
-    } else if (keyCode === DOWN_ARROW) {
-        knight.move(0, 1);
-    }
-    else if (keyCode === RIGHT_ARROW) {
-        knight.move(1, 0);
-    }
-    // return false;
-}
-function keyTyped() {
-    if (key === 'a') {
-        knight.move(-1, 0);
-    } else if (key === 'w') {
-        knight.move(0, -1);
-    } else if (key === 's') {
-        knight.move(0, 1);
-    }
-    else if (key === 'd') {
-        knight.move(1, 0);
-    } else if (key === 'r') {
-        location.reload();
-    }
-    return false;
-}
+
 
 function toggleRules() {
     document.querySelector('#rules').classList.toggle('hide');
@@ -112,12 +83,11 @@ function solveKnightProblem() {
         button.innerText = move;
         button.dataset['value'] = move;
         button.style.minWidth = '10em';
-        button.style.maxWidth = '10em';
         button.addEventListener('click', e => {
+            document.querySelector('#currentMovement').innerText=e.target.innerText;
             board.setAllCellsUnvisited();
             paths = [];
             let intr = button.dataset['interval'];
-            console.log(intr)
             clearInterval(intr);
             let currentStringSequence = e.target.innerText;
             let firstVal = currentStringSequence[0];
@@ -140,49 +110,38 @@ function solveKnightProblem() {
         });
         listOfMovesELe.appendChild(button)
     });
-    // let n = +inputValue.value;
-    // let answer = 0;
-    // if (n == 1) { // Base case
-    //     answer = (5 * 5) - 4; // as the board size is 5x5 and 4 cells are empty.
-    // } else if (n > 1) {
-    //     // we are using n - 1 because we already occupied the initial position.
-    //     knight.travel(n - 1);
-    // }
-    // let message = `Answer Knight(♞) (${answer})`;
-    // resultEle.innerText = message;
+
+}
+function resetUI(){    
+    document.querySelector('#currentMovement').innerText='';
 }
 (function () {
+    setTimeout(console.log.bind(console,"%cCode is available at https://downgit.github.io/#/home?url=https://github.com/zeeshananjumjunaidi/zeeshananjumjunaidi/tree/master/knight-unique-movement",'font-size:13px; background:#a70; color:black;'))
     inputValue = document.querySelector('#inputValue');
     const incrementBtn = document.querySelector('#incrementBtn');
     const decrementBtn = document.querySelector('#decrementBtn');
     resultEle = document.querySelector('#result');
     const solveBtn = document.querySelector('#solveBtn');
+    
+    window.addEventListener('resize',(e)=>{ setup();});
+
     incrementBtn.addEventListener('click', (e) => {
         inputValue.value = +inputValue.value + 1;
-        console.log(inputValue)
     });
+    
     decrementBtn.addEventListener('click', (e) => {
         inputValue.value = +inputValue.value - 1;
         if (+inputValue.value <= 0) {
             inputValue.value = 1;
         }
-        console.log(inputValue)
     });
-    solveBtn.addEventListener('click', solveKnightProblem);
 
+    solveBtn.addEventListener('click',()=>{ 
+        resetUI();
+        solveKnightProblem()});
 
     document.querySelector('#rules').addEventListener('click', function (e) {
         if (e.target.classList.contains('model'))
             hide();
     });
-    // let alternate = false;
-    // setInterval(() => {
-    //     if (alternate) {
-    //         document.title = 'Knight'
-    //         alternate = false;
-    //     } else {
-    //         document.title = '♞';
-    //         alternate = true;
-    //     }
-    // }, 1000);
 })();

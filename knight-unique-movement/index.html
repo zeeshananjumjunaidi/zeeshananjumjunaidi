@@ -7,14 +7,10 @@
     <meta name="description" content="Portfolio" />
     <meta name="author" content="Zeeshan Anjum Junaidi" />
 
-    <script src="../js/vendors/font-awesome-5.15.1.js" crossorigin="anonymous"></script>
     <script src="../js/vendors/p5.js"></script>
 
-    <script src="../js/vendors/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-    <script src="../js/vendors/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="dfs.js"></script>
-    <script src="cell.js"></script>
-    <script src="tree-node.js"></script>
+    <script src="cell.js"></script>    
     <script src="board.js"></script>
     <script src="knight.js"></script>
     <link href="../style/styles.css" rel="stylesheet" />
@@ -29,21 +25,28 @@
 <body style="height: 100%; text-align: center; margin: 30; overflow: hidden; user-select:none;">
     <h1>Knight Distinct Movement ♞</h1>
 
-    <div id="listOfMoves"
-        style="position:absolute; background:#3335; overflow-y: auto; height:15em; color:black; left:0; bottom:0; display:flex; flex-direction:column">
-
+    <div class="panel">
+        <h5>List of Movements</h5>
+        <p id="currentMovement" style="border: 1px solid #3335;"></p>
+        <div id="listOfMoves"></div>
     </div>
     <div style="position:absolute; color:black; right:0; bottom:0; display:flex; flex-direction:column">
-        <label for="inputValue" style="margin: 0;">Input</label>
-        <input type="number" value="10" id="inputValue" />
-        <div style="display: flex; justify-content: center;">
-            <button id="decrementBtn">-</button>
-            <button id="incrementBtn">+</button>
-        </div>
-        <strong id="result" style="background:#333; margin:5px; color:#eee; border-radius:5px;">RESULT</strong>
-        <button id="solveBtn">Solve</button>
-        <button onclick="reset()">Reset</button>
-        <button onclick="toggleRules()">Rules</button>
+        <fieldset style="background:#333; margin:5px; color:#eee; border-radius:5px;">
+            <strong id="result" >RESULT</strong>
+        </fieldset>
+        <fieldset>
+            <label for="inputValue" style="margin: 0;">Input</label>
+            <input type="number" value="10" id="inputValue" />
+            <div style="display: flex; justify-content: center;">
+                <button id="decrementBtn">-</button>
+                <button id="incrementBtn">+</button>
+            </div>
+        </fieldset>
+        <fieldset style="display: flex; flex-direction: column;">
+            <button id="solveBtn">Solve</button>
+            <button onclick="reset()">Reset</button>
+            <button onclick="toggleRules()">Rules</button>
+        </fieldset>
     </div>
     <div class="model hide" id="rules">
         <div class="content">
