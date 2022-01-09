@@ -1,7 +1,10 @@
 ## Knight Distinct Movement ♞
 
 # DEMO
-https://zeeshananjum.com/knight-unique-movement/
+
+> **[zeeshananjum.com/knight-unique-movement](https://zeeshananjum.com/knight-unique-movement/)**
+
+****
 
 ## Introduction
 The chess knight has a unique movement, it may move two squares vertically and one square horizontally, or two squares horizontally and one square vertically (with both forming the shape
@@ -21,5 +24,6 @@ produced.
 - The resulting string cannot contain more than two vowels.
 
 
+##### Download
 You can download only this project using following link:
 https://downgit.github.io/#/home?url=https://github.com/zeeshananjumjunaidi/zeeshananjumjunaidi/tree/master/knight-unique-movement
